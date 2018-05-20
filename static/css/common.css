@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+}
+
+.nav_bom {
+  height: 55px;
+}
+
+.nav_bom .iconfont {
+  display: block;
+  font-size: 20px;
+  padding-top: 5px;
+  color: #bfbfbf;
+}
+
+.nav_bom .list {
+  line-height: 26px;
+}
+
+.nav_bom .weui-bar__item_on {
+  color: #8dc13b;
+}
+
+.nav_bom .weui-bar__item_on .iconfont {
+  color: #8dc13b;
+}
+
+.nav_bom .add .iconfont {
+  font-size: 40px;
+  padding: 0;
+  color: #8dc13b;
+  line-height: 55px;
+}
