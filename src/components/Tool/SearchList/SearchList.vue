@@ -1,0 +1,184 @@
+<template>
+    <div class="container">
+        <div class="search">
+            <div class="input">
+              <input type="text" v-model="searchVal.value" placeholder="输入文字搜索食谱">
+              <i class="iconfont icon-sousuo" @click="search"></i>
+            </div>
+        </div>
+        <scroller lock-x height="-40px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
+        <div class="box search_list">
+            <panel :list="listArr" type="1"></panel>
+            <p class="more_s"  v-show="!searchVal.onFetching">{{searchVal.uptext}}</p>
+            <load-more tip="loading" v-show="searchVal.onFetching"></load-more>
+        </div>
+        </scroller>
+    </div>
+</template>
+<script>
+import { Scroller, LoadMore, Panel } from "vux";
+
+export default {
+  components: {
+    Scroller,
+    LoadMore,
+    Panel
+  },
+  data() {
+    return {
+      searchVal: {
+        value: "",
+        onFetching: false,
+        uptext: "滑动查看更多"
+      },
+      listArr: [
+        {
+          title: "辣椒炒肉辣椒炒肉辣椒炒肉",
+          src: "/static/images/searchm.jpg",
+          desc: "131kcal(100g)",
+          url: "/Tool/SearchList/Details"
+        },
+        {
+          title: "辣椒炒肉",
+          src: "/static/images/searchm.jpg",
+          desc: "131kcal(100g)",
+          url: "/Tool/SearchList/Details"
+        },
+        {
+          title: "辣椒炒肉",
+          src: "/static/images/searchm.jpg",
+          desc: "131kcal(100g)",
+          url: "/Tool/SearchList/Details"
+        },
+        {
+          title: "辣椒炒肉",
+          src: "/static/images/searchm.jpg",
+          desc: "131kcal(100g)",
+          url: "/Tool/SearchList/Details"
+        },
+        {
+          title: "辣椒炒肉",
+          src: "/static/images/searchm.jpg",
+          desc: "131kcal(100g)",
+          url: "/Tool/SearchList/Details"
+        }
+      ]
+    };
+  },
+  methods: {
+    getList() {
+      if (this.searchVal.onFetching) {
+        // do nothing
+      } else {
+        this.searchVal.onFetching = true;
+        setTimeout(() => {
+          this.listArr.push(
+            {
+              title: "辣椒炒肉",
+              src: "/static/images/searchm.jpg",
+              desc: "131kcal(100g)",
+              url: "/Tool/SearchList/Details"
+            },
+            {
+              title: "辣椒炒肉",
+              src: "/static/images/searchm.jpg",
+              desc: "131kcal(100g)",
+              url: "/Tool/SearchList/Details"
+            },
+            {
+              title: "辣椒炒肉",
+              src: "/static/images/searchm.jpg",
+              desc: "131kcal(100g)",
+              url: "/Tool/SearchList/Details"
+            },
+            {
+              title: "辣椒炒肉",
+              src: "/static/images/searchm.jpg",
+              desc: "131kcal(100g)",
+              url: "/Tool/SearchList/Details"
+            }
+          );
+          this.$nextTick(() => {
+            this.$refs.scrollerBottom.reset();
+          });
+          this.searchVal.onFetching = false;
+        }, 2000);
+      }
+    },
+    search() {}
+  },
+  mounted() {
+    // this.$nextTick(() => {
+    //   this.$refs.scrollerBottom.reset({ top: 0 });
+    // });
+  }
+};
+</script>
+<style lang="less" scoped>
+.container {
+  background: #f3f3f3;
+}
+.search {
+  width: 100%;
+  height: 40px;
+  background: #fff;
+  padding: 0 15px;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  .input {
+    position: relative;
+    margin-top: 5px;
+    input {
+      color: #a1a1a1;
+      padding-left: 25px;
+    }
+    i {
+      position: absolute;
+      left: 5px;
+      top: 6px;
+      color: #a1a1a1;
+    }
+  }
+}
+
+.box {
+  padding: 0 15px;
+
+  .weui-panel {
+    background: none;
+  }
+  .more_s {
+    text-align: center;
+    padding: 10px 0;
+    color: #a4a4a4;
+    font-size: 12px;
+  }
+}
+</style>
+<style lang="less">
+.search_list {
+  .weui-panel__bd a {
+    margin-top: 10px;
+    background: #fff;
+    border-radius: 8px;
+
+    .weui-media-box_appmsg,
+    .weui-media-box__hd {
+      width: 120px;
+      height: auto;
+      border: 1px solid #ededed;
+    }
+  }
+  .weui-media-box__title {
+    color: #757575;
+    font-size: 16px;
+  }
+
+  .weui-media-box__desc {
+    margin-top: 10px;
+    color: #a4a4a4;
+    font-size: 14px;
+  }
+}
+</style>

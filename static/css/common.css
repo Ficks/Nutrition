@@ -3,17 +3,27 @@
   padding: 0;
   text-decoration: none;
 }
-body{
-  padding-bottom: 60px;
+
+body,
+html,
+#app {
+  /* padding-bottom: 60px; */
+  height: 100%;
 }
+
+.none {
+  display: none;
+}
+
 .nav_bom {
   height: 55px;
   position: fixed !important;
 }
 
-img{
+img {
   max-width: 100%;
 }
+
 .nav_bom .iconfont {
   display: block;
   font-size: 20px;
@@ -39,7 +49,8 @@ img{
   color: #8dc13b;
   line-height: 55px;
 }
-.nav_bom_alt{
+
+.nav_bom_alt {
   /* display: none; */
   position: fixed;
   bottom: 0;
@@ -47,54 +58,79 @@ img{
   background: #fff;
   width: 100%;
   height: 235px;
-  transition:  all .5s;
+  transition: all .5s;
 }
-.nav_bom_zoom{
+
+.nav_bom_zoom {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,.5);
+  background: rgba(0, 0, 0, .5);
   z-index: 99;
 }
-.nav_bom_alt .close{
+
+.nav_bom_alt .close {
   width: 60px;
   margin: 0 auto;
 }
 
-.nav_bom_alt .close i{
+.nav_bom_alt .close i {
   font-size: 45px;
   transform: rotate(44deg);
 }
-.nav_bom_alt ul{
+
+.nav_bom_alt ul {
   height: auto;
   overflow: hidden;
 }
-.nav_bom_alt li a{
+
+.nav_bom_alt li a {
   display: block;
   color: #505050;
 }
-.nav_bom_alt li{
+
+.nav_bom_alt li {
   float: left;
   width: 33.333%;
   text-align: center;
   font-size: 18px;
 }
 
-.nav_bom_alt .iconfont{
+.nav_bom_alt .iconfont {
   margin-top: 20px;
   font-size: 30px;
   color: #ef7d1d;
   display: block;
   text-align: center;
 }
-li{
+
+li {
   list-style: none;
 }
 
+.table_cc {
+  display: table;
+}
+
+.table_cc .cell {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+input {
+  height: 30px;
+  width: 100%;
+  background: #ebeef3;
+  border-radius: 5px;
+  border: 0;
+  padding: 6px 12px;
+  box-sizing: border-box;
+}
 
 /* 动画 */
+
 .vux-pop-out-enter-active,
 .vux-pop-out-leave-active,
 .vux-pop-in-enter-active,

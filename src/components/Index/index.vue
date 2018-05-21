@@ -75,8 +75,8 @@
           <div class="search">
             <span>长沙市</span>
             <div class="input">
-              <input type="text" placeholder="搜索食材或菜谱">
-              <i class="iconfont icon-sousuo"></i>
+              <input type="text" v-model="searchVal" placeholder="搜索食材或菜谱">
+              <i class="iconfont icon-sousuo" @click="search"></i>
             </div>
             <i class="iconfont icon-dangan1"></i>
           </div>
@@ -95,17 +95,17 @@
               </div>
             </div>
             <div class="right">
-              <div class="share">
+              <div class="share"  @click="share">
                 <i class="iconfont icon-fenxiang"></i>
                 <span>分享</span>
               </div>
             </div>
           </div>
       </div>
-    <!-- 九宫格 -->
+      <!-- 九宫格 -->
       <div class="grid_m">
           <grid :cols="3" :show-lr-borders="false">
-            <grid-item link="/">
+            <grid-item link="/Tool">
                 <i class="iconfont icon-gongjuxiang"></i>
                 <span>基本工具</span>
             </grid-item>
@@ -146,7 +146,7 @@
       <!-- 膳食推荐 -->
       <div class="recommend">
         <div class="box">
-          <h2>膳食推荐<span>换一批</span></h2>
+          <h2>膳食推荐<span @click="isDisease()">换一批</span></h2>
 
           <tab custom-bar-width="27px" v-model="reIndex"  prevent-default @on-before-index-change="recommend">
             <tab-item selected>
@@ -179,6 +179,31 @@
                 </div>
               </swiper-item>
             </swiper>
+          </div>
+        </div>
+      </div>
+
+      <!-- 糖尿病膳食推荐 -->
+      <div class="recommend none">
+        <div class="box">
+          <h2>膳食推荐</h2>
+          <div class="recommend_box">
+            <ul v-for="(item,index) in recommendData">
+              <li v-for="jtem in item[0]">
+                <h3>{{jtem.name}}</h3>
+                <span>{{jtem.kcal}}</span>
+              </li>
+              <li class="default" v-if="item[1].length>0">
+                <h3>加餐</h3>
+              </li>
+              <li v-for="jtem in item[1]">
+                <h3>{{jtem.name}}</h3>
+                <span>{{jtem.kcal}}</span>
+              </li>
+            </ul>
+            <div class="more">
+              <router-link to="/">查看更多></router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -223,7 +248,7 @@ export default {
   },
   data() {
     return {
-      list2: [1, 2, 3],
+      searchVal:'',
       reIndex: 0,
       // 早中晚餐推荐
       recommendData: [
@@ -319,6 +344,11 @@ export default {
     };
   },
   methods: {
+    search(){
+      this.$router.push({path:'/Tool/Recipes',query:{
+        search:this.searchVal
+      }})
+    },
     // 膳食推荐table
     recommend(index) {
       this.reIndex = index;
@@ -329,13 +359,25 @@ export default {
       this.$vux.toast.text("今日签到成功，奖励积分（+1）");
       // this.$vux.toast.text("今天已经签过啦，改天再来吧~");
     },
+    // 分享
+    share() {
+      this.$vux.toast.text("分享好友成功，奖励积分（+10）");
+    },
     openAlt(isTrue) {
       if (isTrue) {
         this.navBottom = 0;
       } else {
         this.navBottom = -300;
       }
+    },
+    // 判断是否为糖尿病患者
+    isDisease() {
+      this.recommendData = [];
     }
+  },
+  mounted() {
+    // 判断是否为糖尿病患者首页推荐食谱不同
+    // this.isDisease();
   }
 };
 </script>
@@ -505,6 +547,16 @@ export default {
     .vux-tab .vux-tab-item,
     .vux-tab .vux-tab-item.vux-tab-selected {
       color: #666666;
+    }
+  }
+
+  .more{
+    text-align:center;
+    font-size:14px;
+
+    a{
+      color:#666666;
+      padding:5px 10px;   
     }
   }
 }

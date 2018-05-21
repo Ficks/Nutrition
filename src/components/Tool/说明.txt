@@ -1,0 +1,8 @@
+tool.vue 			工具页面列表
+searchList			搜索列表与与详情
+NutrientRequirement		营养素需求查询
+MotionEnergyQuery		运动耗能查询
+CalorieCalculation		卡路里需求计算
+NutrientKnowledge		营养素知识
+DietaryReference		饮食分量参考
+WeightQuery			体重标准查询
