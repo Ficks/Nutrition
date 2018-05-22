@@ -1,5 +1,10 @@
 <template>
     <div class="container">
+       <div class="header">
+            <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
+            <div class="title">{{$route.name}}</div>
+            <div class="right"></div>
+        </div>
         <div class="details">
             <div class="title">
                 <h1>正常成人膳食指南 6项权威解答</h1>
@@ -45,8 +50,8 @@
                         <textarea v-model="commentVal" :style="{height:commentShow?'150px':'25px'}" placeholder="我也来说两句..." @focus="commentShow=true" @blur="commentShow=false"></textarea>
                     </div>
                     <div class="right" v-show="!commentShow">
-                        <i class="iconfont icon-dianzan"></i>
-                        <i class="iconfont icon-shoucang"></i>
+                        <i class="iconfont icon-dianzan" @click="setWenz(true)"></i>
+                        <i class="iconfont icon-shoucang" @click="setWenz(false)"></i>
                     </div>
                 </div>
                 <div class="submit_btn" @click="submitComment" v-show="commentShow">确定发表</div>
@@ -91,12 +96,28 @@ export default {
       this.loading = true;
     },
     submitComment() {
-      this.commentArr.push({
-        lou: "4楼",
-        p: this.commentVal,
-        date: "5月22日"
-      });
-      this.commentVal = "";
+      if (this.commentVal !== "") {
+        this.commentArr.push({
+          lou: "4楼",
+          p: this.commentVal,
+          date: "5月22日"
+        });
+        this.commentVal = "";
+        // 显示文字
+        this.$vux.toast.text("发表成功", "bottom");
+      } else {
+        this.$vux.toast.text("评论不能为空", "bottom");
+        return false;
+      }
+    },
+    setWenz(isX) {
+      if (isX) {
+        // 点赞
+        this.$vux.toast.text("点赞成功", "bottom");
+      } else {
+        // 收藏
+        this.$vux.toast.text("收藏成功", "bottom");
+      }
     }
   },
   mounted() {}

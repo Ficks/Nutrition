@@ -109,7 +109,7 @@
                 <i class="iconfont icon-gongjuxiang"></i>
                 <span>基本工具</span>
             </grid-item>
-            <grid-item link="/">
+            <grid-item link="/Allocation">
                 <i class="iconfont icon-shanshitiaopei"></i>
                 <span>膳食调配</span>
             </grid-item>
