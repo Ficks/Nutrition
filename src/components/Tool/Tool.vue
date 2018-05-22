@@ -1,5 +1,10 @@
 <template>
     <div class="view">
+      <div class="header"  v-if="$route.path==='/Tool'">
+        <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
+        <div class="title">{{$route.name}}</div>
+        <div class="right"></div>
+      </div>
     <!-- 九宫格 -->
       <div class="grid_m" v-if="$route.path==='/Tool'">
           <grid :cols="3" :show-lr-borders="false" :show-vertical-dividers="false">
@@ -27,10 +32,7 @@ export default {
     return {};
   },
   methods: {},
-  mounted() {
-    console.log(this.$router);
-    console.log(this.$route);
-  }
+  mounted() {}
 };
 </script>
 <style lang="less" scoped>

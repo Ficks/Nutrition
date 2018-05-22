@@ -78,20 +78,20 @@
               <input type="text" v-model="searchVal" placeholder="搜索食材或菜谱">
               <i class="iconfont icon-sousuo" @click="search"></i>
             </div>
-            <i class="iconfont icon-dangan1"></i>
+            <router-link to="/PersonalFiles"><i class="iconfont icon-dangan1"></i></router-link>
           </div>
           <div class="cont">
             <div class="left">
               <div class="qd" @click="signInFn">
                 <i class="iconfont icon-qiandao"></i>
-                <span>签到</span>
+                <span>{{qiandao}}</span>
               </div>
             </div>
             <div class="center">
               <div class="box">
                 <span>健康得分</span>
                 <h2>100</h2>
-                <router-link to="/">完善个人档案></router-link>
+                <router-link to="/PersonalFiles">完善个人档案></router-link>
               </div>
             </div>
             <div class="right">
@@ -248,7 +248,8 @@ export default {
   },
   data() {
     return {
-      searchVal:'',
+      qiandao: "签到",
+      searchVal: "",
       reIndex: 0,
       // 早中晚餐推荐
       recommendData: [
@@ -344,10 +345,13 @@ export default {
     };
   },
   methods: {
-    search(){
-      this.$router.push({path:'/Tool/Recipes',query:{
-        search:this.searchVal
-      }})
+    search() {
+      this.$router.push({
+        path: "/Tool/Recipes",
+        query: {
+          search: this.searchVal
+        }
+      });
     },
     // 膳食推荐table
     recommend(index) {
@@ -356,7 +360,10 @@ export default {
     // 签到
     signInFn() {
       // 显示文字
-      this.$vux.toast.text("今日签到成功，奖励积分（+1）");
+      if (this.qiandao == "签到") {
+        this.$vux.toast.text("今日签到成功，奖励积分（+1）");
+        this.qiandao = "已签到";
+      }
       // this.$vux.toast.text("今天已经签过啦，改天再来吧~");
     },
     // 分享
@@ -411,6 +418,9 @@ export default {
       border-radius: 7px;
       border: 0;
       padding-left: 30px;
+    }
+    a {
+      color: #fff;
     }
     i {
       width: 12%;
@@ -550,13 +560,13 @@ export default {
     }
   }
 
-  .more{
-    text-align:center;
-    font-size:14px;
+  .more {
+    text-align: center;
+    font-size: 14px;
 
-    a{
-      color:#666666;
-      padding:5px 10px;   
+    a {
+      color: #666666;
+      padding: 5px 10px;
     }
   }
 }

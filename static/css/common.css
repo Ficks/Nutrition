@@ -119,7 +119,7 @@ li {
   vertical-align: middle;
 }
 
-input {
+input,textarea {
   height: 30px;
   width: 100%;
   background: #ebeef3;
@@ -162,4 +162,52 @@ input {
 .vux-pop-in-leave-active {
   opacity: 0;
   transform: translate3d(-100%, 0, 0);
+}
+
+.submit_btn{
+  width: 80%;
+  background: #8dc13b;
+  color: #fff;
+  text-align: center;
+  height: 37px;
+  line-height: 37px;
+  border-radius: 5px;
+  margin: 30px auto;
+}
+.header{
+  position: relative;
+  height: 45px;
+  line-height: 45px;
+  background: #8dc13b;
+  width: 100%;
+  color: #fff;
+}
+.header a{
+  color: #fff;
+  font-size: 15px;
+}
+.header .iconfont{
+  font-size: 20px;
+}
+.header .left{
+  position: absolute;
+  font-size: 15px;
+  left: 0;
+  padding-left: 10px;
+}
+.header .title{
+  text-align: center;
+  font-size: 18px;
+}
+.header .right{
+  position: absolute;
+  font-size: 15px;
+  right: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }

@@ -1,14 +1,19 @@
 <template>
     <div class="container">
+      <div class="header">
+        <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
+        <div class="title">{{$route.name}}</div>
+        <div class="right"></div>
+      </div>
         <div class="search">
             <div class="input">
               <input type="text" v-model="searchVal.value" placeholder="输入文字搜索食谱">
               <i class="iconfont icon-sousuo" @click="search"></i>
             </div>
         </div>
-        <scroller lock-x height="-40px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
+        <scroller lock-x height="-85px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
         <div class="box search_list">
-            <panel :list="listArr" type="1"></panel>
+            <panel :list="listArr" type="1" @on-click-item="toPathDetails"></panel>
             <p class="more_s"  v-show="!searchVal.onFetching">{{searchVal.uptext}}</p>
             <load-more tip="loading" v-show="searchVal.onFetching"></load-more>
         </div>
@@ -26,6 +31,7 @@ export default {
   },
   data() {
     return {
+      title: "",
       searchVal: {
         value: "",
         onFetching: false,
@@ -35,38 +41,55 @@ export default {
         {
           title: "辣椒炒肉辣椒炒肉辣椒炒肉",
           src: "/static/images/searchm.jpg",
-          desc: "131kcal(100g)",
-          url: "/Tool/SearchList/Details"
+          desc: "131kcal(100g)"
         },
         {
           title: "辣椒炒肉",
           src: "/static/images/searchm.jpg",
-          desc: "131kcal(100g)",
-          url: "/Tool/SearchList/Details"
+          desc: "131kcal(100g)"
         },
         {
           title: "辣椒炒肉",
           src: "/static/images/searchm.jpg",
-          desc: "131kcal(100g)",
-          url: "/Tool/SearchList/Details"
+          desc: "131kcal(100g)"
         },
         {
           title: "辣椒炒肉",
           src: "/static/images/searchm.jpg",
-          desc: "131kcal(100g)",
-          url: "/Tool/SearchList/Details"
+          desc: "131kcal(100g)"
         },
         {
           title: "辣椒炒肉",
           src: "/static/images/searchm.jpg",
-          desc: "131kcal(100g)",
-          url: "/Tool/SearchList/Details"
+          desc: "131kcal(100g)"
         }
       ]
     };
   },
   methods: {
+    apiFn() {
+      console.log(this.$route);
+      // 请求那个接口
+      if (this.$route.path === "/Tool/Recipes") {
+        // 菜谱检索
+      } else if (this.$route.path === "/Tool/MaterialRetrieval") {
+        // 食材检索
+      } else if (this.$route.path === "/Tool/OtherRetrieval") {
+        // 其他食品检索
+      } else if (this.$route.path === "/Tool/AllergicFood") {
+        // 过敏食物筛选
+      }
+    },
+    toPathDetails(url) {
+      this.$router.push({
+        path: "/Tool/SearchList/Details",
+        query: {
+          path: this.$route.path
+        }
+      });
+    },
     getList() {
+      console.log(this.$route.path);
       if (this.searchVal.onFetching) {
         // do nothing
       } else {
@@ -108,6 +131,7 @@ export default {
     search() {}
   },
   mounted() {
+    this.apiFn(); //判断需要搜索什么
     // this.$nextTick(() => {
     //   this.$refs.scrollerBottom.reset({ top: 0 });
     // });
