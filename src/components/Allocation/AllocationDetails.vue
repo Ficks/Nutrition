@@ -7,11 +7,23 @@
         </div>
         <div class="details">
             <div class="title">
-                <h1>正常成人膳食指南 6项权威解答</h1>
-                <p>发布时间：2018-05-14 17:14 作者：admin</p>
+                <h1>{{details.title}}</h1>
+                <p>发布时间：{{details.date}} 作者：{{details.author}}</p>
             </div>
-            <div class="content">
-                <p>      一直以来人们都非常关注饮食对健康的影响，那么到底
+            <div class="content" v-html="details.text">
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      details: {
+        title: "正常成人膳食指南 6项权威解答",
+        date: "2018-05-14 17:14",
+        author: "admin",
+        text: ` <p>      一直以来人们都非常关注饮食对健康的影响，那么到底
 吃什么？怎么吃才能够有益机体健康呢？今天小福菌给大家
 带来2018膳食指南，告诉你吃什么最健康！</p>
                 <img src="/static/images/zx.jpg" alt="">
@@ -28,19 +40,14 @@
                 <p>
                           大量摄入新鲜水果或和糖尿病发生率降低直接相关，同
 时还能够降低糖尿病患者并发症的发生率。
-                </p>
-            </div>
-        </div>
-    </div>
-</template>
-<script>
-export default {
-  data() {
-    return {};
+                </p>`
+      }
+    };
   },
   methods: {
     getDetails() {
       console.log("当前页面API：" + this.$route.path);
+      console.log("详细数据格式：", this.details);
     }
   },
   mounted() {

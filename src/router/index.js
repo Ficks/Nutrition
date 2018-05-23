@@ -8,6 +8,7 @@ import FindDetails from '@/components/Find/FindDetails.vue'
 // 动态
 import Dynamic from '@/components/Find/Dynamic.vue'
 import DynamicDetails from '@/components/Find/DynamicDetails.vue'
+import Release from '@/components/Find/Release.vue'
 // 咨询
 import Consultation from '@/components/Consultation/Consultation.vue'
 // 我的
@@ -52,111 +53,114 @@ Vue.use(Router)
 
 export default new Router({
   routes: [{
-    path: '/',
-    name: '首页',
-    component: Index
-  }, {
-    path: '/Find',
-    name: '发现',
-    component: Find
-  }, {
-    path: '/Find/FindDetails',
-    name: '资讯详情',
-    component: FindDetails
-  }, {
-    path: '/Dynamic',
-    name: '动态',
-    component: Dynamic
-  }, {
-    path: '/Dynamic/DynamicDetails',
-    name: '动态详情',
-    component: DynamicDetails
-  }, {
-    path: '/Consultation',
-    name: '咨询',
-    component: Consultation
-  }, {
-    path: '/My',
-    name: '我的',
-    component: My
-  }, {
-    path: '/Tool',
-    name: '基本工具',
-    component: Tool,
-    children: [
-      {
-        path: '/Tool/Recipes',
-        name: '菜谱检索',
-        component: SearchList,
-        icon: "iconfont icon-xitongcaipu"
-      },
-      {
-        path: '/Tool/MaterialRetrieval',
-        name: '食材检索',
-        component: SearchList,
-        icon: "iconfont icon-yumi"
-      },
-      {
-        path: '/Tool/OtherRetrieval',
-        name: '其他食品检索',
-        component: SearchList,
-        icon: "iconfont icon-jinkouniunai"
-      },
-      {
-        path: '/Tool/SearchList/Details',
-        hidden: true,
-        name: 'SearchDetails',
-        component: SearchDetails
-      },
-      {
-        path: '/Tool/CalorieCalculation',
-        name: '卡路里需求计算',
-        component: CalorieCalculation,
-        icon: "iconfont icon-qialuli"
-      },
-      {
-        path: '/Tool/NutrientRequirement',
-        name: '营养素需求查询',
-        component: NutrientRequirement,
-        icon: "iconfont icon-yingyangbaojian"
-      },
-      {
-        path: '/Tool/MotionEnergyQuery',
-        name: '运动耗能查询',
-        component: MotionEnergyQuery,
-        icon: "iconfont icon-yundong"
-      },
-      {
-        path: '/Tool/NutrientKnowledge',
-        name: '营养素知识',
-        component: NutrientKnowledge,
-        icon: "iconfont icon-zhishi"
-      },
-      {
-        path: '/Tool/NutrientKnowledge/NutrientKnowledgeDetails',
-        hidden: true,
-        name: '咨询详情',
-        component: NutrientKnowledgeDetails
-      },
-      {
-        path: '/Tool/DietaryReference',
-        name: '饮食分量参考',
-        component: DietaryReference,
-        icon: "iconfont icon-mianshi"
-      },
-      {
-        path: '/Tool/WeightQuery',
-        name: '体重标准查询',
-        component: WeightQuery,
-        icon: "iconfont icon-tizhong"
-      },
-    ]
-  }, {
-    path: '/Allocation',
-    name: '膳食调配',
-    component: Allocation,
-    children: [
-      {
+      path: '/',
+      name: '首页',
+      component: Index
+    }, {
+      path: '/Find',
+      name: '发现',
+      component: Find
+    }, {
+      path: '/Find/FindDetails',
+      name: '资讯详情',
+      component: FindDetails
+    },
+    {
+      path: '/Dynamic',
+      name: '动态',
+      component: Dynamic
+    }, {
+      path: '/Dynamic/DynamicDetails',
+      name: '动态详情',
+      component: DynamicDetails
+    }, {
+      path: '/Dynamic/Release',
+      name: '发布动态',
+      component: Release
+    }, {
+      path: '/Consultation',
+      name: '咨询',
+      component: Consultation
+    }, {
+      path: '/My',
+      name: '我的',
+      component: My
+    }, {
+      path: '/Tool',
+      name: '基本工具',
+      component: Tool,
+      children: [{
+          path: '/Tool/Recipes',
+          name: '菜谱检索',
+          component: SearchList,
+          icon: "iconfont icon-xitongcaipu"
+        },
+        {
+          path: '/Tool/MaterialRetrieval',
+          name: '食材检索',
+          component: SearchList,
+          icon: "iconfont icon-yumi"
+        },
+        {
+          path: '/Tool/OtherRetrieval',
+          name: '其他食品检索',
+          component: SearchList,
+          icon: "iconfont icon-jinkouniunai"
+        },
+        {
+          path: '/Tool/SearchList/Details',
+          hidden: true,
+          name: 'SearchDetails',
+          component: SearchDetails
+        },
+        {
+          path: '/Tool/CalorieCalculation',
+          name: '卡路里需求计算',
+          component: CalorieCalculation,
+          icon: "iconfont icon-qialuli"
+        },
+        {
+          path: '/Tool/NutrientRequirement',
+          name: '营养素需求查询',
+          component: NutrientRequirement,
+          icon: "iconfont icon-yingyangbaojian"
+        },
+        {
+          path: '/Tool/MotionEnergyQuery',
+          name: '运动耗能查询',
+          component: MotionEnergyQuery,
+          icon: "iconfont icon-yundong"
+        },
+        {
+          path: '/Tool/NutrientKnowledge',
+          name: '营养素知识',
+          component: NutrientKnowledge,
+          icon: "iconfont icon-zhishi"
+        },
+        {
+          path: '/Tool/NutrientKnowledge/NutrientKnowledgeDetails',
+          hidden: true,
+          name: '咨询详情',
+          component: NutrientKnowledgeDetails
+        },
+        {
+          path: '/Tool/DietaryReference',
+          name: '饮食分量参考',
+          component: DietaryReference,
+          icon: "iconfont icon-mianshi"
+        },
+        {
+          path: '/Tool/WeightQuery',
+          name: '体重标准查询',
+          component: WeightQuery,
+          icon: "iconfont icon-tizhong"
+        },
+      ]
+    }, {
+      path: '/Allocation',
+      name: '膳食调配',
+      component: Allocation,
+      children: [{
         path: '/Allocation/NormalDdult',
         name: '正常成人膳食',
         component: AllocationDetails,
@@ -196,56 +200,56 @@ export default new Router({
         name: '家庭配餐',
         component: AllocationDetails,
         icon: "iconfont icon-mianshi"
-      }
-    ]
-  }, {
-    path: '/PersonalFiles',
-    name: '个人档案',
-    component: PersonalFiles,
-    children: [{
-      path: '/PersonalFiles/PersonalData',
-      name: '修改个人档案',
-      component: PersonalData
+      }]
     }, {
-      path: '/PersonalFiles/TodayArchives',
-      name: '今日档案',
-      component: TodayArchives
+      path: '/PersonalFiles',
+      name: '个人档案',
+      component: PersonalFiles,
+      children: [{
+        path: '/PersonalFiles/PersonalData',
+        name: '修改个人档案',
+        component: PersonalData
+      }, {
+        path: '/PersonalFiles/TodayArchives',
+        name: '今日档案',
+        component: TodayArchives
+      }, {
+        path: '/PersonalFiles/AllergicFood',
+        name: '过敏食物筛选',
+        component: SearchList
+      }, {
+        path: '/PersonalFiles/AllergicFood/Details',
+        name: '过敏食物添加',
+        component: SearchDetails
+      }]
     }, {
-      path: '/PersonalFiles/AllergicFood',
-      name: '过敏食物筛选',
-      component: SearchList
+      path: '/Assessment',
+      name: '膳食评估',
+      component: Assessment,
+      children: [{
+        path: '/Assessment/AssessmentAnswer',
+        name: '评估问卷',
+        component: AssessmentAnswer
+      }, {
+        path: '/Assessment/AssessmentResult',
+        name: '评估结果',
+        component: AssessmentResult
+      }]
     }, {
-      path: '/PersonalFiles/AllergicFood/Details',
-      name: '过敏食物添加',
-      component: SearchDetails
-    }]
-  }, {
-    path: '/Assessment',
-    name: '膳食评估',
-    component: Assessment,
-    children: [{
-      path: '/Assessment/AssessmentAnswer',
-      name: '评估问卷',
-      component: AssessmentAnswer
-    }, {
-      path: '/Assessment/AssessmentResult',
-      name: '评估结果',
-      component: AssessmentResult
-    }]
-  }, {
-    path: '/self',
-    name: '自我评估',
-    component: Assessment,
-    children: [{
-      path: '/self/AssessmentAnswer',
-      name: '评估问卷',
-      component: AssessmentAnswer
-    }, {
-      path: '/self/AssessmentResult',
-      name: '评估结果',
-      component: AssessmentResult
-    }]
-  },]
+      path: '/self',
+      name: '自我评估',
+      component: Assessment,
+      children: [{
+        path: '/self/AssessmentAnswer',
+        name: '评估问卷',
+        component: AssessmentAnswer
+      }, {
+        path: '/self/AssessmentResult',
+        name: '评估结果',
+        component: AssessmentResult
+      }]
+    },
+  ]
 
 
 

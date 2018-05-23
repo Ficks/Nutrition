@@ -1,264 +1,129 @@
 <template>
     <div class="container">
-        <!-- 底部导航 -->
-        <tabbar class="nav_bom">
-            <tabbar-item link="/">
-            <div class="list" slot="label">
-                <i class="iconfont icon-shouye"></i>
-                <span>首页</span>
-                </div>
-            </tabbar-item>
-            <tabbar-item link="/Find" selected>
-            <div class="list" slot="label">
-                <i class="iconfont icon-faxian"></i>
-                <span>发现</span>
-                </div>
-            </tabbar-item>
-            <tabbar-item>
-            <div class="list add" slot="label" @click="openAlt(true)">
-                <i class="iconfont icon-tianjia"></i>
-                </div>
-            </tabbar-item>
-            <tabbar-item link="/Consultation">
-            <div class="list" slot="label">
-                <i class="iconfont icon-tuwenzixun"></i>
-                <span>咨询</span>
-                </div>
-            </tabbar-item>
-            <tabbar-item link="/My">
-            <div class="list" slot="label">
-                <i class="iconfont icon-wode-F"></i>
-                <span>我的</span>
-                </div>
-            </tabbar-item>
-        </tabbar>
-        <div class="nav_bom_alt" :style="{bottom:navBottom+'px'}">
-            <ul>
-            <li>
-                <router-link to="/">
-                <i class="iconfont icon-zaocan1"></i>
-                <span>早餐</span>
-                </router-link>
-            </li>
-            <li>
-                <router-link to="/">
-                <i class="iconfont icon-wucan"></i>
-                <span>中餐</span>
-                </router-link>
-            </li>
-            <li>
-                <router-link to="/">
-                <i class="iconfont icon-wancan"></i>
-                <span>晚餐</span>
-                </router-link>
-            </li>
-            <li>
-                <router-link to="/">
-                <i class="iconfont icon-lingshi"></i>
-                <span>加餐</span>
-                </router-link>
-            </li>
-            <li>
-                <router-link to="/">
-                <i class="iconfont icon-buhang"></i>
-                <span>步行</span>
-                </router-link>
-            </li>
-            </ul>
-            <div class="close" @click="openAlt(false)">
-                <i class="iconfont icon-tianjia"></i>
-            </div>
-        </div>
-        <div class="nav_bom_zoom" @click="navBottom=-300" v-show="navBottom===0"></div>
-
         <div class="header">
-            <span class="active">资讯</span>
-            <span>动态</span>
+            <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
+            <div class="title">{{$route.name}}</div>
+            <div class="right"></div>
         </div>
-
-        <div class="box_wr">
-            <scroller lock-x height="-105px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
-            <div class="box search_list">
-                <panel :list="listArr" type="1" @on-click-item="toPathDetails"></panel>
-                <p class="more_s"  v-show="!searchVal.onFetching">{{searchVal.uptext}}</p>
-                <load-more tip="loading" v-show="searchVal.onFetching"></load-more>
+        <div class="details_dt">
+          <div class="top">
+            <div class="imgs"><img src="/static/images/tx.jpg" alt=""></div>
+            <div class="wz">
+              <h1>lok666</h1>
+              <p>1分钟前</p>
             </div>
-            </scroller>
+          </div>
+          <div class="wz_box">
+            <img src="/static/images/dt.jpg" alt="">
+            <p>#饮食行为分享#今天又去吃好吃的了！</p>
+          </div>
+        </div>
+        
+        <div class="pldz_btn">
+          <div class="btns">
+            <i class="iconfont icon-pinglun"></i>
+            评论
+          </div>
+          <div class="btns">
+            <i class="iconfont icon-dianzan1"></i>
+            点赞
+          </div>
         </div>
     </div>
 </template>
 <script>
-import { Tabbar, TabbarItem, Scroller, LoadMore, Panel } from "vux";
 export default {
-  components: {
-    Tabbar,
-    TabbarItem,
-    Scroller,
-    LoadMore,
-    Panel
-  },
   data() {
-    return {
-      navBottom: -300,
-      searchVal: {
-        value: "",
-        onFetching: false,
-        uptext: "滑动查看更多"
-      },
-      listArr: [
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
-        },
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
-        },
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
-        },
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
-        },
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
-        }
-      ]
-    };
+    return {};
   },
-  methods: {
-    openAlt(isTrue) {
-      if (isTrue) {
-        this.navBottom = 0;
-      } else {
-        this.navBottom = -300;
-      }
-    },
-
-    getList() {
-      if (this.searchVal.onFetching) {
-        // do nothing
-      } else {
-        this.searchVal.onFetching = true;
-        setTimeout(() => {
-          this.listArr.push(
-            {
-              title: "资讯标题",
-              src: "/static/images/searchm.jpg",
-              desc: "资讯内容缩略显示...",
-              url: "/Tool/SearchList/Details"
-            },
-            {
-              title: "资讯标题",
-              src: "/static/images/searchm.jpg",
-              desc: "资讯内容缩略显示...",
-              url: "/Tool/SearchList/Details"
-            },
-            {
-              title: "资讯标题",
-              src: "/static/images/searchm.jpg",
-              desc: "资讯内容缩略显示...",
-              url: "/Tool/SearchList/Details"
-            },
-            {
-              title: "资讯标题",
-              src: "/static/images/searchm.jpg",
-              desc: "资讯内容缩略显示...",
-              url: "/Tool/SearchList/Details"
-            }
-          );
-          this.$nextTick(() => {
-            this.$refs.scrollerBottom.reset();
-          });
-          this.searchVal.onFetching = false;
-        }, 2000);
-      }
-    },
-    toPathDetails(url) {
-      this.$router.push({
-        path: "/Find/FindDetails"
-      });
-    }
-  },
+  methods: {},
   mounted() {
     console.log("当前页面API：" + this.$route.path);
-    console.log("当前页面数据列表", this.listArr);
   }
 };
 </script>
 <style scoped lang="less">
 .container {
-  .header {
-    text-align: center;
-    font-size: 17px;
+  height: 100%;
+  overflow: hidden;
 
-    span {
-      margin: 0 25px;
-      position: relative;
-      display: inline-block;
-      overflow: hidden;
+  .details_dt {
+    padding: 15px 35px 50px 35px;
+    box-sizing: border-box;
+  }
 
-      &.active::after {
-        content: "";
-        display: block;
+  .top {
+    .imgs {
+      float: left;
+      img {
+        width: 42px;
+      }
+    }
+    .wz {
+      float: left;
+      padding-left: 10px;
 
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        background: #fff;
-        height: 5px;
-        width: 100%;
-        border-radius: 2.5px;
+      h1 {
+        font-size: 15px;
+        color: #7a7a7a;
+        font-weight: 500;
+      }
+      p {
+        font-size: 12px;
+        color: #b9b9b9;
       }
     }
   }
-
-  .box_wr {
-    // padding-bottom: 80px;
-
-    .more_s {
-      text-align: center;
-      padding-top: 10px;
+  .wz_box {
+    img {
+      max-width: 100%;
+      margin: 10px 0 20px;
+    }
+    p {
       font-size: 14px;
       color: #666;
     }
   }
-}
-</style>
 
-<style lang="less">
-.search_list {
-  .weui-panel__bd a {
-    margin-top: 10px;
-    background: #fff;
-    border-radius: 8px;
+  .pldz_btn {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-top: 1px solid #c9c9c9;
 
-    .weui-media-box_appmsg,
-    .weui-media-box__hd {
-      width: 120px;
-      height: auto;
-      border: 2px solid #ededed;
+    .btns {
+      float: left;
+      width: 50%;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      background: #f0f0f0;
+      font-size: 15px;
+      color: #707070;
+      position: relative;
+
+      i {
+        font-size: 20px;
+        color: #707070;
+        position: relative;
+        top: 2px;
+      }
+
+      &:first-child:after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 4px;
+        height: 32px;
+        width: 1px;
+        background: #a7a7a7;
+      }
+
+      &:active {
+        background: #ddd;
+      }
     }
-  }
-  .weui-media-box__title {
-    color: #545454;
-    font-size: 16px;
-    font-weight: bold;
-  }
-
-  .weui-media-box__desc {
-    margin-top: 10px;
-    color: #8d8d8d;
-    font-size: 14px;
-    font-weight: bold;
   }
 }
 </style>

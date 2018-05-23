@@ -12,6 +12,17 @@ html,
   height: 100%;
 }
 
+input,
+button,
+select,
+textarea {
+  outline: none;
+}
+
+textarea {
+  resize: none;
+}
+
 .text-center {
   text-align: center;
   margin-top: 50%;
@@ -224,7 +235,7 @@ textarea {
   right: 10px;
 }
 
-.header .right a{
+.header .right a {
   color: #fff;
 }
 
@@ -239,4 +250,14 @@ textarea {
 
   {
   opacity: 0;
+}
+
+.details .title h1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.container .details .title p {
+  margin-bottom: 15px;
 }
