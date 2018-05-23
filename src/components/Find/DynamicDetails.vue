@@ -72,8 +72,8 @@
         <div class="nav_bom_zoom" @click="navBottom=-300" v-show="navBottom===0"></div>
 
         <div class="header">
-            <span class="active"><router-link to="/Find">资讯</router-link></span>
-            <span><router-link to="/Dynamic">动态</router-link></span>
+            <span class="active">资讯</span>
+            <span>动态</span>
         </div>
 
         <div class="box_wr">
@@ -217,10 +217,6 @@ export default {
         height: 5px;
         width: 100%;
         border-radius: 2.5px;
-      }
-
-      a {
-        display: block;
       }
     }
   }

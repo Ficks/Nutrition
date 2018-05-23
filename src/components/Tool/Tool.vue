@@ -16,7 +16,7 @@
             </template>
           </grid>
       </div>
-      <div class="view">
+      <div class="view"  v-if="$route.path!=='/Tool'">
         <router-view></router-view>
       </div>
     </div>

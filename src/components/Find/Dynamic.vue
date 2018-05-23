@@ -72,114 +72,99 @@
         <div class="nav_bom_zoom" @click="navBottom=-300" v-show="navBottom===0"></div>
 
         <div class="header">
-            <span class="active"><router-link to="/Find">资讯</router-link></span>
-            <span><router-link to="/Dynamic">动态</router-link></span>
-        </div>
+            <span><router-link to="/Find">资讯</router-link></span>
+            <span class="active"><router-link to="/Dynamic">动态</router-link></span>
 
-        <div class="box_wr">
-            <scroller lock-x height="-105px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
-            <div class="box search_list">
-                <panel :list="listArr" type="1" @on-click-item="toPathDetails"></panel>
-                <p class="more_s"  v-show="!searchVal.onFetching">{{searchVal.uptext}}</p>
-                <load-more tip="loading" v-show="searchVal.onFetching"></load-more>
-            </div>
-            </scroller>
+            <div class="right"><router-link to="/"><i class="iconfont icon-xiangji"></i></router-link></div>
+        </div>
+        <div class="swiper_wr">
+         <swiper :aspect-ratio="300/800" @on-index-change="onSwiperItemIndexChange" v-model="swiperItemIndex" :show-dots="false">
+              <swiper-item class="swiper-demo-img" v-for="(item, index) in listArr" :key="index">
+                <img :src="item">
+              </swiper-item>
+          </swiper>
         </div>
     </div>
 </template>
 <script>
-import { Tabbar, TabbarItem, Scroller, LoadMore, Panel } from "vux";
+import { Tabbar, TabbarItem, Swiper, SwiperItem } from "vux";
 export default {
   components: {
     Tabbar,
     TabbarItem,
-    Scroller,
-    LoadMore,
-    Panel
+    Swiper,
+    SwiperItem
   },
   data() {
     return {
       navBottom: -300,
+      swiperItemIndex: 0,
+      listArr: [
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg",
+        "/static/images/ys.jpg"
+      ],
       searchVal: {
         value: "",
         onFetching: false,
         uptext: "滑动查看更多"
-      },
-      listArr: [
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
-        },
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
-        },
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
-        },
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
-        },
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
-        }
-      ]
+      }
     };
   },
   methods: {
+    onSwiperItemIndexChange(index) {
+      console.log("demo item change", index);
+    },
     openAlt(isTrue) {
       if (isTrue) {
         this.navBottom = 0;
       } else {
         this.navBottom = -300;
-      }
-    },
-
-    getList() {
-      if (this.searchVal.onFetching) {
-        // do nothing
-      } else {
-        this.searchVal.onFetching = true;
-        setTimeout(() => {
-          this.listArr.push(
-            {
-              title: "资讯标题",
-              src: "/static/images/searchm.jpg",
-              desc: "资讯内容缩略显示...",
-              url: "/Tool/SearchList/Details"
-            },
-            {
-              title: "资讯标题",
-              src: "/static/images/searchm.jpg",
-              desc: "资讯内容缩略显示...",
-              url: "/Tool/SearchList/Details"
-            },
-            {
-              title: "资讯标题",
-              src: "/static/images/searchm.jpg",
-              desc: "资讯内容缩略显示...",
-              url: "/Tool/SearchList/Details"
-            },
-            {
-              title: "资讯标题",
-              src: "/static/images/searchm.jpg",
-              desc: "资讯内容缩略显示...",
-              url: "/Tool/SearchList/Details"
-            }
-          );
-          this.$nextTick(() => {
-            this.$refs.scrollerBottom.reset();
-          });
-          this.searchVal.onFetching = false;
-        }, 2000);
       }
     },
     toPathDetails(url) {
@@ -190,7 +175,7 @@ export default {
   },
   mounted() {
     console.log("当前页面API：" + this.$route.path);
-    console.log("当前页面数据列表", this.listArr);
+    // console.log("当前页面数据列表", this.listArr);
   }
 };
 </script>
@@ -199,13 +184,17 @@ export default {
   .header {
     text-align: center;
     font-size: 17px;
-
+    .right {
+      right: 10px;
+    }
     span {
       margin: 0 25px;
       position: relative;
       display: inline-block;
       overflow: hidden;
-
+      a {
+        display: block;
+      }
       &.active::after {
         content: "";
         display: block;
@@ -217,10 +206,6 @@ export default {
         height: 5px;
         width: 100%;
         border-radius: 2.5px;
-      }
-
-      a {
-        display: block;
       }
     }
   }
@@ -235,34 +220,11 @@ export default {
       color: #666;
     }
   }
-}
-</style>
 
-<style lang="less">
-.search_list {
-  .weui-panel__bd a {
-    margin-top: 10px;
-    background: #fff;
-    border-radius: 8px;
-
-    .weui-media-box_appmsg,
-    .weui-media-box__hd {
-      width: 120px;
-      height: auto;
-      border: 2px solid #ededed;
-    }
-  }
-  .weui-media-box__title {
-    color: #545454;
-    font-size: 16px;
-    font-weight: bold;
-  }
-
-  .weui-media-box__desc {
-    margin-top: 10px;
-    color: #8d8d8d;
-    font-size: 14px;
-    font-weight: bold;
+  .swiper_wr {
+    width: 90%;
+    margin: 0 auto;
+    box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.4);
   }
 }
 </style>

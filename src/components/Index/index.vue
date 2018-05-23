@@ -69,7 +69,7 @@
             <i class="iconfont icon-tianjia"></i>
         </div>
       </div>
-      <div class="nav_bom_zoom" v-show="navBottom===0"></div>
+        <div class="nav_bom_zoom" @click="navBottom=-300" v-show="navBottom===0"></div>
     <!-- 顶部 -->
       <div class="top">
           <div class="search">
@@ -113,15 +113,15 @@
                 <i class="iconfont icon-shanshitiaopei"></i>
                 <span>膳食调配</span>
             </grid-item>
-            <grid-item link="/">
+            <grid-item link="/Assessment">
                 <i class="iconfont icon-pinggubaogaodayin"></i>
                 <span>膳食评估</span>
             </grid-item>
-            <grid-item link="/">
+            <grid-item link="/self">
                 <i class="iconfont icon-ziwopinggu"></i>
                 <span>自我评估</span>
             </grid-item>
-            <grid-item link="/">
+            <grid-item link="/Find">
                 <i class="iconfont icon-shequdongtai"></i>
                 <span>社区交流</span>
             </grid-item>
@@ -257,7 +257,7 @@ export default {
         [
           [
             {
-              name: "馒头",
+              name: "早餐",
               kcal: "114kcal/1.0"
             },
             {
@@ -271,7 +271,7 @@ export default {
           ],
           [
             {
-              name: "馒头",
+              name: "加餐",
               kcal: "114kcal/1.0"
             }
           ]
@@ -280,7 +280,7 @@ export default {
         [
           [
             {
-              name: "馒头2",
+              name: "中餐",
               kcal: "114kcal/1.0"
             },
             {
@@ -294,7 +294,7 @@ export default {
           ],
           [
             {
-              name: "馒头",
+              name: "加餐",
               kcal: "114kcal/1.0"
             }
           ]
@@ -303,7 +303,7 @@ export default {
         [
           [
             {
-              name: "馒头3",
+              name: "晚餐",
               kcal: "114kcal/1.0"
             },
             {
@@ -317,7 +317,7 @@ export default {
           ],
           [
             {
-              name: "馒头",
+              name: "加餐",
               kcal: "114kcal/1.0"
             }
           ]
@@ -379,12 +379,24 @@ export default {
     },
     // 判断是否为糖尿病患者
     isDisease() {
-      this.recommendData = [];
+      // this.recommendData = [];
+      console.log("判断是否为糖尿病患者是的话改变成糖尿病患者的推荐食物");
+    },
+    getDietRecommend() {
+      // 膳食推荐，早中晚餐
+      console.log("膳食推荐，早中晚餐推荐数据格式：", this.recommendData);
+    },
+    getNutritionConsultation() {
+      // 推荐营养咨询
+      console.log("推荐营养咨询数据格式：", this.nutCon);
     }
   },
   mounted() {
     // 判断是否为糖尿病患者首页推荐食谱不同
-    // this.isDisease();
+    this.isDisease();
+
+    this.getDietRecommend();
+    this.getNutritionConsultation();
   }
 };
 </script>

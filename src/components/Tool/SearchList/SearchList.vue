@@ -68,7 +68,6 @@ export default {
   },
   methods: {
     apiFn() {
-      console.log(this.$route);
       // 请求那个接口
       if (this.$route.path === "/Tool/Recipes") {
         // 菜谱检索
@@ -79,6 +78,10 @@ export default {
       } else if (this.$route.path === "/Tool/AllergicFood") {
         // 过敏食物筛选
       }
+
+      console.log("当前页面API：" + this.$route.path);
+      console.log("列表数据格式：", this.listArr);
+      console.log("这个页面可以变成添加过敏食物的列表页");
     },
     toPathDetails(url) {
       this.$router.push({
@@ -89,7 +92,6 @@ export default {
       });
     },
     getList() {
-      console.log(this.$route.path);
       if (this.searchVal.onFetching) {
         // do nothing
       } else {

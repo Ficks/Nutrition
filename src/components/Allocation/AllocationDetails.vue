@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     getDetails() {
-      console.log(this.$route);
+      console.log("当前页面API：" + this.$route.path);
     }
   },
   mounted() {

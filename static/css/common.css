@@ -208,6 +208,7 @@ textarea {
   position: absolute;
   font-size: 15px;
   left: 0;
+  top: 0;
   padding-left: 10px;
 }
 
@@ -217,9 +218,14 @@ textarea {
 }
 
 .header .right {
+  top: 0;
   position: absolute;
   font-size: 15px;
-  right: 0;
+  right: 10px;
+}
+
+.header .right a{
+  color: #fff;
 }
 
 .fade-enter-active,

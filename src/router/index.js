@@ -1,13 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 // 首页
-import Index from '@/components/Index/index.vue'
+import Index from '@/components/Index/Index.vue'
 // 发现
-import Find from '@/components/Find/find.vue'
+import Find from '@/components/Find/Find.vue'
+import FindDetails from '@/components/Find/FindDetails.vue'
+// 动态
+import Dynamic from '@/components/Find/Dynamic.vue'
+import DynamicDetails from '@/components/Find/DynamicDetails.vue'
 // 咨询
-import Consultation from '@/components/Consultation/consultation.vue'
+import Consultation from '@/components/Consultation/Consultation.vue'
 // 我的
-import My from '@/components/My/my.vue'
+import My from '@/components/My/My.vue'
 // 基本工具
 import Tool from '@/components/Tool/Tool.vue'
 // 基本工具--搜索列表
@@ -38,7 +42,10 @@ import TodayArchives from '@/components/PersonalFiles/TodayArchives.vue'
 import Allocation from '@/components/Allocation/Allocation.vue';
 import AllocationDetails from '@/components/Allocation/AllocationDetails.vue';
 
-
+// 评估
+import Assessment from '@/components/Assessment/Assessment.vue';
+import AssessmentAnswer from '@/components/Assessment/AssessmentAnswer.vue';
+import AssessmentResult from '@/components/Assessment/AssessmentResult.vue';
 
 
 Vue.use(Router)
@@ -53,6 +60,18 @@ export default new Router({
     name: '发现',
     component: Find
   }, {
+    path: '/Find/FindDetails',
+    name: '资讯详情',
+    component: FindDetails
+  }, {
+    path: '/Dynamic',
+    name: '动态',
+    component: Dynamic
+  }, {
+    path: '/Dynamic/DynamicDetails',
+    name: '动态详情',
+    component: DynamicDetails
+  }, {
     path: '/Consultation',
     name: '咨询',
     component: Consultation
@@ -64,7 +83,8 @@ export default new Router({
     path: '/Tool',
     name: '基本工具',
     component: Tool,
-    children: [{
+    children: [
+      {
         path: '/Tool/Recipes',
         name: '菜谱检索',
         component: SearchList,
@@ -131,73 +151,101 @@ export default new Router({
         icon: "iconfont icon-tizhong"
       },
     ]
-
   }, {
     path: '/Allocation',
     name: '膳食调配',
     component: Allocation,
-    children: [{
-      path: '/Allocation/NormalDdult',
-      name: '正常成人膳食',
-      component: AllocationDetails,
-      icon: "iconfont icon-nanren"
-    }, {
-      path: '/Allocation/Baby',
-      name: '婴幼儿膳食',
-      component: AllocationDetails,
-      icon: "iconfont icon-yingerertongxiaohaibaby"
-    }, {
-      path: '/Allocation/YoungPeople',
-      name: '儿童及青春期膳食',
-      component: AllocationDetails,
-      icon: "iconfont icon-xuesheng"
-    }, {
-      path: '/Allocation/Aged',
-      name: '老年人膳食',
-      component: AllocationDetails,
-      icon: "iconfont icon-laoren"
-    }, {
-      path: '/Allocation/PregnantWoman',
-      name: '孕妇及乳母膳食',
-      component: AllocationDetails,
-      icon: "iconfont icon-yunfu"
-    }, {
-      path: '/Allocation/Vegetarian',
-      name: '素食者膳食',
-      component: AllocationDetails,
-      icon: "iconfont icon-baicai"
-    }, {
-      path: '/Allocation/Disease',
-      name: '疾病及职业膳食',
-      component: AllocationDetails,
-      icon: "iconfont icon-zhiyebingweihaishigubaogao"
-    }, {
-      path: '/Allocation/FamilyDinner',
-      name: '家庭配餐',
-      component: AllocationDetails,
-      icon: "iconfont icon-mianshi"
-    }, ]
+    children: [
+      {
+        path: '/Allocation/NormalDdult',
+        name: '正常成人膳食',
+        component: AllocationDetails,
+        icon: "iconfont icon-nanren"
+      }, {
+        path: '/Allocation/Baby',
+        name: '婴幼儿膳食',
+        component: AllocationDetails,
+        icon: "iconfont icon-yingerertongxiaohaibaby"
+      }, {
+        path: '/Allocation/YoungPeople',
+        name: '儿童及青春期膳食',
+        component: AllocationDetails,
+        icon: "iconfont icon-xuesheng"
+      }, {
+        path: '/Allocation/Aged',
+        name: '老年人膳食',
+        component: AllocationDetails,
+        icon: "iconfont icon-laoren"
+      }, {
+        path: '/Allocation/PregnantWoman',
+        name: '孕妇及乳母膳食',
+        component: AllocationDetails,
+        icon: "iconfont icon-yunfu"
+      }, {
+        path: '/Allocation/Vegetarian',
+        name: '素食者膳食',
+        component: AllocationDetails,
+        icon: "iconfont icon-baicai"
+      }, {
+        path: '/Allocation/Disease',
+        name: '疾病及职业膳食',
+        component: AllocationDetails,
+        icon: "iconfont icon-zhiyebingweihaishigubaogao"
+      }, {
+        path: '/Allocation/FamilyDinner',
+        name: '家庭配餐',
+        component: AllocationDetails,
+        icon: "iconfont icon-mianshi"
+      }
+    ]
   }, {
     path: '/PersonalFiles',
     name: '个人档案',
-    component: PersonalFiles
+    component: PersonalFiles,
+    children: [{
+      path: '/PersonalFiles/PersonalData',
+      name: '修改个人档案',
+      component: PersonalData
+    }, {
+      path: '/PersonalFiles/TodayArchives',
+      name: '今日档案',
+      component: TodayArchives
+    }, {
+      path: '/PersonalFiles/AllergicFood',
+      name: '过敏食物筛选',
+      component: SearchList
+    }, {
+      path: '/PersonalFiles/AllergicFood/Details',
+      name: '过敏食物添加',
+      component: SearchDetails
+    }]
   }, {
-    path: '/PersonalData',
-    name: '修改个人档案',
-    component: PersonalData
+    path: '/Assessment',
+    name: '膳食评估',
+    component: Assessment,
+    children: [{
+      path: '/Assessment/AssessmentAnswer',
+      name: '评估问卷',
+      component: AssessmentAnswer
+    }, {
+      path: '/Assessment/AssessmentResult',
+      name: '评估结果',
+      component: AssessmentResult
+    }]
   }, {
-    path: '/TodayArchives',
-    name: '今日档案',
-    component: TodayArchives
-  }, {
-    path: '/AllergicFood',
-    name: '过敏食物筛选',
-    component: SearchList
-  }, {
-    path: '/AllergicFood/Details',
-    name: '过敏食物添加',
-    component: SearchDetails
-  }, ]
+    path: '/self',
+    name: '自我评估',
+    component: Assessment,
+    children: [{
+      path: '/self/AssessmentAnswer',
+      name: '评估问卷',
+      component: AssessmentAnswer
+    }, {
+      path: '/self/AssessmentResult',
+      name: '评估结果',
+      component: AssessmentResult
+    }]
+  },]
 
 
 

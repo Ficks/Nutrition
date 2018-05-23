@@ -152,7 +152,10 @@ export default {
   methods: {
     getDetails() {
       var api = this.$route.query.path;
-      console.log(api);
+
+      console.log("当前页面API：" + this.$route.path);
+      console.log("详情页面数据：", this.details);
+      console.log("这个页面可以变成添加过敏食物的页面");
       if (api === "/Tool/Recipes") {
         this.title = "食谱大全";
       } else if (api === "/Tool/MaterialRetrieval") {
@@ -161,7 +164,6 @@ export default {
         this.title = "其他食品";
       }
       // 获取信息
-      console.log(this.$route.query.path);
     },
     // 打开底部
     openBom(isTrue) {

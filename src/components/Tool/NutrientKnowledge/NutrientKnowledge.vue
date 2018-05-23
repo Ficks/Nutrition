@@ -62,17 +62,8 @@ export default {
   },
   methods: {
     apiFn() {
-      console.log(this.$route);
-      // 请求那个接口
-      if (this.$route.path === "/Tool/Recipes") {
-        // 菜谱检索
-      } else if (this.$route.path === "/Tool/MaterialRetrieval") {
-        // 食材检索
-      } else if (this.$route.path === "/Tool/OtherRetrieval") {
-        // 其他食品检索
-      } else if (this.$route.path === "/Tool/AllergicFood") {
-        // 过敏食物筛选
-      }
+      console.log("当前页面API：" + this.$route.path);
+      console.log("当前页面数据列表", this.listArr);
     },
     toPathDetails(url) {
       this.$router.push({
@@ -182,7 +173,7 @@ export default {
     .weui-media-box__hd {
       width: 120px;
       height: auto;
-      border: 1px solid #ededed;
+      border: 2px solid #ededed;
     }
   }
   .weui-media-box__title {
