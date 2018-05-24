@@ -13,8 +13,8 @@
                 <i class="iconfont icon-tianjiajiahaowubiankuang"></i>
             </div>
             <div class="iconload">
-                <i class="">#</i> 
-                <i class="iconfont icon-dingwei"></i> 
+                <span><img src="/static/images/ic1.png" alt=""></span>
+                <span><img src="/static/images/ic2.png" alt=""></span>
             </div>
         </div>
     </div>
@@ -74,18 +74,10 @@ export default {
 
     .iconload {
       margin-left: 15px;
-      margin-top: 10px;
+      margin-top: 15px;
 
-      i {
-        display: block;
-        float: left;
-        width: 23px;
-        height: 23px;
-        line-height: 23px;
-        text-align: center;
-        border-radius: 50%;
-        margin-right: 10px;
-        border: 1px solid #8e8e8e;
+      span {
+        margin-right: 5px;
       }
     }
   }

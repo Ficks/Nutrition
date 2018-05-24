@@ -297,8 +297,10 @@ export default {
 
 <style scoped lang="less">
 .container {
+  box-sizing: border-box;
   height: 100%;
-  overflow: hidden;
+  padding-bottom: 80px;
+  overflow: auto;
   background: #e3e3e3;
   .header {
     text-align: center;

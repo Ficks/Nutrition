@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <!-- 底部导航 -->
       <tabbar class="nav_bom">
           <tabbar-item link="/" selected>
@@ -75,8 +75,8 @@
           <div class="search">
             <span>长沙市</span>
             <div class="input">
-              <input type="text" v-model="searchVal" placeholder="搜索食材或菜谱">
-              <i class="iconfont icon-sousuo" @click="search"></i>
+              <div class="inpus"><router-link to="/Tool/Recipes">搜索食材或菜谱</router-link></div>
+              <i class="iconfont icon-sousuo"></i>
             </div>
             <router-link to="/PersonalFiles"><i class="iconfont icon-dangan1"></i></router-link>
           </div>
@@ -118,18 +118,18 @@
                 <span>膳食评估</span>
             </grid-item>
             <grid-item link="/self">
-                <i class="iconfont icon-ziwopinggu"></i>
+                <i class="iconfont icon-shuxie"></i>
                 <span>自我评估</span>
             </grid-item>
             <grid-item link="/Find">
                 <i class="iconfont icon-shequdongtai"></i>
                 <span>社区交流</span>
             </grid-item>
-            <grid-item link="/">
+            <grid-item link="/Consultation">
                 <i class="iconfont icon-kefuzixunhui"></i>
                 <span>人工咨询</span>
             </grid-item>
-            <grid-item link="/" class="bor_none">
+            <grid-item link="/PersonalFiles" class="bor_none">
                 <i class="iconfont icon-dangan"></i>
                 <span>个人档案</span>
             </grid-item>
@@ -345,14 +345,6 @@ export default {
     };
   },
   methods: {
-    search() {
-      this.$router.push({
-        path: "/Tool/Recipes",
-        query: {
-          search: this.searchVal
-        }
-      });
-    },
     // 膳食推荐table
     recommend(index) {
       this.reIndex = index;
@@ -401,6 +393,17 @@ export default {
 };
 </script>
 <style scoped lang="less">
+.container {
+  padding-bottom: 80px;
+
+  .grid_m {
+    padding: 15px;
+
+    a {
+      padding: 10px;
+    }
+  }
+}
 .top {
   height: 217px;
   background: #8dc13b;
@@ -447,10 +450,24 @@ export default {
       width: 70%;
       float: left;
 
+      .inpus {
+        width: 100%;
+        padding-left: 30px;
+        box-sizing: border-box;
+        height: 30px;
+        line-height: 30px;
+        background: #fff;
+        border-radius: 5px;
+        font-size: 14px;
+        a {
+          display: block;
+          color: #bfbfbf;
+        }
+      }
       i {
         position: absolute;
         left: 0;
-        top: 0;
+        top: -2px;
         color: #bfbfbf;
         padding-top: 2px;
         font-size: 20px;
@@ -665,11 +682,17 @@ export default {
         color: #4e4e4e;
         margin-top: 8px;
         margin-bottom: 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       h4 {
         font-size: 12px;
         font-weight: 500;
         color: #aaaaaa;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }

@@ -3,12 +3,12 @@
       <div class="header">
         <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
         <div class="title">{{$route.name}}</div>
-        <div class="right"></div>
+        <div class="right" @click="getList">搜索</div>
       </div>
         <div class="search">
             <div class="input">
               <input type="text" v-model="searchVal.value" placeholder="输入文字搜索食谱">
-              <i class="iconfont icon-sousuo" @click="search"></i>
+              <i class="iconfont icon-sousuo" @click="getList"></i>
             </div>
         </div>
         <scroller lock-x height="-85px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
@@ -129,8 +129,7 @@ export default {
           this.searchVal.onFetching = false;
         }, 2000);
       }
-    },
-    search() {}
+    }
   },
   mounted() {
     this.apiFn(); //判断需要搜索什么
