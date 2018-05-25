@@ -5,6 +5,7 @@
             <div class="title">{{$route.name}}</div>
             <div class="right" @click="submit">完成</div>
         </div>
+        <scroller lock-x height="-45px"   ref="scrollerBottom">
         <div class="text_fb">
             <textarea placeholder="写下你想分享的内容..." v-model="data.text">
 
@@ -17,6 +18,7 @@
                 <span><img src="/static/images/ic2.png" alt=""></span>
             </div>
         </div>
+        </scroller>
     </div>
 </template>
 <script>
@@ -48,6 +50,7 @@ export default {
   overflow: hidden;
 
   .text_fb {
+    padding-bottom: 20px;
     textarea {
       height: 115px;
       width: 100%;

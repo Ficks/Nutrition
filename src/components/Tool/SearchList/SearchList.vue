@@ -11,12 +11,12 @@
               <i class="iconfont icon-sousuo" @click="getList"></i>
             </div>
         </div>
-        <scroller lock-x height="-85px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
-        <div class="box search_list">
-            <panel :list="listArr" type="1" @on-click-item="toPathDetails"></panel>
-            <p class="more_s"  v-show="!searchVal.onFetching">{{searchVal.uptext}}</p>
-            <load-more tip="loading" v-show="searchVal.onFetching"></load-more>
-        </div>
+        <scroller lock-x height="-85px" @on-scroll-bottom="getList"  ref="scrollerBottom">
+          <div class="box scroller_box">
+              <panel :list="listArr" type="1" @on-click-item="toPathDetails"></panel>
+              <p class="more_s"  v-show="!searchVal.onFetching">{{searchVal.uptext}}</p>
+              <load-more tip="loading" v-show="searchVal.onFetching"></load-more>
+          </div>
         </scroller>
     </div>
 </template>
@@ -142,6 +142,9 @@ export default {
 <style lang="less" scoped>
 .container {
   background: #f3f3f3;
+  overflow: auto;
+  height: 100%;
+  box-sizing: border-box;
 }
 .search {
   width: 100%;
@@ -180,9 +183,13 @@ export default {
     font-size: 12px;
   }
 }
+
+.scroller_box {
+  height: 100%;
+}
 </style>
 <style lang="less">
-.search_list {
+.scroller_box {
   .weui-panel__bd a {
     margin-top: 10px;
     background: #fff;

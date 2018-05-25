@@ -5,15 +5,19 @@
             <div class="title">{{$route.name}}</div>
             <div class="right"></div>
         </div>
-        <div class="list">
-            <ul>
-                <li v-for="(item,index) in arr" @click="setList(index)"><div>{{item.title}}<span>{{item.value || "请选择"}}{{item.value>0?item.dw:""}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></span></div></li>
-            </ul>
+      <scroller lock-x height="-45px" ref="scrollerBottom">
+        <div class="scroller_box">
+          <div class="list">
+              <ul>
+                  <li v-for="(item,index) in arr" @click="setList(index)"><div>{{item.title}}<span>{{item.value || "请选择"}}{{item.value>0?item.dw:""}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></span></div></li>
+              </ul>
+          </div>
+          <div class="box" v-if="kcal!==''">
+            <p>计算后预计每日所需能量</p>
+            <h1>{{kcal}}</h1>
+          </div>
         </div>
-        <div class="box" v-if="kcal!==''">
-          <p>计算后预计每日所需能量</p>
-          <h1>{{kcal}}</h1>
-        </div>
+      </scroller>
           <div class="submit_btn" @click="search">确认查询</div>
 
       <div class="nav_bom_zoom" v-show="zoom" @click="closeAll"></div>
@@ -125,6 +129,10 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.container {
+  overflow: hidden;
+  height: 100%;
+}
 .list {
   ul {
     li {

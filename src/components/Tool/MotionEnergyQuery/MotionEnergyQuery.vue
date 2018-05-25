@@ -5,7 +5,8 @@
             <div class="title">{{$route.name}}</div>
             <div class="right"></div>
         </div>
-        <div class="list_wr">
+      <scroller lock-x height="-45px" ref="scrollerBottom">
+        <div class="list_wr scroller_box">
             <div class="list" v-for="(item,index) in arr">
                 <div class="left">
                     <i class="iconfont icon-buhang"></i>
@@ -21,6 +22,7 @@
                 </div>
             </div>
         </div>
+      </scroller>
     </div>
 </template>
 <script>

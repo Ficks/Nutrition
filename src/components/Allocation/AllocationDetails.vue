@@ -5,14 +5,18 @@
             <div class="title">{{$route.name}}</div>
             <div class="right"></div>
         </div>
-        <div class="details">
-            <div class="title">
-                <h1>{{details.title}}</h1>
-                <p>发布时间：{{details.date}} 作者：{{details.author}}</p>
-            </div>
-            <div class="content" v-html="details.text">
-            </div>
+      <scroller lock-x height="-45px" ref="scrollerBottom">
+        <div class="scroller_box">
+          <div class="details">
+              <div class="title">
+                  <h1>{{details.title}}</h1>
+                  <p>发布时间：{{details.date}} 作者：{{details.author}}</p>
+              </div>
+              <div class="content" v-html="details.text">
+              </div>
+          </div>
         </div>
+      </scroller>
     </div>
 </template>
 <script>
@@ -48,6 +52,9 @@ export default {
     getDetails() {
       console.log("当前页面API：" + this.$route.path);
       console.log("详细数据格式：", this.details);
+      setTimeout(() => {
+        this.$refs.scrollerBottom.reset({ top: 0 });
+      });
     }
   },
   mounted() {
@@ -58,9 +65,14 @@ export default {
 
 <style scoped lang="less">
 .container {
-  padding-bottom: 50px;
+  height: 100%;
   box-sizing: border-box;
-
+  overflow: auto;
+  .scroller_box {
+    height: 100%;
+    box-sizing: border-box;
+    overflow: auto;
+  }
   .details {
     padding: 0 20px;
     .title {

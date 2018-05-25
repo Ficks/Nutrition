@@ -5,10 +5,11 @@
             <div class="title">{{$route.name}}</div>
             <div class="right"></div>
         </div>
-        <h1 class="text-center">图文页，内容由后台配置</h1>
-        <div class="content">
-
+      <scroller lock-x height="-45px" ref="scrollerBottom">
+        <div class="content scroller_box">
+          <h1 class="text-center">图文页，内容由后台配置</h1>
         </div>
+      </scroller>
     </div>
 </template>
 <script>
@@ -20,3 +21,14 @@ export default {
   mounted() {}
 };
 </script>
+<style scoped lang="less">
+.container {
+  height: 100%;
+  box-sizing: border-box;
+  .scroller_box {
+    height: 100%;
+    box-sizing: border-box;
+  }
+}
+</style>
+

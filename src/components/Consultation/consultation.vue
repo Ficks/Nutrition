@@ -91,9 +91,9 @@
             </ul>
         </div>
         <div class="box_wr">
-            <scroller lock-x height="-185px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
+            <scroller lock-x height="-205px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
             <div class="box search_list">
-                <div class="list_me" v-for="(item,index) in listArr">
+                <div class="list_me" v-for="(item,index) in listArr" @click="toPathDetails">
                     <div class="tx"><img :src="item.src" alt=""></div>
                     <div class="box_wz">
                         <div class="list_ts">
@@ -293,13 +293,14 @@ export default {
     },
     toPathDetails(url) {
       this.$router.push({
-        path: "/Find/FindDetails"
+        path: "/Consultation/ConsultationDetails"
       });
     }
   },
   mounted() {
     console.log("当前页面API：" + this.$route.path);
     console.log("当前页面数据列表", this.listArr);
+    console.log("当前页面筛选数据", this.searchVal);
   }
 };
 </script>

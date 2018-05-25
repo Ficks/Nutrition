@@ -5,42 +5,47 @@
             <div class="title">{{$route.name}}</div>
             <div class="right"></div>
         </div>
-        <div class="list">
-            <ul>
-                <li v-for="(item,index) in arr" @click="setList(index)"><div>{{item.title}}<span>{{item.value || "请选择"}}{{item.value>0?item.dw:""}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></span></div></li>
-            </ul>
-        </div>
-        <div class="box" v-if="bmi!==''">
-          <p>BMI为</p>
-          <h1>{{bmi}}</h1>
-          <div class="tps">
-              {{bmitps}}
-          </div>
-          <div class="list_tb">
+      <scroller lock-x height="-103px" ref="scrollerBottom">
+        <div class="scroller_box">
+            <div class="list ">
               <ul>
-                  <li>
-                      <span>分类</span>
-                      <span>BMI范围</span>
-                  </li>
-                  <li>
-                      <span>偏瘦</span>
-                      <span><=18.4</span>
-                  </li>
-                  <li>
-                      <span>正常</span>
-                      <span>18.5~23.9</span>
-                  </li>
-                  <li>
-                      <span>过重</span>
-                      <span>24.0~27.9</span>
-                  </li>
-                  <li>
-                      <span>肥胖</span>
-                      <span>>=28.0</span>
-                  </li>
+                  <li v-for="(item,index) in arr" @click="setList(index)"><div>{{item.title}}<span>{{item.value || "请选择"}}{{item.value>0?item.dw:""}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></span></div></li>
               </ul>
           </div>
+          <div class="box" v-if="bmi!==''">
+            <p>BMI为</p>
+            <h1>{{bmi}}</h1>
+            <div class="tps">
+                {{bmitps}}
+            </div>
+            <div class="list_tb">
+                <ul>
+                    <li>
+                        <span>分类</span>
+                        <span>BMI范围</span>
+                    </li>
+                    <li>
+                        <span>偏瘦</span>
+                        <span><=18.4</span>
+                    </li>
+                    <li>
+                        <span>正常</span>
+                        <span>18.5~23.9</span>
+                    </li>
+                    <li>
+                        <span>过重</span>
+                        <span>24.0~27.9</span>
+                    </li>
+                    <li>
+                        <span>肥胖</span>
+                        <span>>=28.0</span>
+                    </li>
+                </ul>
+            </div>
+          </div>
         </div>
+      </scroller>
+        
           <div class="submit_btn" @click="search">确认查询</div>
 
       <div class="nav_bom_zoom" v-show="zoom" @click="closeAll"></div>
@@ -145,6 +150,15 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.container {
+  height: 100%;
+  box-sizing: border-box;
+  .scroller_box {
+    padding-bottom: 20px;
+    height: 100%;
+    box-sizing: border-box;
+  }
+}
 .list {
   ul {
     li {
@@ -251,6 +265,14 @@ export default {
   font-size: 14px;
   color: #8dc13b;
   margin: 20px 0 30px;
+}
+
+.submit_btn {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  margin: 0 auto;
 }
 </style>
 

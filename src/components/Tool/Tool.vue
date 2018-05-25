@@ -6,27 +6,30 @@
         <div class="right"></div>
       </div>
     <!-- 九宫格 -->
-      <div class="grid_m" v-if="$route.path==='/Tool'">
-          <grid :cols="3" :show-lr-borders="false" :show-vertical-dividers="false">
-            <template v-for="(item,index) in $router.options.routes" v-if="item.path===$route.path">
-                <grid-item :link="jtem.path" v-for="(jtem,index) in item.children" v-if="!jtem.hidden">
-                    <i :class="jtem.icon"></i>
-                    <span>{{jtem.name}}</span>
-                </grid-item>
-            </template>
-          </grid>
-      </div>
+      <scroller lock-x height="-45px" ref="scrollerBottom" v-if="$route.path==='/Tool'">
+        <div class="grid_m scroller_box">
+            <grid :cols="3" :show-lr-borders="false" :show-vertical-dividers="false">
+              <template v-for="(item,index) in $router.options.routes" v-if="item.path===$route.path">
+                  <grid-item :link="jtem.path" v-for="(jtem,index) in item.children" v-if="!jtem.hidden">
+                      <i :class="jtem.icon"></i>
+                      <span>{{jtem.name}}</span>
+                  </grid-item>
+              </template>
+            </grid>
+        </div>
+      </scroller>
       <div class="view"  v-if="$route.path!=='/Tool'">
         <router-view></router-view>
       </div>
     </div>
 </template>
 <script>
-import { Grid, GridItem } from "vux";
+import { Grid, GridItem, Scroller } from "vux";
 export default {
   components: {
     Grid,
-    GridItem
+    GridItem,
+    Scroller
   },
   data() {
     return {};

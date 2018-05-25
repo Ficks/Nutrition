@@ -299,10 +299,14 @@ export default {
 .container {
   box-sizing: border-box;
   height: 100%;
+  padding-top: 45px;
   padding-bottom: 80px;
   overflow: auto;
   background: #e3e3e3;
   .header {
+    z-index: 999;
+    position: fixed;
+    top: 0;
     text-align: center;
     font-size: 17px;
     .right {

@@ -5,8 +5,14 @@ import Vuex from 'vuex'
 import App from './App'
 import router from './router'
 Vue.config.productionTip = false
-import { ToastPlugin } from 'vux'
+import {
+  ToastPlugin,
+  Scroller
+} from 'vux'
+
 Vue.use(ToastPlugin)
+Vue.component('scroller', Scroller)
+
 Vue.use(Vuex)
 // 直接使用 WeUI 样式并引入 fastclick 会导致一些点击问题，VUX 组件内部已经做了相关处理。
 const FastClick = require('fastclick')

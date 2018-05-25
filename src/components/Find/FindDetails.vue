@@ -5,45 +5,47 @@
             <div class="title">{{$route.name}}</div>
             <div class="right"></div>
         </div>
-        <div class="details">
+      <scroller lock-x height="-90px" @on-scroll-bottom="getList" ref="scrollerBottom">
+        <div class="scroller_box">
+          <div class="details">
             <div class="title">
-                <h1>{{details.title}}</h1>
-                <p>发布时间：{{details.date}} 作者：{{details.author}}</p>
-            </div>
-            <div class="content" v-html="details.text">
-            </div>
+                  <h1>{{details.title}}</h1>
+                  <p>发布时间：{{details.date}} 作者：{{details.author}}</p>
+              </div>
+              <div class="content" v-html="details.text">
+              </div>
+          </div>
+          <div class="comment">
+              <h2><span>以下为评论</span></h2>
+              <ul>
+                  <li v-for="(item,index) in listArr">
+                      <div class="top">{{item.lou}} <span>{{item.date}}</span></div>
+                      <p>{{item.p}}</p>
+                  </li>
+              </ul>
+              <div class="more">
+                  <span  v-show="!loading">滑动查看更多</span>
+                  <load-more tip="loading" v-show="loading"></load-more>
+              </div>
+          </div>
         </div>
-        <div class="comment">
-            <h2><span>以下为评论</span></h2>
-            <ul>
-                <li v-for="(item,index) in commentArr">
-                    <div class="top">{{item.lou}} <span>{{item.date}}</span></div>
-                    <p>{{item.p}}</p>
-                </li>
-            </ul>
-            <div class="more">
-                <span  @click="moreFn" v-show="!loading">查看更多评论></span>
-                <load-more tip="loading" v-show="loading"></load-more>
-            </div>
-
-            <div class="text_input">
-                <div class="tops">
-                    <div class="left" :style="{width:commentShow?100+'%':'75%'}">
-                        <textarea v-model="commentVal" :style="{height:commentShow?'150px':'25px'}" placeholder="我也来说两句..." @focus="commentShow=true" @blur="commentShow=false"></textarea>
-                    </div>
-                    <div class="right" v-show="!commentShow">
-                        <i class="iconfont icon-dianzan" @click="setWenz(true)"></i>
-                        <i class="iconfont icon-shoucang" @click="setWenz(false)"></i>
-                    </div>
-                </div>
-                <div class="submit_btn" @click="submitComment" v-show="commentShow">确定发表</div>
-            </div>
-        </div>
+      </scroller>
+        <div class="text_input">
+              <div class="tops">
+                  <div class="left" :style="{width:commentShow?100+'%':'75%'}">
+                      <textarea v-model="commentVal" :style="{height:commentShow?'150px':'25px'}" placeholder="我也来说两句..." @focus="commentShow=true" @blur="commentShow=false"></textarea>
+                  </div>
+                  <div class="right" v-show="!commentShow">
+                      <i class="iconfont icon-dianzan" @click="setWenz(true)"></i>
+                      <i class="iconfont icon-shoucang" @click="setWenz(false)"></i>
+                  </div>
+              </div>
+              <div class="submit_btn" @click="submitComment" v-show="commentShow">确定发表</div>
+          </div>
     </div>
 </template>
 <script>
 import { LoadMore } from "vux";
-import { setTimeout } from "timers";
 export default {
   components: {
     LoadMore
@@ -76,7 +78,7 @@ export default {
       loading: false,
       commentShow: false,
       commentVal: "",
-      commentArr: [
+      listArr: [
         {
           lou: "1楼",
           p: " 文章写的很好，都是干货，给了我很大的启发！",
@@ -96,13 +98,39 @@ export default {
     };
   },
   methods: {
-    moreFn() {
-      console.log("查看更多评论");
-      this.loading = true;
+    getList() {
+      if (this.loading) {
+        // do nothing
+      } else {
+        this.loading = true;
+        setTimeout(() => {
+          this.listArr.push(
+            {
+              lou: "1楼",
+              p: " 文章写的很好，都是干货，给了我很大的启发！",
+              date: "4月20日"
+            },
+            {
+              lou: "2楼",
+              p: " 文章写的很好，都是干货，给了我很大的启发！",
+              date: "4月20日"
+            },
+            {
+              lou: "3楼",
+              p: " 文章写的很好，都是干货，给了我很大的启发！",
+              date: "4月20日"
+            }
+          );
+          this.$nextTick(() => {
+            this.$refs.scrollerBottom.reset();
+          });
+          this.loading = false;
+        }, 2000);
+      }
     },
     submitComment() {
       if (this.commentVal !== "") {
-        this.commentArr.push({
+        this.listArr.push({
           lou: "4楼",
           p: this.commentVal,
           date: "5月22日"
@@ -128,16 +156,21 @@ export default {
   mounted() {
     console.log("当前页面API：" + this.$route.path);
     console.log("详细数据格式：", this.details);
-    console.log("评论数据格式：", this.commentArr);
+    console.log("评论数据格式：", this.listArr);
   }
 };
 </script>
 
 <style scoped lang="less">
 .container {
-  padding-bottom: 50px;
   box-sizing: border-box;
+  height: 100%;
+  overflow: hidden;
 
+  .scroller_box {
+    height: 100%;
+    box-sizing: border-box;
+  }
   .details {
     padding: 0 20px;
     .title {
@@ -145,7 +178,7 @@ export default {
       h1 {
         font-size: 18px;
         color: #545454;
-        margin-top: 15px;
+        padding-top: 15px;
         margin-bottom: 5px;
       }
       p {
@@ -204,56 +237,54 @@ export default {
     .more {
       text-align: center;
       padding: 10px 0;
-      span {
-        color: #617bff;
-        font-size: 14px;
-      }
+      color: #a4a4a4;
+      font-size: 12px;
+    }
+  }
+
+  .text_input {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #f6f6f6;
+    padding-top: 8px;
+    padding-bottom: 3px;
+    line-height: 25px;
+    .tops {
+      height: auto;
+      overflow: hidden;
+    }
+    .submit_btn {
+      margin: 15px auto;
     }
 
-    .text_input {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: #f6f6f6;
-      padding-top: 8px;
-      padding-bottom: 3px;
-      line-height: 25px;
-      .tops {
-        height: auto;
-        overflow: hidden;
+    .left {
+      float: left;
+      box-sizing: border-box;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-top: 2px;
+      width: 75%;
+      textarea {
+        height: 25px;
+        width: 100%;
+        background: #ffffff;
+        resize: none;
+        height: 100%;
+        transition: all 0.5s;
       }
-      .submit_btn {
-        margin: 15px auto;
-      }
+    }
+    .right {
+      float: right;
+      width: 25%;
+      text-align: center;
 
-      .left {
-        float: left;
+      .iconfont {
+        font-size: 22px;
+        color: #8dc13b;
+        padding: 0 5px;
         box-sizing: border-box;
-        padding-left: 20px;
-        padding-right: 20px;
-        padding-top: 2px;
-        width: 75%;
-        textarea {
-          height: 25px;
-          width: 100%;
-          background: #ffffff;
-          resize: none;
-          height: 100%;
-          transition: all 0.5s;
-        }
-      }
-      .right {
-        float: right;
-        width: 25%;
-        text-align: center;
-
-        .iconfont {
-          font-size: 22px;
-          color: #8dc13b;
-          padding: 0 5px;
-          box-sizing: border-box;
-        }
       }
     }
   }

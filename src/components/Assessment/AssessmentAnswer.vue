@@ -5,6 +5,7 @@
             <div class="title">{{$route.name}}</div>
             <div class="right"></div>
         </div>
+      <scroller lock-x height="-45px" ref="scrollerBottom">
         <div class="pad_wr">
           <div class="list_tm" v-for="(item,index) in listArr">
             <h3>{{`${index+1}、${item.title}`}}</h3>
@@ -20,6 +21,7 @@
           </div>
           <div class="submit_btn" @click="submit">提交答案</div>
         </div>
+      </scroller>
 
     </div>
 </template>

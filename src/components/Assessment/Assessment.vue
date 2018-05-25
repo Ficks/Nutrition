@@ -5,7 +5,8 @@
             <div class="title">{{$route.name}}</div>
             <div class="right"></div>
         </div>
-        <div class="list_md" v-if="this.$route.matched.length===1">
+      <scroller lock-x height="-45px" ref="scrollerBottom" v-if="this.$route.matched.length===1">
+        <div class="list_md">
             <ul>
                 <li v-for="(item,index) in listArr" @click="toDetails(index)">
                     <div class="left">
@@ -18,6 +19,7 @@
                 </li>
             </ul>
         </div>
+      </scroller>
         <div class="view"  v-if="this.$route.matched.length!==1">
             <router-view></router-view>
         </div>

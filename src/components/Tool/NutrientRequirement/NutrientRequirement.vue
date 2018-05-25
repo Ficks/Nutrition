@@ -5,11 +5,13 @@
             <div class="title">{{$route.name}}</div>
             <div class="right"></div>
       </div>
-      <div class="select" @click="select.show=true">
-          {{select.value}}
-          <i class="iconfont icon-xiala"></i>
-      </div>
-        <div class="box">
+     
+      <scroller lock-x height="-45px" ref="scrollerBottom">
+        <div class="box scroller_box">
+           <div class="select" @click="select.show=true">
+              {{select.value}}
+              <i class="iconfont icon-xiala"></i>
+          </div>
             <ul>
                 <li v-for="(item,index) in arrList">
                     <div class="left">{{item.title}}</div>
@@ -17,7 +19,7 @@
                 </li>
             </ul>
         </div>
-
+      </scroller>
 
         <div class="nav_bom_zoom" v-show="select.show" @click="select.show=false"></div>
         <div class="afxm"  :style="{bottom:select.show?0:-200+'px'}">
@@ -33,7 +35,6 @@
 </template>
 <script>
 export default {
-  components: {},
   data() {
     return {
       select: {
@@ -108,8 +109,10 @@ export default {
   height: 100%;
   background: #f9f9f9;
 }
+
 .box {
   padding: 0 20px;
+  padding-bottom: 30px;
   li {
     height: auto;
     overflow: hidden;

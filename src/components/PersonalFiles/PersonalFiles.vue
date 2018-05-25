@@ -5,7 +5,8 @@
         <div class="title">{{$route.name}}</div>
         <div class="right"></div>
       </div>
-        <div class="box">
+      <scroller lock-x height="-45px"   ref="scrollerBottom">
+        <div class="box scroller_box">
           <h2>2018-05-01~2018-06-01</h2>
           <ul>
               <li>
@@ -26,11 +27,15 @@
               </li>
           </ul>
         </div>
+      </scroller>
     </div>
 </template>
 <script>
+import { Scroller } from "vux";
 export default {
-  components: {},
+  components: {
+    Scroller
+  },
   data() {
     return {
       arrList: [
@@ -191,6 +196,18 @@ ul {
       font-size: 15px;
       color: #666666;
     }
+  }
+}
+
+@media screen and(max-width: 350px) {
+  ul li .left {
+    width: 30%;
+  }
+  ul li .center {
+    width: 40%;
+  }
+  ul li .right {
+    width: 30%;
   }
 }
 </style>

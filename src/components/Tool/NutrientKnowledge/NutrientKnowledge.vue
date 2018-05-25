@@ -6,7 +6,7 @@
         <div class="right"></div>
       </div>
         <scroller lock-x height="-45px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
-        <div class="box search_list">
+        <div class="box search_list scroller_box">
             <panel :list="listArr" type="1" @on-click-item="toPathDetails"></panel>
             <p class="more_s"  v-show="!searchVal.onFetching">{{searchVal.uptext}}</p>
             <load-more tip="loading" v-show="searchVal.onFetching"></load-more>
@@ -15,11 +15,10 @@
     </div>
 </template>
 <script>
-import { Scroller, LoadMore, Panel } from "vux";
+import { LoadMore, Panel } from "vux";
 
 export default {
   components: {
-    Scroller,
     LoadMore,
     Panel
   },
@@ -123,6 +122,11 @@ export default {
 <style lang="less" scoped>
 .container {
   background: #f9f9f9;
+  height: 100%;
+}
+.scroller_box {
+  padding-bottom: 1px;
+  box-sizing: border-box;
 }
 .search {
   width: 100%;

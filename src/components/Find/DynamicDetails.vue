@@ -5,20 +5,23 @@
             <div class="title">{{$route.name}}</div>
             <div class="right"></div>
         </div>
-        <div class="details_dt">
-          <div class="top">
-            <div class="imgs"><img src="/static/images/tx.jpg" alt=""></div>
-            <div class="wz">
-              <h1>lok666</h1>
-              <p>1分钟前</p>
+        <scroller lock-x height="-45px"   ref="scrollerBottom">
+          <div class="scroller_box">
+            <div class="details_dt">
+              <div class="top">
+                <div class="imgs"><img src="/static/images/tx.jpg" alt=""></div>
+                <div class="wz">
+                  <h1>lok666</h1>
+                  <p>1分钟前</p>
+                </div>
+              </div>
+              <div class="wz_box">
+                <img src="/static/images/dt.jpg" alt="">
+                <p>#饮食行为分享#今天又去吃好吃的了！</p>
+              </div>
             </div>
           </div>
-          <div class="wz_box">
-            <img src="/static/images/dt.jpg" alt="">
-            <p>#饮食行为分享#今天又去吃好吃的了！</p>
-          </div>
-        </div>
-        
+        </scroller>
         <div class="pldz_btn">
           <div class="btns">
             <i class="iconfont icon-pinglun"></i>
@@ -39,16 +42,20 @@ export default {
   methods: {},
   mounted() {
     console.log("当前页面API：" + this.$route.path);
+
+    setTimeout(() => {
+      this.$ref.scrollerBottom.reset();
+    });
   }
 };
 </script>
 <style scoped lang="less">
 .container {
   height: 100%;
-  overflow: hidden;
 
   .details_dt {
     padding: 15px 35px 50px 35px;
+    height: 100%;
     box-sizing: border-box;
   }
 

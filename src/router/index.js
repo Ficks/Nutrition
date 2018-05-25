@@ -11,6 +11,8 @@ import DynamicDetails from '@/components/Find/DynamicDetails.vue'
 import Release from '@/components/Find/Release.vue'
 // 咨询
 import Consultation from '@/components/Consultation/Consultation.vue'
+import ConsultationDetails from '@/components/Consultation/ConsultationDetails.vue'
+
 // 我的
 import My from '@/components/My/My.vue'
 // 基本工具
@@ -82,6 +84,11 @@ export default new Router({
       name: '咨询',
       component: Consultation
     }, {
+      path: '/Consultation/ConsultationDetails',
+      name: '营养师详情',
+      component: ConsultationDetails
+    }, {
+
       path: '/My',
       name: '我的',
       component: My

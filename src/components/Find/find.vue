@@ -77,7 +77,7 @@
         </div>
 
         <div class="box_wr">
-            <scroller lock-x height="-105px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
+            <scroller lock-x height="-100px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
             <div class="box search_list">
                 <panel :list="listArr" type="1" @on-click-item="toPathDetails"></panel>
                 <p class="more_s"  v-show="!searchVal.onFetching">{{searchVal.uptext}}</p>
@@ -196,6 +196,10 @@ export default {
 </script>
 <style scoped lang="less">
 .container {
+  height: 100%;
+  .search_list {
+    height: 100%;
+  }
   .header {
     text-align: center;
     font-size: 17px;

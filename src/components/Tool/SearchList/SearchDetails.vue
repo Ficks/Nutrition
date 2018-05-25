@@ -5,51 +5,56 @@
         <div class="title">{{title}}</div>
         <div class="right"></div>
       </div>
-        <div class="top">
+      <scroller lock-x height="-45px"   ref="scrollerBottom">
+        <div class="scroller_box">
+          <div class="top">
             <div class="twbm">
-                <div class="img">
-                    <img :src="details.src" alt="">
-                </div>
-                <div class="wz">
-                    <h1>{{details.title}}</h1>
-                    <p>{{details.kcal}}</p>
-                </div>
-            </div>
-            <div class="desc">
-                <p>禁忌：<span>{{details.taboo}}</span></p>
-                <p>适宜：<span>{{details.suitable}}</span></p>
-            </div>
+                  <div class="img">
+                      <img :src="details.src" alt="">
+                  </div>
+                  <div class="wz">
+                      <h1>{{details.title}}</h1>
+                      <p>{{details.kcal}}</p>
+                  </div>
+              </div>
+              <div class="desc">
+                  <p>禁忌：<span>{{details.taboo}}</span></p>
+                  <p>适宜：<span>{{details.suitable}}</span></p>
+              </div>
+          </div>
+          <h2 class="title_hb">
+              描述
+          </h2>
+          <div class="describe">
+              <p><i class="iconfont icon-jieyibiaozhi1"></i>辣椒炒肉，这道色香味俱全的菜肴，是湖南人每家每户必吃的招牌土菜，是最具代表性的湘菜之一。</p>
+          </div>
+          <h2 class="title_hb">
+              所含营养素
+              <span>每100g</span>
+          </h2>
+          <div class="box_list">
+              <ul>
+                  <li v-for="item in details.nutrientArr">
+                      {{item.title}}
+                      <span>{{item.value}}</span>
+                  </li>
+              </ul>
+          </div>
+          <h2 class="title_hb" v-if="$route.query.path==='/Tool/MaterialRetrieval'">
+              微量元素
+          </h2>
+          <div class="box_list" v-if="$route.query.path==='/Tool/MaterialRetrieval'">
+              <ul>
+                  <li v-for="item in details.traceElementArr">
+                      {{item.title}}
+                      <span>{{item.value}}</span>
+                  </li>
+              </ul>
+          </div>
+          <div class="submit_btn" @click="openBom(true)">添加到今日饮食</div>
         </div>
-        <h2 class="title_hb">
-            描述
-        </h2>
-        <div class="describe">
-            <p><i class="iconfont icon-jieyibiaozhi1"></i>辣椒炒肉，这道色香味俱全的菜肴，是湖南人每家每户必吃的招牌土菜，是最具代表性的湘菜之一。</p>
-        </div>
-        <h2 class="title_hb">
-            所含营养素
-            <span>每100g</span>
-        </h2>
-        <div class="box_list">
-            <ul>
-                <li v-for="item in details.nutrientArr">
-                    {{item.title}}
-                    <span>{{item.value}}</span>
-                </li>
-            </ul>
-        </div>
-        <h2 class="title_hb" v-if="$route.query.path==='/Tool/MaterialRetrieval'">
-            微量元素
-        </h2>
-        <div class="box_list" v-if="$route.query.path==='/Tool/MaterialRetrieval'">
-            <ul>
-                <li v-for="item in details.traceElementArr">
-                    {{item.title}}
-                    <span>{{item.value}}</span>
-                </li>
-            </ul>
-        </div>
-        <div class="submit_btn" @click="openBom(true)">添加到今日饮食</div>
+      </scroller>
+        
 
       <div class="nav_bom_zoom" @click="openBom(false)" v-show="detailsFix===0"></div>
       <div class="details_fix" :style="{bottom:detailsFix+'px'}">
@@ -82,12 +87,13 @@
     </div>
 </template>
 <script>
-import { Rater, Range } from "vux";
+import { Rater, Range, Scroller } from "vux";
 
 export default {
   components: {
     Rater,
-    Range
+    Range,
+    Scroller
   },
   data() {
     return {
@@ -186,9 +192,14 @@ export default {
 <style lang="less">
 .container {
   height: 100%;
-  overflow: hidden;
-  overflow-y: auto;
   background: #f9f9f9;
+  box-sizing: border-box;
+
+  .scroller_box {
+    height: 100%;
+    padding-bottom: 40px;
+    box-sizing: border-box;
+  }
   .top {
     box-sizing: border-box;
     padding: 0 20px;
@@ -229,7 +240,7 @@ export default {
       padding-left: 30px;
       color: #ef7d1d;
       padding-right: 20px;
-      height: 80px;
+      height: 90px;
       padding-top: 17px;
     }
     p {
