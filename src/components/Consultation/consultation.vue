@@ -124,12 +124,11 @@
     </div>
 </template>
 <script>
-import { Tabbar, TabbarItem, Scroller, LoadMore, Panel } from "vux";
+import { Tabbar, TabbarItem, LoadMore, Panel } from "vux";
 export default {
   components: {
     Tabbar,
     TabbarItem,
-    Scroller,
     LoadMore,
     Panel
   },

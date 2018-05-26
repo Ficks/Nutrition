@@ -87,13 +87,12 @@
     </div>
 </template>
 <script>
-import { Rater, Range, Scroller } from "vux";
+import { Rater, Range } from "vux";
 
 export default {
   components: {
     Rater,
-    Range,
-    Scroller
+    Range
   },
   data() {
     return {
@@ -166,6 +165,8 @@ export default {
         this.title = "食谱大全";
       } else if (api === "/Tool/MaterialRetrieval") {
         this.title = "食材大全";
+      } else if (api === "/My/PersonalFiles/AllergicFood/Details") {
+        this.title = "过敏食物添加";
       } else {
         this.title = "其他食品";
       }

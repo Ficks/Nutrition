@@ -26,6 +26,9 @@ textarea {
 .text-center {
   text-align: center;
   margin-top: 50%;
+  font-size: 18px;
+  color: #acacac;
+  font-weight: 500;
 }
 
 .none {

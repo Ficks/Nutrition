@@ -15,6 +15,23 @@ import ConsultationDetails from '@/components/Consultation/ConsultationDetails.v
 
 // 我的
 import My from '@/components/My/My.vue'
+// 个人档案
+import PersonalFiles from '@/components/My/PersonalFiles/PersonalFiles.vue'
+import PersonalData from '@/components/My/PersonalFiles/PersonalData.vue'
+import TodayArchives from '@/components/My/PersonalFiles/TodayArchives.vue'
+// 我的收藏
+import Collection from '@/components/My/Collection.vue'
+// 收支明细
+import Property from '@/components/My/Property/Property.vue'
+// 提现
+import PutForward from '@/components/My/Property/PutForward.vue'
+// 退款
+import Refund from '@/components/My/Property/Refund.vue'
+import State from '@/components/My/Property/Property.vue'
+
+
+
+
 // 基本工具
 import Tool from '@/components/Tool/Tool.vue'
 // 基本工具--搜索列表
@@ -35,10 +52,6 @@ import DietaryReference from '@/components/Tool/DietaryReference/DietaryReferenc
 // 基本工具--体重标准查询
 import WeightQuery from '@/components/Tool/WeightQuery/WeightQuery.vue'
 
-// 个人档案
-import PersonalFiles from '@/components/PersonalFiles/PersonalFiles.vue'
-import PersonalData from '@/components/PersonalFiles/PersonalData.vue'
-import TodayArchives from '@/components/PersonalFiles/TodayArchives.vue'
 
 
 // 膳食调配
@@ -49,6 +62,12 @@ import AllocationDetails from '@/components/Allocation/AllocationDetails.vue';
 import Assessment from '@/components/Assessment/Assessment.vue';
 import AssessmentAnswer from '@/components/Assessment/AssessmentAnswer.vue';
 import AssessmentResult from '@/components/Assessment/AssessmentResult.vue';
+
+// 走进我们
+import WalkIntoUs from '@/components/WalkIntoUs/WalkIntoUs.vue';
+
+// 合作伙伴
+import Partner from '@/components/Partner/Partner.vue';
 
 
 Vue.use(Router)
@@ -88,11 +107,61 @@ export default new Router({
       name: '营养师详情',
       component: ConsultationDetails
     }, {
-
       path: '/My',
       name: '我的',
       component: My
     }, {
+      path: '/My/PersonalFiles',
+      name: '个人档案',
+      component: PersonalFiles,
+      children: [{
+        path: '/My/PersonalFilesPersonalFiles/PersonalData',
+        name: '修改个人档案',
+        component: PersonalData
+      }, {
+        path: '/My/TodayArchives',
+        name: '今日档案',
+        component: TodayArchives
+      }, {
+        path: '/My/PersonalFiles/AllergicFood',
+        name: '过敏食物筛选',
+        component: SearchList
+      }, {
+        path: '/My/PersonalFiles/AllergicFood/Details',
+        name: '过敏食物添加',
+        component: SearchDetails
+      }]
+    }, {
+      path: '/My/Collection',
+      name: '我的收藏',
+      component: Collection
+    }, {
+      path: '/My/Property',
+      name: '收支明细',
+      component: Property,
+      children: [{
+        path: '/My/Property/PutForward',
+        name: '余额提现',
+        component: PutForward
+      }, {
+        path: '/My/Property/Refund',
+        name: '退款',
+        component: Refund
+      }, {
+        path: '/My/Property/State',
+        name: '提交成功',
+        component: State
+      }]
+    }, {
+      path: '/My/WalkIntoUs',
+      name: '走进我们',
+      component: WalkIntoUs
+    }, {
+      path: '/My/Partner',
+      name: '合作伙伴',
+      component: Partner
+    }, {
+
       path: '/Tool',
       name: '基本工具',
       component: Tool,
@@ -209,27 +278,6 @@ export default new Router({
         icon: "iconfont icon-mianshi"
       }]
     }, {
-      path: '/PersonalFiles',
-      name: '个人档案',
-      component: PersonalFiles,
-      children: [{
-        path: '/PersonalFiles/PersonalData',
-        name: '修改个人档案',
-        component: PersonalData
-      }, {
-        path: '/PersonalFiles/TodayArchives',
-        name: '今日档案',
-        component: TodayArchives
-      }, {
-        path: '/PersonalFiles/AllergicFood',
-        name: '过敏食物筛选',
-        component: SearchList
-      }, {
-        path: '/PersonalFiles/AllergicFood/Details',
-        name: '过敏食物添加',
-        component: SearchDetails
-      }]
-    }, {
       path: '/Assessment',
       name: '膳食评估',
       component: Assessment,
@@ -257,8 +305,4 @@ export default new Router({
       }]
     },
   ]
-
-
-
-
 })

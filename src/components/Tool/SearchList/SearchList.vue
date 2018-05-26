@@ -21,11 +21,10 @@
     </div>
 </template>
 <script>
-import { Scroller, LoadMore, Panel } from "vux";
+import { LoadMore, Panel } from "vux";
 
 export default {
   components: {
-    Scroller,
     LoadMore,
     Panel
   },
@@ -75,7 +74,9 @@ export default {
         // 食材检索
       } else if (this.$route.path === "/Tool/OtherRetrieval") {
         // 其他食品检索
-      } else if (this.$route.path === "/Tool/AllergicFood") {
+      } else if (
+        this.$route.path === "/My/PersonalFiles/AllergicFood/Details"
+      ) {
         // 过敏食物筛选
       }
 

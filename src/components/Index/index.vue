@@ -129,15 +129,15 @@
                 <i class="iconfont icon-kefuzixunhui"></i>
                 <span>人工咨询</span>
             </grid-item>
-            <grid-item link="/PersonalFiles" class="bor_none">
+            <grid-item link="/My/PersonalFiles" class="bor_none">
                 <i class="iconfont icon-dangan"></i>
                 <span>个人档案</span>
             </grid-item>
-            <grid-item link="/" class="bor_none">
+            <grid-item link="/My/WalkIntoUs" class="bor_none">
                 <i class="iconfont icon-guanyuwomen"></i>
                 <span>走进我们</span>
             </grid-item>
-            <grid-item link="/" class="bor_none">
+            <grid-item link="/My/Partner" class="bor_none">
                 <i class="iconfont icon-hezuo"></i>
                 <span>合伙合作</span>
             </grid-item>
@@ -211,14 +211,12 @@
       <div class="yinyanzx">
         <h2>营养咨询<span>更多></span></h2>
         <ul>
-          <li v-for="(item,index) in nutCon">
-            <router-link to="/">
+          <li v-for="(item,index) in nutCon" @click="toDetails(item)">
               <div class="img">
                 <img :src="item.img" alt="">
               </div>
               <h3>{{item.name}}</h3>
               <h4>{{item.fname}}</h4>
-            </router-link>
           </li>
         </ul>
       </div>
@@ -328,17 +326,20 @@ export default {
         {
           img: "/static/images/ys.jpg",
           name: "陈医生",
-          fname: "中南医学院博士"
+          fname: "中南医学院博士",
+          link: "/Consultation/ConsultationDetails"
         },
         {
           img: "/static/images/ys.jpg",
           name: "陈医生",
-          fname: "中南医学院博士"
+          fname: "中南医学院博士",
+          link: "/Consultation/ConsultationDetails"
         },
         {
           img: "/static/images/ys.jpg",
           name: "陈医生",
-          fname: "中南医学院博士"
+          fname: "中南医学院博士",
+          link: "/Consultation/ConsultationDetails"
         }
       ],
       navBottom: -300
@@ -381,6 +382,12 @@ export default {
     getNutritionConsultation() {
       // 推荐营养咨询
       console.log("推荐营养咨询数据格式：", this.nutCon);
+    },
+    toDetails(item) {
+      // 跳转到营养师详情
+      this.$router.push({
+        path: item.link
+      });
     }
   },
   mounted() {

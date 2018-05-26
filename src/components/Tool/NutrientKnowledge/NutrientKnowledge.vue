@@ -34,27 +34,32 @@ export default {
         {
           title: "资讯标题",
           src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
+          desc: "资讯内容缩略显示...",
+          link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
         },
         {
           title: "资讯标题",
           src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
+          desc: "资讯内容缩略显示...",
+          link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
         },
         {
           title: "资讯标题",
           src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
+          desc: "资讯内容缩略显示...",
+          link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
         },
         {
           title: "资讯标题",
           src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
+          desc: "资讯内容缩略显示...",
+          link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
         },
         {
           title: "资讯标题",
           src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
+          desc: "资讯内容缩略显示...",
+          link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
         }
       ]
     };
@@ -64,9 +69,10 @@ export default {
       console.log("当前页面API：" + this.$route.path);
       console.log("当前页面数据列表", this.listArr);
     },
-    toPathDetails(url) {
+    toPathDetails(item) {
+      console.log(item);
       this.$router.push({
-        path: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
+        path: item.link
       });
     },
     getList() {
@@ -81,25 +87,25 @@ export default {
               title: "资讯标题",
               src: "/static/images/searchm.jpg",
               desc: "资讯内容缩略显示...",
-              url: "/Tool/SearchList/Details"
+              link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
             },
             {
               title: "资讯标题",
               src: "/static/images/searchm.jpg",
               desc: "资讯内容缩略显示...",
-              url: "/Tool/SearchList/Details"
+              link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
             },
             {
               title: "资讯标题",
               src: "/static/images/searchm.jpg",
               desc: "资讯内容缩略显示...",
-              url: "/Tool/SearchList/Details"
+              link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
             },
             {
               title: "资讯标题",
               src: "/static/images/searchm.jpg",
               desc: "资讯内容缩略显示...",
-              url: "/Tool/SearchList/Details"
+              link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
             }
           );
           this.$nextTick(() => {
@@ -108,8 +114,7 @@ export default {
           this.searchVal.onFetching = false;
         }, 2000);
       }
-    },
-    search() {}
+    }
   },
   mounted() {
     this.apiFn(); //判断需要搜索什么

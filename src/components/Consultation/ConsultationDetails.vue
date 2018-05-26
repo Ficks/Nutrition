@@ -59,27 +59,38 @@
             </div>
         </scroller>
         
+        <actionsheet v-model="payment.value" :menus="payment.menu" @on-click-menu="paymentFn" show-cancel></actionsheet>
 
-        <div class="fixbom submit">
+        <div class="fixbom submit" @click="payment.value=true">
             图文咨询（50元/次）
             <p>单次咨询为12小时</p>
         </div>
     </div>
 </template>
 <script>
-import { Scroller, LoadMore } from "vux";
-import { setTimeout } from "timers";
+import { LoadMore, Actionsheet, Loading } from "vux";
 export default {
   components: {
-    Scroller,
-    LoadMore
+    LoadMore,
+    Actionsheet,
+    Loading
   },
   data() {
     return {
       loading: false,
+      payment: {
+        value: false,
+        menu: {
+          "payment.noop": "支付方式",
+          price: "",
+          integral: ""
+        }
+      },
       details: {
         src: "/static/images/ystx.jpg",
         name: "陈博士",
+        price: 50,
+        integral: 1000,
         experience: "十年经验",
         company: "中南大学医学院",
         serviceNum: "10000",
@@ -110,6 +121,16 @@ export default {
     };
   },
   methods: {
+    init() {
+      this.payment.menu.price = `<span style='color:#8dc13b'>微信支付 (${
+        this.details.price
+      }元)</span>`;
+      this.payment.menu.integral = `积分支付 (${this.details.integral})`;
+    },
+    paymentFn(key) {
+      // 支付
+      console.log(key);
+    },
     getList() {
       // 获取评论列表
       if (this.loading) {
@@ -143,6 +164,7 @@ export default {
     }
   },
   mounted() {
+    this.init();
     console.log("当前页面API：" + this.$route.path);
     console.log("详情数据：", this.details);
     console.log("评论列表数据：", this.listArr);

@@ -38,12 +38,10 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     host: HOST || config.dev.host,
     port: PORT || config.dev.port,
     open: config.dev.autoOpenBrowser,
-    overlay: config.dev.errorOverlay ?
-      {
-        warnings: false,
-        errors: true
-      } :
-      false,
+    overlay: config.dev.errorOverlay ? {
+      warnings: false,
+      errors: true
+    } : false,
     publicPath: config.dev.assetsPublicPath,
     proxy: config.dev.proxyTable,
     quiet: true, // necessary for FriendlyErrorsPlugin
@@ -82,7 +80,7 @@ module.exports = new Promise((resolve, reject) => {
       // publish the new Port, necessary for e2e tests
       process.env.PORT = port
       // add port to devServer config
-      devWebpackConfig.devServer.host = '127.0.0.1';
+      devWebpackConfig.devServer.host = '192.168.0.113';
       devWebpackConfig.devServer.port = port;
 
       // Add FriendlyErrorsPlugin
@@ -91,8 +89,7 @@ module.exports = new Promise((resolve, reject) => {
           messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
         },
         onErrors: config.dev.notifyOnErrors ?
-          utils.createNotifierCallback() :
-          undefined
+          utils.createNotifierCallback() : undefined
       }))
 
       resolve(devWebpackConfig)

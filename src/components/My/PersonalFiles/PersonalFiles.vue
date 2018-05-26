@@ -1,11 +1,11 @@
 <template>
     <div class="container">
-      <div class="header">
+      <div class="header" v-if="$route.path==='/My/PersonalFiles'">
         <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
         <div class="title">{{$route.name}}</div>
         <div class="right"></div>
       </div>
-      <scroller lock-x height="-45px"   ref="scrollerBottom">
+      <scroller lock-x height="-45px"   ref="scrollerBottom" v-if="$route.path==='/My/PersonalFiles'">
         <div class="box scroller_box">
           <h2>2018-05-01~2018-06-01</h2>
           <ul>
@@ -14,12 +14,14 @@
                   <div class="center"></div>
                   <div class="right">预计所需</div>
               </li>
-              <li v-for="(item,index) in arrList">
+              <li v-for="(item,index) in listArr">
                   <div class="left">{{item.title}}</div>
                   <div class="center">
                       <div class="kdc">
-                          <div class="jdt" :style="{width:(parseInt(item.spedVal)/parseInt(item.value))*100+'%'}">
-  {{item.spedValName}}
+                        
+                          <div :class="{over:fomatFloat(item)>100}" class="jdt" :style="{width:fomatFloat(item)+'%'}">
+                            <template v-if="fomatFloat(item)<100">{{item.spedValName}}</template>
+                            <template v-else>{{fomatFloat(item,true)}}</template>
                           </div>
                       </div>
                   </div>
@@ -28,23 +30,22 @@
           </ul>
         </div>
       </scroller>
+      <div class="view"  v-if="$route.path!=='/My/PersonalFiles'">
+        <router-view></router-view>
+      </div>
     </div>
 </template>
 <script>
-import { Scroller } from "vux";
 export default {
-  components: {
-    Scroller
-  },
   data() {
     return {
-      arrList: [
+      listArr: [
         {
           title: "热量",
           spedVal: "650",
           spedValName: "650kcal",
           valueName: "1000kcal",
-          value: "1000k"
+          value: "1000"
         },
         {
           title: "蛋白质",
@@ -55,79 +56,102 @@ export default {
         },
         {
           title: "脂肪",
-          spedVal: "",
-          spedValName: "",
-          valueName: "",
-          value: "7.05g"
+          spedVal: "6.22",
+          spedValName: "6.22g",
+          valueName: "7.05g",
+          value: "7.05"
         },
         {
           title: "碳水",
-          spedVal: "",
-          spedValName: "",
-          valueName: "",
-          value: "7.05g"
+          spedVal: "4.22",
+          spedValName: "4.22g",
+          valueName: "6.05g",
+          value: "6.05"
         },
         {
           title: "膳食纤维",
-          spedVal: "",
-          spedValName: "",
-          valueName: "",
-          value: "7.05mg"
+          spedVal: "3.2",
+          spedValName: "3.2mg",
+          valueName: "5.05mg",
+          value: "5.05"
         },
         {
           title: "维生素A",
-          spedVal: "",
-          spedValName: "",
-          valueName: "",
-          value: "7.05g"
+          spedVal: "1.02",
+          spedValName: "1.02g",
+          valueName: "2.05g",
+          value: "2.05"
         },
         {
           title: "维生素B",
-          spedVal: "",
-          spedValName: "",
-          valueName: "",
-          value: "7.05g"
+          spedVal: "3.22",
+          spedValName: "3.22g",
+          valueName: "7.05g",
+          value: "7.05"
+        },
+        {
+          title: "维生素C",
+          spedVal: "6.65",
+          spedValName: "6.65g",
+          valueName: "6.05g",
+          value: "6.05"
         },
         {
           title: "钙",
-          spedVal: "",
-          spedValName: "",
-          valueName: "",
-          value: "10.0mg"
+          spedVal: "3.21",
+          spedValName: "3.21mg",
+          valueName: "5.05mg",
+          value: "5.05"
         },
         {
           title: "铁",
-          spedVal: "",
-          spedValName: "",
-          valueName: "",
-          value: "7.05g"
+          spedVal: "1.22",
+          spedValName: "1.22g",
+          valueName: "2.05g",
+          value: "2.05"
         },
         {
           title: "锌",
-          spedVal: "",
-          spedValName: "",
-          valueName: "",
-          value: "7.05g"
+          spedVal: "6.54",
+          spedValName: "6.54g",
+          valueName: "7.05",
+          value: "7.05"
         },
         {
           title: "镁",
-          spedVal: "",
-          spedValName: "",
-          valueName: "",
-          value: "7.05g"
+          spedVal: "4.24",
+          spedValName: "4.24g",
+          valueName: "6.05g",
+          value: "6.05"
         },
         {
           title: "碘",
-          spedVal: "",
-          spedValName: "",
-          valueName: "",
-          value: "10.0mg"
+          spedVal: "4",
+          spedValName: "4mg",
+          valueName: "5.05mg",
+          value: "5.05"
         }
       ]
     };
   },
-  methods: {},
-  mounted() {}
+  methods: {
+    fomatFloat(item, isT) {
+      if (isT) {
+        var num = parseFloat(item.spedVal) / parseFloat(item.value) * 100;
+        num = num - 100;
+        return (
+          "超过" + Math.round(num * Math.pow(10, 2)) / Math.pow(10, 2) + "%"
+        );
+      } else {
+        var num = parseFloat(item.spedVal) / parseFloat(item.value) * 100;
+        return Math.round(num * Math.pow(10, 2)) / Math.pow(10, 2);
+      }
+    }
+  },
+  mounted() {
+    console.log("当前页面API" + this.$route.path);
+    console.log("数据格式：", this.listArr);
+  }
 };
 </script>
 <style scoped lang="less">
@@ -169,6 +193,7 @@ ul {
         background: #fff;
         border-radius: 5px;
         position: relative;
+        overflow: hidden;
 
         .jdt {
           position: absolute;
@@ -183,6 +208,10 @@ ul {
           text-overflow: ellipsis;
           overflow: hidden;
           white-space: nowrap;
+          max-width: 100% !important;
+        }
+        .over {
+          background: rgba(255, 48, 0, 1);
         }
       }
     }

@@ -4,13 +4,18 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App'
 import router from './router'
+
+
 Vue.config.productionTip = false
 import {
   ToastPlugin,
+  LoadingPlugin,
   Scroller
 } from 'vux'
 
 Vue.use(ToastPlugin)
+Vue.use(LoadingPlugin)
+
 Vue.component('scroller', Scroller)
 
 Vue.use(Vuex)
