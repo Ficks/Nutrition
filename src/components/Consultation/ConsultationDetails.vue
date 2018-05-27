@@ -81,7 +81,7 @@ export default {
       payment: {
         value: false,
         menu: {
-          "payment.noop": "支付方式",
+          "payment.noop": "请选择支付方式",
           price: "",
           integral: ""
         }
@@ -128,7 +128,26 @@ export default {
       this.payment.menu.integral = `积分支付 (${this.details.integral})`;
     },
     paymentFn(key) {
-      // 支付
+      if (key == "price") {
+        // 微信支付
+        this.$router.push({
+          path: "/Consultation/State",
+          query: {
+            mode: 0, //支付方式
+            success: 1, //是否成功
+            name: this.details.name
+          }
+        });
+      } else {
+        // 积分支付
+        this.$router.push({
+          path: "/Consultation/State",
+          query: {
+            mode: 1,
+            success: 0
+          }
+        });
+      }
       console.log(key);
     },
     getList() {

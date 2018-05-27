@@ -91,7 +91,7 @@
                 <li><router-link to="/My/PersonalFiles">个人档案<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
                 <li><router-link to="/My/Collection">我的收藏<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
                 <li><router-link to="/My/Property">收支明细<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
-                <li><router-link to="">我的咨询<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
+                <li><router-link to="/My/MyAdvice">我的咨询<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
               </ul>
               <ul>
                 <li><router-link to="/My/WalkIntoUs">走进我们<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>

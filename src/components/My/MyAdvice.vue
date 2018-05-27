@@ -1,118 +1,32 @@
 <template>
     <div class="container">
-        <!-- 底部导航 -->
-        <tabbar class="nav_bom">
-            <tabbar-item link="/">
-            <div class="list" slot="label">
-                <i class="iconfont icon-shouye"></i>
-                <span>首页</span>
-                </div>
-            </tabbar-item>
-            <tabbar-item link="/Find">
-            <div class="list" slot="label">
-                <i class="iconfont icon-faxian"></i>
-                <span>发现</span>
-                </div>
-            </tabbar-item>
-            <tabbar-item>
-            <div class="list add" slot="label" @click="openAlt(true)">
-                <i class="iconfont icon-tianjia"></i>
-                </div>
-            </tabbar-item>
-            <tabbar-item link="/Consultation" selected>
-            <div class="list" slot="label">
-                <i class="iconfont icon-tuwenzixun"></i>
-                <span>咨询</span>
-                </div>
-            </tabbar-item>
-            <tabbar-item link="/My">
-            <div class="list" slot="label">
-                <i class="iconfont icon-wode-F"></i>
-                <span>我的</span>
-                </div>
-            </tabbar-item>
-        </tabbar>
-        <div class="nav_bom_alt" :style="{bottom:navBottom+'px'}">
-            <ul>
-            <li>
-                <router-link to="/">
-                <i class="iconfont icon-zaocan1"></i>
-                <span>早餐</span>
-                </router-link>
-            </li>
-            <li>
-                <router-link to="/">
-                <i class="iconfont icon-wucan"></i>
-                <span>中餐</span>
-                </router-link>
-            </li>
-            <li>
-                <router-link to="/">
-                <i class="iconfont icon-wancan"></i>
-                <span>晚餐</span>
-                </router-link>
-            </li>
-            <li>
-                <router-link to="/">
-                <i class="iconfont icon-lingshi"></i>
-                <span>加餐</span>
-                </router-link>
-            </li>
-            <li>
-                <router-link to="/">
-                <i class="iconfont icon-buhang"></i>
-                <span>步行</span>
-                </router-link>
-            </li>
-            </ul>
-            <div class="close" @click="openAlt(false)">
-                <i class="iconfont icon-tianjia"></i>
-            </div>
-        </div>
-        <div class="nav_bom_zoom" @click="navBottom=-300" v-show="navBottom===0"></div>
-
-        <div class="header">
-            <div class="title">
-                营养师列表
-            </div>
-            <div class="right" @click="getList">搜索</div>
-        </div>
+      <div class="header">
+        <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
+        <div class="title">{{$route.name}}</div>
+        <div class="right" @click="getList">搜索</div>
+      </div>
         <div class="search">
             <div class="input">
-              <input type="text" v-model="searchVal.value" placeholder="输入文字搜索食谱">
+              <input type="text" v-model="searchVal.value" placeholder="搜索营养师姓名">
               <i class="iconfont icon-sousuo" @click="getList"></i>
             </div>
         </div>
-        <div class="search_type">
-            <ul>
-                <li @click="searchVal.region=!searchVal.region" :class="{rotate:searchVal.region}">地域 <i class="iconfont icon-xiala" style="transiform"></i></li>
-                <li @click="searchVal.praise=!searchVal.praise" :class="{rotate:searchVal.praise}">好评度 <i class="iconfont icon-xiala"></i></li>
-                <li @click="searchVal.familiarity=!searchVal.familiarity" :class="{rotate:searchVal.familiarity}">熟悉度 <i class="iconfont icon-xiala"></i></li>
-            </ul>
-        </div>
         <div class="box_wr">
-            <scroller lock-x height="-185px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
+            <scroller lock-x height="-95px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
             <div class="box search_list">
-                <div class="list_me" v-for="(item,index) in listArr" @click="toPathDetails">
+                <div class="list_me" v-for="(item,index) in listArr" @click="toPathDetails(item)">
                     <div class="tx"><img :src="item.src" alt=""></div>
                     <div class="box_wz">
                         <div class="list_ts">
-                            <h3>{{item.name}} <span>{{item.praise}}%五星好评</span></h3>
+                            <h3>{{item.name}}
+                                <span :class="{jiesu:item.state==0}">{{item.state==0?"已结束":"咨询中"}}</span>
+                            </h3>
                         </div>
                         <div class="list_ts">
                             <p>{{item.company}}</p>
                         </div>
                         <div class="list_ts">
                             <p>擅长：{{item.technology}}</p>
-                        </div>
-                        <div class="list_ts bom">
-                            <div class="left">
-                                <span>￥{{item.money}}/次 </span>
-                                {{item.number}}人咨询过
-                            </div>
-                            <div class="right">
-                                {{item.time}}
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -137,9 +51,6 @@ export default {
       navBottom: -300,
       searchVal: {
         value: "",
-        region: false, //地域
-        praise: false, //好评度
-        familiarity: false, //熟悉度
         onFetching: false,
         uptext: "滑动查看更多"
       },
@@ -147,62 +58,44 @@ export default {
         {
           name: "用户名",
           src: "/static/images/ystx.jpg",
-          praise: "98",
           company: "中南大学医学院",
           technology: "病后营养调理、健身营养调理",
-          money: 50,
-          number: 1000,
-          time: "9:00 ~ 11:00"
+          state: 1
         },
         {
           name: "用户名",
           src: "/static/images/ystx.jpg",
-          praise: "98",
           company: "中南大学医学院",
           technology: "病后营养调理、健身营养调理",
-          money: 50,
-          number: 1000,
-          time: "9:00 ~ 11:00"
+          state: 0
         },
         {
           name: "用户名",
           src: "/static/images/ystx.jpg",
-          praise: "98",
           company: "中南大学医学院",
           technology: "病后营养调理、健身营养调理",
-          money: 50,
-          number: 1000,
-          time: "9:00 ~ 11:00"
+          state: 0
         },
         {
           name: "用户名",
           src: "/static/images/ystx.jpg",
-          praise: "98",
           company: "中南大学医学院",
           technology: "病后营养调理、健身营养调理",
-          money: 50,
-          number: 1000,
-          time: "9:00 ~ 11:00"
+          state: 0
         },
         {
           name: "用户名",
           src: "/static/images/ystx.jpg",
-          praise: "98",
           company: "中南大学医学院",
           technology: "病后营养调理、健身营养调理",
-          money: 50,
-          number: 1000,
-          time: "9:00 ~ 11:00"
+          state: 0
         },
         {
           name: "用户名",
           src: "/static/images/ystx.jpg",
-          praise: "98",
           company: "中南大学医学院",
           technology: "病后营养调理、健身营养调理",
-          money: 50,
-          number: 1000,
-          time: "9:00 ~ 11:00"
+          state: 0
         }
       ]
     };
@@ -225,62 +118,44 @@ export default {
             {
               name: "用户名",
               src: "/static/images/ystx.jpg",
-              praise: "98",
               company: "中南大学医学院",
               technology: "病后营养调理、健身营养调理",
-              money: 50,
-              number: 1000,
-              time: "9:00 ~ 11:00"
+              state: 1
             },
             {
               name: "用户名",
               src: "/static/images/ystx.jpg",
-              praise: "98",
               company: "中南大学医学院",
               technology: "病后营养调理、健身营养调理",
-              money: 50,
-              number: 1000,
-              time: "9:00 ~ 11:00"
+              state: 0
             },
             {
               name: "用户名",
               src: "/static/images/ystx.jpg",
-              praise: "98",
               company: "中南大学医学院",
               technology: "病后营养调理、健身营养调理",
-              money: 50,
-              number: 1000,
-              time: "9:00 ~ 11:00"
+              state: 0
             },
             {
               name: "用户名",
               src: "/static/images/ystx.jpg",
-              praise: "98",
               company: "中南大学医学院",
               technology: "病后营养调理、健身营养调理",
-              money: 50,
-              number: 1000,
-              time: "9:00 ~ 11:00"
+              state: 1
             },
             {
               name: "用户名",
               src: "/static/images/ystx.jpg",
-              praise: "98",
               company: "中南大学医学院",
               technology: "病后营养调理、健身营养调理",
-              money: 50,
-              number: 1000,
-              time: "9:00 ~ 11:00"
+              state: 0
             },
             {
               name: "用户名",
               src: "/static/images/ystx.jpg",
-              praise: "98",
               company: "中南大学医学院",
               technology: "病后营养调理、健身营养调理",
-              money: 50,
-              number: 1000,
-              time: "9:00 ~ 11:00"
+              state: 0
             }
           );
           this.$nextTick(() => {
@@ -290,10 +165,16 @@ export default {
         }, 2000);
       }
     },
-    toPathDetails(url) {
-      this.$router.push({
-        path: "/Consultation/ConsultationDetails"
-      });
+    toPathDetails(item) {
+      if (item.state == 0) {
+        //   营养师详情
+        this.$router.push({
+          path: "/Consultation/ConsultationDetails",
+          query: {}
+        });
+      } else {
+        //   聊天
+      }
     }
   },
   mounted() {
@@ -340,7 +221,7 @@ export default {
   .search {
     width: 100%;
     height: 50px;
-    background: #fff;
+    background: #f9f9f9;
     padding: 0 15px;
     box-sizing: border-box;
     overflow: hidden;
@@ -348,6 +229,8 @@ export default {
     .input {
       position: relative;
       margin-top: 10px;
+      background: #e7e7e7;
+      border-radius: 5px;
       input {
         color: #a1a1a1;
         padding-left: 25px;
@@ -357,37 +240,6 @@ export default {
         left: 5px;
         top: 6px;
         color: #a1a1a1;
-      }
-    }
-  }
-
-  .search_type {
-    height: auto;
-    overflow: hidden;
-    background: #fff;
-    border-top: 1px solid #dfdfdf;
-    border-bottom: 1px solid #dfdfdf;
-    li {
-      float: left;
-      width: 33.333%;
-      text-align: center;
-      height: 33px;
-      line-height: 33px;
-      text-align: center;
-      font-size: 12px;
-      color: #666;
-      i {
-        font-size: 12px;
-        color: #727272;
-        display: inline-block;
-        transition: all 0.5s;
-      }
-      &.rotate {
-        color: #8dc13b;
-        i {
-          transform: rotate(180deg);
-          color: #8dc13b;
-        }
       }
     }
   }
@@ -447,9 +299,24 @@ export default {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+
         span {
           float: right;
+          display: block;
+          width: 150/2px;
+          height: 44/2px;
+          line-height: 44/2px;
+          border-radius: 5px;
+          color: #fff;
+          background: #8dc13b;
+          text-align: center;
           font-size: 13px;
+          font-weight: 500;
+          margin-right: 8px;
+
+          &.jiesu {
+            background: #949494;
+          }
         }
       }
       p {
@@ -482,9 +349,6 @@ export default {
         color: #666666;
         position: relative;
         top: 5px;
-      }
-      .bom {
-        margin-top: 10px;
       }
     }
   }

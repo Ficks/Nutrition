@@ -31,13 +31,14 @@
     </div>
 </template>
 <script>
-import { LoadMore, Actionsheet, Loading } from "vux";
+import { LoadMore, Actionsheet, Loading, Toast } from "vux";
 
 export default {
   components: {
     LoadMore,
     Actionsheet,
-    Loading
+    Loading,
+    Toast
   },
   data() {
     return {
@@ -115,6 +116,10 @@ export default {
       }
       this.operation = false;
       this.$vux.loading.hide();
+      this.$vux.toast.show({
+        text: "删除成功",
+        type: "success"
+      });
     },
     getList() {
       console.log(this.$route.path);

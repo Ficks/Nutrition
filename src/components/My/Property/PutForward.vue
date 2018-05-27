@@ -12,7 +12,7 @@
                 </li>
             </ul>
         </div>
-        <scroller lock-x height="-237px"  @on-scroll-bottom="getList" ref="scrollerBottom">
+        <scroller lock-x height="-158px" ref="scrollerBottom">
             <div class="scroller_box xxxx">
                 <ul>
                     <li>
@@ -25,10 +25,11 @@
                     </li>
                 </ul>
                 <p>特殊原因可能有延期，请谅解</p>
+                <div class="submit_btn" @click="submit">确认提现</div>
             </div>
         </scroller>
 
-        <div class="submit_btn"><router-link to="/My/Property/State">确认提现</router-link></div>
+        
     </div>
 </template>
 <script>
@@ -36,7 +37,17 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    submit() {
+      //state 0 是退款 1是提现
+      this.$router.push({
+        path: "/My/Property/State",
+        query: {
+          state: 1
+        }
+      });
+    }
+  },
   mounted() {
     console.log("当前页面API：" + this.$route.path);
   }
@@ -96,14 +107,10 @@ export default {
     }
   }
   .submit_btn {
-    position: fixed;
-    bottom: 15px;
-    left: 0;
-    right: 0;
     border-radius: 45px;
     height: 44px;
     line-height: 44px;
-    margin: 0 auto;
+    margin-top: 50px;
 
     a {
       display: block;

@@ -12,6 +12,8 @@ import Release from '@/components/Find/Release.vue'
 // 咨询
 import Consultation from '@/components/Consultation/Consultation.vue'
 import ConsultationDetails from '@/components/Consultation/ConsultationDetails.vue'
+import ConsultationState from '@/components/Consultation/State.vue'
+import Chat from '@/components/Consultation/Chat.vue'
 
 // 我的
 import My from '@/components/My/My.vue'
@@ -27,8 +29,8 @@ import Property from '@/components/My/Property/Property.vue'
 import PutForward from '@/components/My/Property/PutForward.vue'
 // 退款
 import Refund from '@/components/My/Property/Refund.vue'
-import State from '@/components/My/Property/Property.vue'
-
+import PropertyState from '@/components/My/Property/State.vue'
+import MyAdvice from '@/components/My/MyAdvice.vue'
 
 
 
@@ -106,6 +108,15 @@ export default new Router({
       path: '/Consultation/ConsultationDetails',
       name: '营养师详情',
       component: ConsultationDetails
+    },
+    {
+      path: '/Consultation/State',
+      name: '支付结果',
+      component: ConsultationState
+    }, {
+      path: '/Consultation/Chat',
+      name: '聊天',
+      component: Chat
     }, {
       path: '/My',
       name: '我的',
@@ -145,13 +156,17 @@ export default new Router({
         component: PutForward
       }, {
         path: '/My/Property/Refund',
-        name: '退款',
+        name: '退款原因',
         component: Refund
       }, {
         path: '/My/Property/State',
         name: '提交成功',
-        component: State
+        component: PropertyState
       }]
+    }, {
+      path: '/My/MyAdvice',
+      name: '我的咨询',
+      component: MyAdvice
     }, {
       path: '/My/WalkIntoUs',
       name: '走进我们',

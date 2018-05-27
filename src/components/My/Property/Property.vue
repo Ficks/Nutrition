@@ -1,7 +1,7 @@
 <template>
     <div class="container">
       <div class="header" v-if="$route.path=='/My/Property'">
-        <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
+        <div class="left" @click="$router.push({path:'/My'})"><i class="iconfont icon-fanhui"></i>返回</div>
         <div class="title">{{$route.name}}</div>
       </div>
         <div class="balance" v-if="$route.path=='/My/Property'">
@@ -38,7 +38,7 @@
             </div>
         </scroller>
 
-        <div class="submit_btn"><router-link to="/My/Property/PutForward">余额提现</router-link></div>
+        <div class="submit_btn" v-if="$route.path=='/My/Property'"><router-link to="/My/Property/PutForward">余额提现</router-link></div>
         
         <div class="view" v-if="$route.path!='/My/Property'">
             <router-view></router-view>
@@ -143,8 +143,10 @@ export default {
     }
   },
   mounted() {
-    console.log("当前页面API：" + this.$route.path);
-    console.log("当前页面数据列表", this.listArr);
+    if (this.$route.path == "/My/Property") {
+      console.log("当前页面API：" + this.$route.path);
+      console.log("当前页面数据列表", this.listArr);
+    }
   }
 };
 </script>
