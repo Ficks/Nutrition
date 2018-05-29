@@ -4,44 +4,46 @@
         <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
         <div class="title">{{title}}</div>
       </div>
-        <!-- <scroller lock-x height="-45px" ref="scrollerBottom" @on-scroll="getList"> -->
-             <scroller v-model="scrollerStatus" height="-45px"   lock-x   ref="scroller" :use-pulldown="true" :pulldowns-config="upobj" @on-pulldown-loading="selPullUp" >
-            <div class="scroller_box chat">
-                <load-more tip="loading" v-show="loading"></load-more>
+        <scroller v-model="updownVal" lock-x height="-90px" ref="scrollerBottom" :use-pulldown="true" :scrollbarY="true" @on-pulldown-loading="getList">
+            <div class="scroller_box chat" id="chat_box">
+                <load-more tip="loading" class="loadingys" v-show="loading"></load-more>
                 <ul>
                     <li v-for="(item,index) in listArr" :class="{he:item.name==he.name,my:item.name==my.name}">
                         <div class="tx"><img :src="item.src" alt=""></div>
                         <div class="box">
                             <div class="text" v-if="item.type=='text'">{{item.text}}</div>
+                            <!-- <textarea v-if="item.type=='text'" v-model="item.text"></textarea> -->
                             <div class="img" v-else><img :src="item.img" alt=""></div>
                         </div>
                     </li>
                 </ul>
             </div>
         </scroller>
+        <div class="text_jl" id="outh">{{chatText}}</div>
+        <div class="ltk">
+          <div class="input" :style="{height:outHeight+'px'}"><textarea v-model="chatText"></textarea></div>
+          <div class="btn_fm">
+            <span @click="msgNew">发送</span>
+            <i class="icofnont"></i>
+          </div>
+        </div>
     </div>
 </template>
 <script>
-import { LoadMore } from "vux";
+import { LoadMore, Toast } from "vux";
 import { setTimeout } from "timers";
 export default {
   components: {
-    LoadMore
+    LoadMore,
+    Toast
   },
   data() {
     return {
-      scrollerStatus: {
-        pullupStatus: "default"
-      },
-      upobj: {
-        content: "请上拉刷新数据",
-        pullUpHeight: 60,
-        height: 40,
-        autoRefresh: false,
-        downContent: "请上拉刷新数据",
-        upContent: "请上拉刷新数据",
-        loadingContent: "加载中...",
-        clsPrefix: "xs-plugin-pullup-"
+      chatText: "",
+      outHeight: 44,
+      outH: null,
+      updownVal: {
+        pulldownStatus: "defalut"
       },
       loading: false,
       title: this.$route.query.name,
@@ -111,15 +113,38 @@ export default {
       ]
     };
   },
+  watch: {
+    chatText() {
+      this.outHeight = this.outH.offsetHeight;
+      console.log(this.outHeight);
+    }
+  },
   methods: {
-    selPullUp() {
-      console.log("上拉刷新数据");
-      this.PageIndex++;
-      this.getList(false);
+    msgNew() {
+      // 发送消息
+      if (this.chatText !== "") {
+        this.listArr.push({
+          name: "lok666",
+          src: "/static/images/tx.jpg",
+          type: "text",
+          text: this.chatText
+        });
+        this.chatText = "";
+
+        this.$refs.scrollerBottom.reset({
+          // top:
+        });
+      } else {
+        this.$vux.toast.show({
+          text: "不能发送空消息",
+          type: "text"
+        });
+      }
     },
     getList() {
       if (this.loading) {
       } else {
+        console.log(99999);
         this.loading = true;
         setTimeout(() => {
           this.listArr.unshift(
@@ -127,13 +152,13 @@ export default {
               name: this.$route.query.name,
               src: "/static/images/ystx.jpg",
               type: "text",
-              text: "请问有什么可以帮助你的？"
+              text: "新一代洗衣服111"
             },
             {
               name: "lok666",
               src: "/static/images/tx.jpg",
               type: "text",
-              text: "我怎么可以吃才可以长胖？"
+              text: "新一代洗衣服222"
             },
             {
               name: "lok666",
@@ -142,24 +167,36 @@ export default {
               img: "/static/images/ys.jpg"
             }
           );
-          console.log(this.scrollerStatus.pullupStatus);
-          this.scrollerStatus.pullupStatus = false;
           this.$nextTick(() => {
             this.loading = false;
-            this.$refs.scroller.reset();
+            this.updownVal.pulldownStatus = "default";
+            this.$refs.scrollerBottom.reset();
           });
-        }, 1000);
+        }, 2000);
       }
     }
   },
   mounted() {
+    this.outH = document.getElementById("outh");
+    this.outHeight = this.outH.offsetHeight;
     console.log(this.$route.query);
     console.log("当前页面API：" + this.$route.path);
+
+    setTimeout(() => {
+      this.$refs.scrollerBottom.reset();
+    });
+
+    setInterval(() => {
+      console.log(this.$refs.scrollerBottom.reset);
+    }, 1000);
   }
 };
 </script>
 <style lang="less" scoped>
 .container {
+  .loadingys {
+    margin-top: -20px;
+  }
   height: 100%;
   overflow: auto;
   background: #f3f3f3;
@@ -240,5 +277,68 @@ export default {
       }
     }
   }
+
+  .ltk {
+    position: fixed;
+    bottom: 0;
+    min-height: 45px;
+    height: auto;
+    background: #e0e0e0;
+    width: 100%;
+    padding: 0 12px;
+    box-sizing: border-box;
+    left: 0;
+
+    .input {
+      float: left;
+      width: 88%;
+      margin-top: 8px;
+      height: 22px;
+      textarea {
+        background: #fff;
+        height: 56/2px;
+        border: 1px solid #c7c7c7;
+        height: 100%;
+        padding: 5px 12px;
+      }
+    }
+
+    .btn_fm {
+      float: right;
+
+      span {
+        background: #8dc13b;
+        height: 29px;
+        line-height: 29px;
+        color: #fff;
+        border-radius: 5px;
+        font-size: 14px;
+        padding: 0 5px;
+        display: block;
+        margin-top: 8px;
+        margin-left: 2px;
+      }
+    }
+  }
+
+  .text_jl {
+    position: fixed;
+    opacity: 1;
+    z-index: 1;
+    background: #000;
+    min-height: 58/2px;
+    height: auto;
+    max-height: 130px;
+    color: #fff;
+    width: 100%;
+    word-wrap: break-word;
+    z-index: -99;
+    bottom: -100px;
+  }
+}
+</style>
+<style>
+.xs-plugin-pulldown-container {
+  display: none !important;
 }
 </style>
