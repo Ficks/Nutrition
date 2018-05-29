@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="header">
-            <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
+            <div class="left" @click="back"><i class="iconfont icon-fanhui"></i>返回</div>
             <div class="title">{{$route.name}}</div>
             <div class="right"></div>
         </div>
@@ -149,6 +149,15 @@ export default {
         });
       }
       console.log(key);
+    },
+    back() {
+      if (this.$route.query.back) {
+        this.$router.push({
+          path: this.$route.query.back
+        });
+      } else {
+        this.$router.back(-1);
+      }
     },
     getList() {
       // 获取评论列表

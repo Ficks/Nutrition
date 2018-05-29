@@ -5,7 +5,7 @@
         <div class="title">{{title}}</div>
       </div>
         <div class="scroller_box chat" id="chat_box">
-            <load-more tip="loading" class="loadingys" v-show="loading"></load-more>
+            <load-more tip="loading" v-show="loading"></load-more>
             <ul>
                 <li v-for="(item,index) in listArr" :class="{he:item.name==he.name,my:item.name==my.name}">
                     <div class="tx"><img :src="item.src" alt=""></div>
@@ -19,10 +19,23 @@
         </div>
         <div class="text_jl" id="outh">{{chatText}}</div>
         <div class="ltk">
-          <div class="input" :style="{height:outHeight+'px'}"><textarea v-model="chatText"></textarea></div>
-          <div class="btn_fm">
-            <span @click="msgNew">发送</span>
-            <i class="icofnont"></i>
+          <div class="rel">
+            <div class="input" :style="{height:outHeight+'px','padding-right':chatText===''?'30px':'60px'}"><textarea v-model="chatText"></textarea></div>
+            <div class="btn_fm">
+              <span @click="msgNew" v-show="chatText!==''">发送</span>
+              <i  v-show="chatText==''" class="iconfont icon-tupian"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav_bom_zoom" v-if="end"></div>
+        <div class="alert_box" v-if="end">
+          <p>本次咨询已结束，去给个评价吧~</p>
+          <div class="boxs">
+            <div class="btn">前往评价</div>
+            <div class="backs"><router-link :to="{path:'/Consultation/ConsultationDetails',query:{
+              back:'/Consultation'
+            }}">返回</router-link></div>
           </div>
         </div>
     </div>
@@ -37,10 +50,12 @@ export default {
   },
   data() {
     return {
+      end: false,
       chatText: "",
       outHeight: 44,
       outH: null,
       loading: false,
+      scrollTop: 0,
       title: this.$route.query.name,
       he: {
         name: this.$route.query.name,
@@ -140,30 +155,21 @@ export default {
     getList() {
       if (this.loading) {
       } else {
-        console.log(99999);
+        var els = document.getElementsByClassName("container")[0];
+        this.scrollTop = els.scrollHeight;
         this.loading = true;
         setTimeout(() => {
-          this.listArr.unshift(
-            {
-              name: this.$route.query.name,
-              src: "/static/images/ystx.jpg",
-              type: "text",
-              text: "新一代洗衣服111"
-            },
-            {
-              name: "lok666",
-              src: "/static/images/tx.jpg",
-              type: "text",
-              text: "新一代洗衣服222"
-            },
-            {
-              name: "lok666",
-              src: "/static/images/tx.jpg",
-              type: "img",
-              img: "/static/images/ys.jpg"
-            }
-          );
+          this.listArr.unshift({
+            name: "lok666",
+            src: "/static/images/tx.jpg",
+            type: "img",
+            img: "/static/images/ys.jpg"
+          });
+
           this.$nextTick(() => {
+            setTimeout(() => {
+              els.scrollTop = els.scrollHeight - this.scrollTop;
+            });
             this.loading = false;
           });
         }, 2000);
@@ -175,7 +181,11 @@ export default {
     this.outH = document.getElementById("outh");
     this.outHeight = this.outH.offsetHeight;
     console.log("当前页面API：" + this.$route.path);
-    console.log(9990);
+    console.log("聊天数据：", this.listArr);
+
+    setTimeout(() => {
+      this.end = true;
+    }, 3000);
     var el = document.getElementsByClassName("container")[0];
     el.onscroll = () => {
       var t = el.scrollTop; //获取距离页面顶部的距离
@@ -183,14 +193,16 @@ export default {
         this.getList();
       }
     };
+    this.$nextTick(() => {
+      setTimeout(() => {
+        el.scrollTop = el.scrollHeight;
+      });
+    });
   }
 };
 </script>
 <style lang="less" scoped>
 .container {
-  .loadingys {
-    margin-top: -20px;
-  }
   height: 100%;
   overflow: auto;
   background: #f3f3f3;
@@ -289,12 +301,22 @@ export default {
     padding: 0 12px;
     box-sizing: border-box;
     left: 0;
-
+    .rel {
+      position: relative;
+      height: auto;
+      overflow: hidden;
+      width: 100%;
+      height: 45px;
+    }
     .input {
+      position: absolute;
+      left: 0;
+      top: 8px;
       float: left;
-      width: 88%;
-      margin-top: 8px;
+      width: 100%;
       height: 22px;
+      box-sizing: border-box;
+      padding-right: 60px;
       textarea {
         background: #fff;
         height: 56/2px;
@@ -305,20 +327,27 @@ export default {
     }
 
     .btn_fm {
+      position: relative;
+      z-index: 999;
       float: right;
-
       span {
         background: #8dc13b;
         height: 29px;
         line-height: 29px;
         color: #fff;
         border-radius: 5px;
-        font-size: 14px;
-        padding: 0 5px;
+        font-size: 12px;
+        padding: 0 12px;
         display: block;
         margin-top: 8px;
         margin-left: 2px;
       }
+    }
+
+    i {
+      font-size: 22px;
+      line-height: 45px;
+      color: #515151;
     }
   }
 
@@ -335,6 +364,54 @@ export default {
     word-wrap: break-word;
     z-index: -99;
     bottom: -100px;
+  }
+
+  .alert_box {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 80%;
+    background: #fff;
+    border-radius: 10px;
+    z-index: 9919;
+    margin-top: -70px;
+
+    p {
+      font-size: 16px;
+      color: #666666;
+      margin: 30px 0 20px;
+      text-align: center;
+    }
+
+    .boxs {
+      width: 65%;
+      height: 30px;
+      line-height: 30px;
+      margin: 0 auto;
+      padding-bottom: 65/2px;
+      position: relative;
+
+      .btn {
+        background: #8dc13b;
+        color: #fff;
+        border-radius: 4px;
+        text-align: center;
+        font-size: 15px;
+      }
+      .backs {
+        position: absolute;
+        font-size: 15px;
+        top: 0;
+        right: -40px;
+
+        a {
+          display: block;
+          color: #666666;
+        }
+      }
+    }
   }
 }
 </style>
