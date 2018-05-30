@@ -32,7 +32,7 @@
         <div class="alert_box" v-if="end">
           <p>本次咨询已结束，去给个评价吧~</p>
           <div class="boxs">
-            <div class="btn">前往评价</div>
+            <div class="btn"><router-link to="/Consultation/ChatRefund">前往评价</router-link></div>
             <div class="backs"><router-link :to="{path:'/Consultation/ConsultationDetails',query:{
               back:'/Consultation'
             }}">返回</router-link></div>
@@ -399,6 +399,10 @@ export default {
         border-radius: 4px;
         text-align: center;
         font-size: 15px;
+
+        a {
+          color: #fff;
+        }
       }
       .backs {
         position: absolute;

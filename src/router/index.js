@@ -14,6 +14,8 @@ import Consultation from '@/components/Consultation/Consultation.vue'
 import ConsultationDetails from '@/components/Consultation/ConsultationDetails.vue'
 import ConsultationState from '@/components/Consultation/State.vue'
 import Chat from '@/components/Consultation/Chat.vue'
+import ChatRefund from '@/components/Consultation/Refund.vue'
+import ChatYes from '@/components/Consultation/ChatYes.vue'
 
 // 我的
 import My from '@/components/My/My.vue'
@@ -71,253 +73,274 @@ import WalkIntoUs from '@/components/WalkIntoUs/WalkIntoUs.vue';
 // 合作伙伴
 import Partner from '@/components/Partner/Partner.vue';
 
+// 营养师登录
+import Dietitian from '@/components/Dietitian/Dietitian.vue';
+import DietitianList from '@/components/Dietitian/DietitianList.vue';
+
 
 Vue.use(Router)
 
 export default new Router({
   routes: [{
-      path: '/',
-      name: '首页',
-      component: Index
+    path: '/',
+    name: '首页',
+    component: Index
+  }, {
+    path: '/Find',
+    name: '发现',
+    component: Find
+  }, {
+    path: '/Find/FindDetails',
+    name: '资讯详情',
+    component: FindDetails
+  },
+  {
+    path: '/Dynamic',
+    name: '动态',
+    component: Dynamic
+  }, {
+    path: '/Dynamic/DynamicDetails',
+    name: '动态详情',
+    component: DynamicDetails
+  }, {
+    path: '/Dynamic/Release',
+    name: '发布动态',
+    component: Release
+  }, {
+    path: '/Consultation',
+    name: '咨询',
+    component: Consultation
+  }, {
+    path: '/Consultation/ConsultationDetails',
+    name: '营养师详情',
+    component: ConsultationDetails
+  },
+  {
+    path: '/Consultation/State',
+    name: '支付结果',
+    component: ConsultationState
+  }, {
+    path: '/Consultation/Chat',
+    name: '聊天',
+    component: Chat
+  }, {
+    path: '/Consultation/ChatRefund',
+    name: '评价营养师',
+    component: ChatRefund
+  },
+  {
+    path: '/Consultation/ChatYes',
+    name: '评价成功',
+    component: ChatYes
+  }, {
+    path: '/My',
+    name: '我的',
+    component: My
+  }, {
+    path: '/My/PersonalFiles',
+    name: '个人档案',
+    component: PersonalFiles,
+    children: [{
+      path: '/My/PersonalFilesPersonalFiles/PersonalData',
+      name: '修改个人档案',
+      component: PersonalData
     }, {
-      path: '/Find',
-      name: '发现',
-      component: Find
+      path: '/My/TodayArchives',
+      name: '今日档案',
+      component: TodayArchives
     }, {
-      path: '/Find/FindDetails',
-      name: '资讯详情',
-      component: FindDetails
+      path: '/My/PersonalFiles/AllergicFood',
+      name: '过敏食物筛选',
+      component: SearchList
+    }, {
+      path: '/My/PersonalFiles/AllergicFood/Details',
+      name: '过敏食物添加',
+      component: SearchDetails
+    }]
+  }, {
+    path: '/My/Collection',
+    name: '我的收藏',
+    component: Collection
+  }, {
+    path: '/My/Property',
+    name: '收支明细',
+    component: Property,
+    children: [{
+      path: '/My/Property/PutForward',
+      name: '余额提现',
+      component: PutForward
+    }, {
+      path: '/My/Property/Refund',
+      name: '退款原因',
+      component: Refund
+    }, {
+      path: '/My/Property/State',
+      name: '提交成功',
+      component: PropertyState
+    }]
+  }, {
+    path: '/My/MyAdvice',
+    name: '我的咨询',
+    component: MyAdvice
+  }, {
+    path: '/My/WalkIntoUs',
+    name: '走进我们',
+    component: WalkIntoUs
+  }, {
+    path: '/My/Partner',
+    name: '合作伙伴',
+    component: Partner
+  }, {
+    path: '/Tool',
+    name: '基本工具',
+    component: Tool,
+    children: [{
+      path: '/Tool/Recipes',
+      name: '菜谱检索',
+      component: SearchList,
+      icon: "iconfont icon-xitongcaipu"
     },
     {
-      path: '/Dynamic',
-      name: '动态',
-      component: Dynamic
-    }, {
-      path: '/Dynamic/DynamicDetails',
-      name: '动态详情',
-      component: DynamicDetails
-    }, {
-      path: '/Dynamic/Release',
-      name: '发布动态',
-      component: Release
-    }, {
-      path: '/Consultation',
-      name: '咨询',
-      component: Consultation
-    }, {
-      path: '/Consultation/ConsultationDetails',
-      name: '营养师详情',
-      component: ConsultationDetails
+      path: '/Tool/MaterialRetrieval',
+      name: '食材检索',
+      component: SearchList,
+      icon: "iconfont icon-yumi"
     },
     {
-      path: '/Consultation/State',
-      name: '支付结果',
-      component: ConsultationState
-    }, {
-      path: '/Consultation/Chat',
-      name: '聊天',
-      component: Chat
-    }, {
-      path: '/My',
-      name: '我的',
-      component: My
-    }, {
-      path: '/My/PersonalFiles',
-      name: '个人档案',
-      component: PersonalFiles,
-      children: [{
-        path: '/My/PersonalFilesPersonalFiles/PersonalData',
-        name: '修改个人档案',
-        component: PersonalData
-      }, {
-        path: '/My/TodayArchives',
-        name: '今日档案',
-        component: TodayArchives
-      }, {
-        path: '/My/PersonalFiles/AllergicFood',
-        name: '过敏食物筛选',
-        component: SearchList
-      }, {
-        path: '/My/PersonalFiles/AllergicFood/Details',
-        name: '过敏食物添加',
-        component: SearchDetails
-      }]
-    }, {
-      path: '/My/Collection',
-      name: '我的收藏',
-      component: Collection
-    }, {
-      path: '/My/Property',
-      name: '收支明细',
-      component: Property,
-      children: [{
-        path: '/My/Property/PutForward',
-        name: '余额提现',
-        component: PutForward
-      }, {
-        path: '/My/Property/Refund',
-        name: '退款原因',
-        component: Refund
-      }, {
-        path: '/My/Property/State',
-        name: '提交成功',
-        component: PropertyState
-      }]
-    }, {
-      path: '/My/MyAdvice',
-      name: '我的咨询',
-      component: MyAdvice
-    }, {
-      path: '/My/WalkIntoUs',
-      name: '走进我们',
-      component: WalkIntoUs
-    }, {
-      path: '/My/Partner',
-      name: '合作伙伴',
-      component: Partner
-    }, {
-
-      path: '/Tool',
-      name: '基本工具',
-      component: Tool,
-      children: [{
-          path: '/Tool/Recipes',
-          name: '菜谱检索',
-          component: SearchList,
-          icon: "iconfont icon-xitongcaipu"
-        },
-        {
-          path: '/Tool/MaterialRetrieval',
-          name: '食材检索',
-          component: SearchList,
-          icon: "iconfont icon-yumi"
-        },
-        {
-          path: '/Tool/OtherRetrieval',
-          name: '其他食品检索',
-          component: SearchList,
-          icon: "iconfont icon-jinkouniunai"
-        },
-        {
-          path: '/Tool/SearchList/Details',
-          hidden: true,
-          name: 'SearchDetails',
-          component: SearchDetails
-        },
-        {
-          path: '/Tool/CalorieCalculation',
-          name: '卡路里需求计算',
-          component: CalorieCalculation,
-          icon: "iconfont icon-qialuli"
-        },
-        {
-          path: '/Tool/NutrientRequirement',
-          name: '营养素需求查询',
-          component: NutrientRequirement,
-          icon: "iconfont icon-yingyangbaojian"
-        },
-        {
-          path: '/Tool/MotionEnergyQuery',
-          name: '运动耗能查询',
-          component: MotionEnergyQuery,
-          icon: "iconfont icon-yundong"
-        },
-        {
-          path: '/Tool/NutrientKnowledge',
-          name: '营养素知识',
-          component: NutrientKnowledge,
-          icon: "iconfont icon-zhishi"
-        },
-        {
-          path: '/Tool/NutrientKnowledge/NutrientKnowledgeDetails',
-          hidden: true,
-          name: '咨询详情',
-          component: NutrientKnowledgeDetails
-        },
-        {
-          path: '/Tool/DietaryReference',
-          name: '饮食分量参考',
-          component: DietaryReference,
-          icon: "iconfont icon-mianshi"
-        },
-        {
-          path: '/Tool/WeightQuery',
-          name: '体重标准查询',
-          component: WeightQuery,
-          icon: "iconfont icon-tizhong"
-        },
-      ]
-    }, {
-      path: '/Allocation',
-      name: '膳食调配',
-      component: Allocation,
-      children: [{
-        path: '/Allocation/NormalDdult',
-        name: '正常成人膳食',
-        component: AllocationDetails,
-        icon: "iconfont icon-nanren"
-      }, {
-        path: '/Allocation/Baby',
-        name: '婴幼儿膳食',
-        component: AllocationDetails,
-        icon: "iconfont icon-yingerertongxiaohaibaby"
-      }, {
-        path: '/Allocation/YoungPeople',
-        name: '儿童及青春期膳食',
-        component: AllocationDetails,
-        icon: "iconfont icon-xuesheng"
-      }, {
-        path: '/Allocation/Aged',
-        name: '老年人膳食',
-        component: AllocationDetails,
-        icon: "iconfont icon-laoren"
-      }, {
-        path: '/Allocation/PregnantWoman',
-        name: '孕妇及乳母膳食',
-        component: AllocationDetails,
-        icon: "iconfont icon-yunfu"
-      }, {
-        path: '/Allocation/Vegetarian',
-        name: '素食者膳食',
-        component: AllocationDetails,
-        icon: "iconfont icon-baicai"
-      }, {
-        path: '/Allocation/Disease',
-        name: '疾病及职业膳食',
-        component: AllocationDetails,
-        icon: "iconfont icon-zhiyebingweihaishigubaogao"
-      }, {
-        path: '/Allocation/FamilyDinner',
-        name: '家庭配餐',
-        component: AllocationDetails,
-        icon: "iconfont icon-mianshi"
-      }]
-    }, {
-      path: '/Assessment',
-      name: '膳食评估',
-      component: Assessment,
-      children: [{
-        path: '/Assessment/AssessmentAnswer',
-        name: '评估问卷',
-        component: AssessmentAnswer
-      }, {
-        path: '/Assessment/AssessmentResult',
-        name: '评估结果',
-        component: AssessmentResult
-      }]
-    }, {
-      path: '/self',
-      name: '自我评估',
-      component: Assessment,
-      children: [{
-        path: '/self/AssessmentAnswer',
-        name: '评估问卷',
-        component: AssessmentAnswer
-      }, {
-        path: '/self/AssessmentResult',
-        name: '评估结果',
-        component: AssessmentResult
-      }]
+      path: '/Tool/OtherRetrieval',
+      name: '其他食品检索',
+      component: SearchList,
+      icon: "iconfont icon-jinkouniunai"
     },
+    {
+      path: '/Tool/SearchList/Details',
+      hidden: true,
+      name: 'SearchDetails',
+      component: SearchDetails
+    },
+    {
+      path: '/Tool/CalorieCalculation',
+      name: '卡路里需求计算',
+      component: CalorieCalculation,
+      icon: "iconfont icon-qialuli"
+    },
+    {
+      path: '/Tool/NutrientRequirement',
+      name: '营养素需求查询',
+      component: NutrientRequirement,
+      icon: "iconfont icon-yingyangbaojian"
+    },
+    {
+      path: '/Tool/MotionEnergyQuery',
+      name: '运动耗能查询',
+      component: MotionEnergyQuery,
+      icon: "iconfont icon-yundong"
+    },
+    {
+      path: '/Tool/NutrientKnowledge',
+      name: '营养素知识',
+      component: NutrientKnowledge,
+      icon: "iconfont icon-zhishi"
+    },
+    {
+      path: '/Tool/NutrientKnowledge/NutrientKnowledgeDetails',
+      hidden: true,
+      name: '咨询详情',
+      component: NutrientKnowledgeDetails
+    },
+    {
+      path: '/Tool/DietaryReference',
+      name: '饮食分量参考',
+      component: DietaryReference,
+      icon: "iconfont icon-mianshi"
+    },
+    {
+      path: '/Tool/WeightQuery',
+      name: '体重标准查询',
+      component: WeightQuery,
+      icon: "iconfont icon-tizhong"
+    },
+    ]
+  }, {
+    path: '/Allocation',
+    name: '膳食调配',
+    component: Allocation,
+    children: [{
+      path: '/Allocation/NormalDdult',
+      name: '正常成人膳食',
+      component: AllocationDetails,
+      icon: "iconfont icon-nanren"
+    }, {
+      path: '/Allocation/Baby',
+      name: '婴幼儿膳食',
+      component: AllocationDetails,
+      icon: "iconfont icon-yingerertongxiaohaibaby"
+    }, {
+      path: '/Allocation/YoungPeople',
+      name: '儿童及青春期膳食',
+      component: AllocationDetails,
+      icon: "iconfont icon-xuesheng"
+    }, {
+      path: '/Allocation/Aged',
+      name: '老年人膳食',
+      component: AllocationDetails,
+      icon: "iconfont icon-laoren"
+    }, {
+      path: '/Allocation/PregnantWoman',
+      name: '孕妇及乳母膳食',
+      component: AllocationDetails,
+      icon: "iconfont icon-yunfu"
+    }, {
+      path: '/Allocation/Vegetarian',
+      name: '素食者膳食',
+      component: AllocationDetails,
+      icon: "iconfont icon-baicai"
+    }, {
+      path: '/Allocation/Disease',
+      name: '疾病及职业膳食',
+      component: AllocationDetails,
+      icon: "iconfont icon-zhiyebingweihaishigubaogao"
+    }, {
+      path: '/Allocation/FamilyDinner',
+      name: '家庭配餐',
+      component: AllocationDetails,
+      icon: "iconfont icon-mianshi"
+    }]
+  }, {
+    path: '/Assessment',
+    name: '膳食评估',
+    component: Assessment,
+    children: [{
+      path: '/Assessment/AssessmentAnswer',
+      name: '评估问卷',
+      component: AssessmentAnswer
+    }, {
+      path: '/Assessment/AssessmentResult',
+      name: '评估结果',
+      component: AssessmentResult
+    }]
+  }, {
+    path: '/self',
+    name: '自我评估',
+    component: Assessment,
+    children: [{
+      path: '/self/AssessmentAnswer',
+      name: '评估问卷',
+      component: AssessmentAnswer
+    }, {
+      path: '/self/AssessmentResult',
+      name: '评估结果',
+      component: AssessmentResult
+    }]
+  },
+  {
+    path: '/Dietitian',
+    name: "营养师登录",
+    component: Dietitian
+  }, {
+    path: '/Dietitian/DietitianList',
+    name: "咨询列表",
+    component: DietitianList
+  }
   ]
 })

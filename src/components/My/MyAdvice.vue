@@ -174,6 +174,12 @@ export default {
         });
       } else {
         //   聊天
+        this.$router.push({
+          path: "/Consultation/Chat",
+          query: {
+            name: item.name
+          }
+        });
       }
     }
   },

@@ -1,75 +1,6 @@
 <template>
   <div class="container">
-    <!-- 底部导航 -->
-      <tabbar class="nav_bom">
-          <tabbar-item link="/" selected>
-          <div class="list" slot="label">
-            <i class="iconfont icon-shouye"></i>
-            <span>首页</span>
-            </div>
-          </tabbar-item>
-          <tabbar-item link="/Find">
-          <div class="list" slot="label">
-            <i class="iconfont icon-faxian"></i>
-            <span>发现</span>
-            </div>
-          </tabbar-item>
-          <tabbar-item>
-          <div class="list add" slot="label" @click="openAlt(true)">
-            <i class="iconfont icon-tianjia"></i>
-            </div>
-          </tabbar-item>
-          <tabbar-item link="/Consultation">
-          <div class="list" slot="label">
-            <i class="iconfont icon-tuwenzixun"></i>
-            <span>咨询</span>
-            </div>
-          </tabbar-item>
-          <tabbar-item link="/My">
-          <div class="list" slot="label">
-            <i class="iconfont icon-wode-F"></i>
-            <span>我的</span>
-            </div>
-          </tabbar-item>
-      </tabbar>
-      <div class="nav_bom_alt" :style="{bottom:navBottom+'px'}">
-        <ul>
-          <li>
-            <router-link to="/">
-            <i class="iconfont icon-zaocan1"></i>
-            <span>早餐</span>
-            </router-link>
-          </li>
-          <li>
-            <router-link to="/">
-            <i class="iconfont icon-wucan"></i>
-            <span>中餐</span>
-            </router-link>
-          </li>
-          <li>
-            <router-link to="/">
-            <i class="iconfont icon-wancan"></i>
-            <span>晚餐</span>
-            </router-link>
-          </li>
-          <li>
-            <router-link to="/">
-            <i class="iconfont icon-lingshi"></i>
-            <span>加餐</span>
-            </router-link>
-          </li>
-          <li>
-            <router-link to="/">
-            <i class="iconfont icon-buhang"></i>
-            <span>步行</span>
-            </router-link>
-          </li>
-        </ul>
-        <div class="close" @click="openAlt(false)">
-            <i class="iconfont icon-tianjia"></i>
-        </div>
-      </div>
-        <div class="nav_bom_zoom" @click="navBottom=-300" v-show="navBottom===0"></div>
+    <Menu :index="0"></Menu>
     <!-- 顶部 -->
       <div class="top">
           <div class="search">
@@ -223,26 +154,17 @@
   </div>
 </template>
 <script>
-import {
-  Tabbar,
-  TabbarItem,
-  Grid,
-  GridItem,
-  Tab,
-  TabItem,
-  Swiper,
-  SwiperItem
-} from "vux";
+import { Grid, GridItem, Tab, TabItem, Swiper, SwiperItem } from "vux";
+import Menu from "../Common/Menu.vue";
 export default {
   components: {
-    Tabbar,
-    TabbarItem,
     Grid,
     GridItem,
     Tab,
     TabItem,
     Swiper,
-    SwiperItem
+    SwiperItem,
+    Menu
   },
   data() {
     return {
@@ -341,8 +263,7 @@ export default {
           fname: "中南医学院博士",
           link: "/Consultation/ConsultationDetails"
         }
-      ],
-      navBottom: -300
+      ]
     };
   },
   methods: {
@@ -362,13 +283,6 @@ export default {
     // 分享
     share() {
       this.$vux.toast.text("分享好友成功，奖励积分（+10）");
-    },
-    openAlt(isTrue) {
-      if (isTrue) {
-        this.navBottom = 0;
-      } else {
-        this.navBottom = -300;
-      }
     },
     // 判断是否为糖尿病患者
     isDisease() {
