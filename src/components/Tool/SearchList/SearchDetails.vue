@@ -51,7 +51,8 @@
                   </li>
               </ul>
           </div>
-          <div class="submit_btn" @click="openBom(true)">添加到今日饮食</div>
+          <div class="submit_btn" @click="openBom(true)" v-if="title!='过敏食物添加'">添加到今日饮食</div>
+          <div class="submit_btn" @click="openBom(true)" v-else>添加到过敏食物</div>
         </div>
       </scroller>
         
@@ -165,7 +166,7 @@ export default {
         this.title = "食谱大全";
       } else if (api === "/Tool/MaterialRetrieval") {
         this.title = "食材大全";
-      } else if (api === "/My/PersonalFiles/AllergicFood/Details") {
+      } else if (api === "/My/PersonalFiles/AllergicFood") {
         this.title = "过敏食物添加";
       } else {
         this.title = "其他食品";

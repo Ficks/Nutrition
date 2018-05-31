@@ -35,33 +35,33 @@
       <div class="nav_bom_alt" :style="{bottom:navBottom+'px'}">
         <ul>
           <li>
-            <router-link to="/">
+            <router-link to="/Tool/Recipes">
             <i class="iconfont icon-zaocan1"></i>
             <span>早餐</span>
             </router-link>
           </li>
           <li>
-            <router-link to="/">
+            <router-link to="/Tool/Recipes">
             <i class="iconfont icon-wucan"></i>
             <span>中餐</span>
             </router-link>
           </li>
           <li>
-            <router-link to="/">
+            <router-link to="/Tool/Recipes">
             <i class="iconfont icon-wancan"></i>
             <span>晚餐</span>
             </router-link>
           </li>
           <li>
-            <router-link to="/">
+            <router-link to="/Tool/Recipes">
             <i class="iconfont icon-lingshi"></i>
             <span>加餐</span>
             </router-link>
           </li>
           <li>
-            <router-link to="/">
+            <router-link to="/AddMotion">
             <i class="iconfont icon-buhang"></i>
-            <span>步行</span>
+            <span>运动</span>
             </router-link>
           </li>
         </ul>

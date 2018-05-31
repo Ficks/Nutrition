@@ -149,8 +149,10 @@ export default {
     }
   },
   mounted() {
-    console.log("当前页面API" + this.$route.path);
-    console.log("数据格式：", this.listArr);
+    if (this.$route.path == "/My/PersonalFiles") {
+      console.log("当前页面API" + this.$route.path);
+      console.log("数据格式：", this.listArr);
+    }
   }
 };
 </script>

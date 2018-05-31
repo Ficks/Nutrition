@@ -76,6 +76,12 @@ import Partner from '@/components/Partner/Partner.vue';
 // 营养师登录
 import Dietitian from '@/components/Dietitian/Dietitian.vue';
 import DietitianList from '@/components/Dietitian/DietitianList.vue';
+import DietitianChat from '@/components/Dietitian/Chat.vue';
+import UserInfo from '@/components/Dietitian/UserInfo.vue';
+
+// 添加运动
+import AddMotion from '@/components/AddMotion/AddMotion.vue';
+
 
 
 Vue.use(Router)
@@ -141,7 +147,7 @@ export default new Router({
     name: '个人档案',
     component: PersonalFiles,
     children: [{
-      path: '/My/PersonalFilesPersonalFiles/PersonalData',
+      path: '/My/PersonalData',
       name: '修改个人档案',
       component: PersonalData
     }, {
@@ -152,10 +158,6 @@ export default new Router({
       path: '/My/PersonalFiles/AllergicFood',
       name: '过敏食物筛选',
       component: SearchList
-    }, {
-      path: '/My/PersonalFiles/AllergicFood/Details',
-      name: '过敏食物添加',
-      component: SearchDetails
     }]
   }, {
     path: '/My/Collection',
@@ -341,6 +343,20 @@ export default new Router({
     path: '/Dietitian/DietitianList',
     name: "咨询列表",
     component: DietitianList
+  },
+  {
+    path: '/Dietitian/Chat',
+    name: "聊天",
+    component: DietitianChat
+  },
+  {
+    path: '/Dietitian/UserInfo',
+    name: "用户资料类型",
+    component: UserInfo
+  }, {
+    path: '/AddMotion',
+    name: "添加运动",
+    component: AddMotion
   }
   ]
 })

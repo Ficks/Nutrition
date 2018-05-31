@@ -4,7 +4,7 @@
         <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
         <div class="title">{{$route.name}}</div>
       </div>
-    <scroller lock-x height="-95px" ref="scrollerBottom">
+    <scroller lock-x height="-45px" ref="scrollerBottom">
       <div class="scroller_box">
           <div class="logo">
             <img src="/static/images/logo.jpg" alt="">
@@ -90,6 +90,9 @@ export default {
         position: absolute;
         left: 0;
         top: 0;
+        line-height: 50px;
+        color: #1a1a1a;
+        font-size: 20px;
       }
 
       .abs {

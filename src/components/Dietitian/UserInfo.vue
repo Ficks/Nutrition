@@ -1,34 +1,16 @@
 <template>
     <div class="container">
-        <!-- 底部导航 -->
-        <Menu :index="4"></Menu>
-        <div class="header">
-            <div class="title">个人中心</div>
-        </div>
-        <div class="top_box">
-          <div class="imgs">
-            <img src="/static/images/tx.jpg" alt="">
-          </div>
-          <div class="wz">
-            <h1>lok666</h1>
-            <p>男 27岁</p>
-          </div>
-        </div>
+      <div class="header">
+        <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
+        <div class="title">{{$route.name}}</div>
+      </div>
         <div class="my_box">
-            <scroller lock-x height="-210px"  ref="scrollerBottom">
+            <scroller lock-x height="-45px"  ref="scrollerBottom">
             <div class="my_list scroller_box">
               <ul>
+                <li><router-link :to="{path:'/My/PersonalData',query:{read:true}}">用户资料<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
                 <li><router-link to="/My/TodayArchives">今日档案<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
                 <li><router-link to="/My/PersonalFiles">个人档案<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
-                <li><router-link to="/My/PersonalData">我的资料<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
-                <li><router-link to="/My/Collection">我的收藏<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
-                <li><router-link to="/My/Property">收支明细<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
-                <li><router-link to="/My/MyAdvice">我的咨询<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
-              </ul>
-              <ul>
-                <li><router-link to="/My/WalkIntoUs">走进我们<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
-                <li><router-link to="/My/Partner">合作伙伴<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
-                <li><router-link to="/Dietitian">营养师用户<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
               </ul>
             </div>
             </scroller>
@@ -36,18 +18,12 @@
     </div>
 </template>
 <script>
-import Menu from "../Common/Menu.vue";
 export default {
-  components: {
-    Menu
-  },
   data() {
     return {};
   },
   methods: {},
-  mounted() {
-    console.log("当前页面API：" + this.$route.path);
-  }
+  mounted() {}
 };
 </script>
 <style scoped lang="less">
