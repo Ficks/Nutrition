@@ -14,8 +14,8 @@
                 <i class="iconfont icon-tianjiajiahaowubiankuang"></i>
             </div>
             <div class="iconload">
-                <span><img src="/static/images/ic1.png" alt=""></span>
-                <span><img src="/static/images/ic2.png" alt=""></span>
+                <span><i class="iconfont icon-huatishuohua"></i></span>
+                <span><i class="iconfont icon-weizhi"></i></span>
             </div>
         </div>
         </scroller>
@@ -77,10 +77,15 @@ export default {
 
     .iconload {
       margin-left: 15px;
-      margin-top: 15px;
+      margin-top: 10px;
 
       span {
-        margin-right: 5px;
+        margin-right: 10px;
+
+        i {
+          font-size: 18px;
+          color: #909090;
+        }
       }
     }
   }

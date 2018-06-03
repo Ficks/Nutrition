@@ -75,7 +75,7 @@
           </grid>
       </div>
       <!-- 膳食推荐 -->
-      <div class="recommend">
+      <div class="recommend" v-if="!isTNB">
         <div class="box">
           <h2>膳食推荐<span @click="isDisease()">换一批</span></h2>
 
@@ -90,7 +90,7 @@
               晚餐
             </tab-item>
           </tab>
-          <div class="recommend_box">
+          <div class="recommend_box" @click="mastri">
             <swiper v-model="reIndex" :show-dots="false">
               <swiper-item v-for="(item,index) in recommendData" :key="index">
                 <div class="tab-swiper vux-center">
@@ -115,25 +115,18 @@
       </div>
 
       <!-- 糖尿病膳食推荐 -->
-      <div class="recommend none">
+      <div class="recommend" v-else>
         <div class="box">
           <h2>膳食推荐</h2>
           <div class="recommend_box">
-            <ul v-for="(item,index) in recommendData">
-              <li v-for="jtem in item[0]">
-                <h3>{{jtem.name}}</h3>
-                <span>{{jtem.kcal}}</span>
-              </li>
-              <li class="default" v-if="item[1].length>0">
-                <h3>加餐</h3>
-              </li>
-              <li v-for="jtem in item[1]">
-                <h3>{{jtem.name}}</h3>
-                <span>{{jtem.kcal}}</span>
+            <ul>
+              <li v-for="item in TnbListArr">
+                <h3>{{item.name}}</h3>
+                <span>{{item.kcal}}</span>
               </li>
             </ul>
             <div class="more">
-              <router-link to="/">查看更多></router-link>
+              <router-link to="/Index/Recommend">查看更多></router-link>
             </div>
           </div>
         </div>
@@ -171,7 +164,22 @@ export default {
       qiandao: "签到",
       searchVal: "",
       reIndex: 0,
+      isTNB: false,
       // 早中晚餐推荐
+      TnbListArr: [
+        {
+          name: "酸奶",
+          kcal: "114kcal/1.0"
+        },
+        {
+          name: "鸡蛋",
+          kcal: "114kcal/1.0"
+        },
+        {
+          name: "馒头",
+          kcal: "114kcal/1.0"
+        }
+      ],
       recommendData: [
         // 早餐
         [
@@ -267,6 +275,11 @@ export default {
     };
   },
   methods: {
+    mastri() {
+      this.$router.push({
+        path: "/Index/RecommendZzw"
+      });
+    },
     // 膳食推荐table
     recommend(index) {
       this.reIndex = index;
