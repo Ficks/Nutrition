@@ -155,7 +155,7 @@ export default {
     getList() {
       if (this.loading) {
       } else {
-        var els = document.getElementsByClassName("container")[0];
+        var els = document.getElementById("chat_box");
         this.scrollTop = els.scrollHeight;
         this.loading = true;
         setTimeout(() => {
@@ -183,10 +183,11 @@ export default {
     console.log("当前页面API：" + this.$route.path);
     console.log("聊天数据：", this.listArr);
 
-    setTimeout(() => {
-      this.end = true;
-    }, 3000);
-    var el = document.getElementsByClassName("container")[0];
+    // 3秒后结束当前聊天
+    // setTimeout(() => {
+    //   this.end = true;
+    // }, 3000);
+    var el = document.getElementById("chat_box");
     el.onscroll = () => {
       var t = el.scrollTop; //获取距离页面顶部的距离
       if (t === 0) {
@@ -215,6 +216,8 @@ export default {
     z-index: 9099;
   }
   .chat {
+    height: 100%;
+    overflow: auto;
     padding: 11px 27/2px;
     box-sizing: border-box;
 

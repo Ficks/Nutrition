@@ -99,3 +99,10 @@ export default {
 };
 </script>
 
+<style>
+.header_box {
+  position: fixed;
+  z-index: 999;
+  bottom: 0;
+}
+</style>

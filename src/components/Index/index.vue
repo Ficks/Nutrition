@@ -9,7 +9,7 @@
               <div class="inpus"><router-link to="/Tool/Recipes">搜索食材或菜谱</router-link></div>
               <i class="iconfont icon-sousuo"></i>
             </div>
-            <router-link to="/PersonalFiles"><i class="iconfont icon-dangan1"></i></router-link>
+            <router-link to="/My/PersonalFiles"><i class="iconfont icon-dangan2"></i></router-link>
           </div>
           <div class="cont">
             <div class="left">
@@ -22,7 +22,7 @@
               <div class="box">
                 <span>健康得分</span>
                 <h2>100</h2>
-                <router-link to="/PersonalFiles">完善个人档案></router-link>
+                <router-link to="/My/PersonalFiles">完善个人档案></router-link>
               </div>
             </div>
             <div class="right">
@@ -133,7 +133,7 @@
       </div>
     <!-- 营养咨询 -->
       <div class="yinyanzx">
-        <h2>营养咨询<span>更多></span></h2>
+        <h2>营养咨询<span><router-link to="/Consultation">更多></router-link></span></h2>
         <ul>
           <li v-for="(item,index) in nutCon" @click="toDetails(item)">
               <div class="img">
@@ -144,6 +144,12 @@
           </li>
         </ul>
       </div>
+      <div class="fenx" @click="isFx=false"  v-show="isFx">
+        <div class="img"><img src="/static/images/fx.png" alt=""></div>
+        <p>请点击右上角 <br>将它发送给指定朋友<br>或分享到朋友圈</p>
+      </div>
+      <div class="nav_bom_zoom" @click="isFx=false"  v-show="isFx"></div>
+      
   </div>
 </template>
 <script>
@@ -162,6 +168,7 @@ export default {
   data() {
     return {
       qiandao: "签到",
+      isFx: false,
       searchVal: "",
       reIndex: 0,
       isTNB: false,
@@ -295,7 +302,7 @@ export default {
     },
     // 分享
     share() {
-      this.$vux.toast.text("分享好友成功，奖励积分（+10）");
+      this.isFx = true;
     },
     // 判断是否为糖尿病患者
     isDisease() {
@@ -327,14 +334,55 @@ export default {
 };
 </script>
 <style scoped lang="less">
+.fenx {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+
+  .img {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    img {
+      width: 25%;
+      float: right;
+      padding-right: 20px;
+    }
+  }
+  p {
+    text-align: center;
+    color: #fff;
+  }
+}
+.nav_bom_zoom {
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.8);
+}
 .container {
+  box-sizing: border-box;
+  height: 100%;
   padding-bottom: 80px;
+  overflow: auto;
 
   .grid_m {
     padding: 15px;
 
     a {
       padding: 10px;
+
+      i {
+        display: block;
+        height: 33px;
+      }
+
+      &:nth-child(4) {
+        i {
+          font-size: 27px;
+        }
+      }
     }
   }
 }
@@ -376,6 +424,7 @@ export default {
       line-height: 30px;
       display: block;
       padding-top: 2px;
+      font-size: 25px;
       float: right;
       text-align: center;
     }
@@ -591,8 +640,10 @@ export default {
 
     span {
       float: right;
-      font-size: 14px;
-      color: #858585;
+      a {
+        font-size: 14px;
+        color: #858585;
+      }
     }
   }
   ul {
