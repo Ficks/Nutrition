@@ -203,6 +203,7 @@ export default {
   .chat {
     padding: 11px 27/2px;
     box-sizing: border-box;
+    padding-bottom: 50px;
 
     li {
       padding: 11px 0;

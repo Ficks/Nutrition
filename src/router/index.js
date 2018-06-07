@@ -165,7 +165,7 @@ export default new Router({
       component: PersonalFiles,
       children: [{
         path: '/My/PersonalData',
-        name: '修改个人档案',
+        name: '我的资料',
         component: PersonalData
       }, {
         path: '/My/TodayArchives',

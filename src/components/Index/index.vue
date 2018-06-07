@@ -22,7 +22,7 @@
               <div class="box">
                 <span>健康得分</span>
                 <h2>100</h2>
-                <router-link to="/My/PersonalFiles">完善个人档案></router-link>
+                <router-link to="/My/PersonalData">完善个人档案></router-link>
               </div>
             </div>
             <div class="right">

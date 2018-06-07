@@ -47,7 +47,7 @@
             <h3>选择身高</h3>
             <div class="vuels">年龄：{{form.height}} cm</div>
             <div class="sle">
-              <range v-model="form.height"  :min="0" :max="150"></range>
+              <range v-model="form.height"  :min="0" :max="210"></range>
             </div>
         </div>
 
@@ -161,7 +161,7 @@ export default {
       if (this.read) {
         return;
       }
-      jbsTrue = true;
+      this.jbsTrue = true;
     },
     gmswFn() {
       if (this.read) {
@@ -304,8 +304,10 @@ export default {
           right: 0;
           box-sizing: border-box;
           top: 0;
+          font-size: 15px;
 
           input {
+            font-size: 15px;
             text-align: right;
             background: none;
 

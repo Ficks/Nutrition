@@ -88,12 +88,13 @@
     </div>
 </template>
 <script>
-import { Rater, Range } from "vux";
+import { Rater, Range, Toast } from "vux";
 
 export default {
   components: {
     Rater,
-    Range
+    Range,
+    Toast
   },
   data() {
     return {
@@ -175,6 +176,12 @@ export default {
     },
     // 打开底部
     openBom(isTrue) {
+      if (this.title == "过敏食物添加") {
+        this.$vux.toast.show({
+          text: "添加成功"
+        });
+        return;
+      }
       if (isTrue) {
         this.detailsFix = 0;
       } else {

@@ -14,7 +14,7 @@
              <p>{{item.endTime}}</p>
            </div>
            <div class="btns">
-             <div class="btn_m" @click="chat(item)" v-show="item.msg">新消息</div>
+             <div class="btn_m xxx" @click="chat(item)" v-show="item.msg">新消息</div>
              <div class="btn_m" @click="userInfo(item)" :style="{'margin-top':item.msg?'8px':'20px'}">用户资料</div>
              <!-- <div class="btn_m end" :style="{'margin-top':item.msg?'8px':'20px'}">已结束</div> -->
            </div>
@@ -185,6 +185,9 @@ export default {
         border-radius: 5px;
         margin-top: 10px;
         font-size: 13px;
+      }
+      .xxx {
+        background: #8dc13b;
       }
       .end {
         background: #949494;
