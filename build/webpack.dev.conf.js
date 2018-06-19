@@ -30,7 +30,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       rewrites: [{
         from: /.*/,
         to: path.posix.join(config.dev.assetsPublicPath, 'index.html')
-      }, ],
+      },],
     },
     hot: true,
     contentBase: false, // since we use CopyWebpackPlugin.
@@ -80,7 +80,6 @@ module.exports = new Promise((resolve, reject) => {
       // publish the new Port, necessary for e2e tests
       process.env.PORT = port
       // add port to devServer config
-      devWebpackConfig.devServer.host = '192.168.0.107';
       devWebpackConfig.devServer.port = port;
 
       // Add FriendlyErrorsPlugin

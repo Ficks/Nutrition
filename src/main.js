@@ -4,7 +4,11 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App'
 import router from './router'
+import Settings from '@/config/settings.js'
+import Axios from 'axios'
+import store from '@/vuex/store'
 
+Vue.prototype.$http = Axios;
 
 Vue.config.productionTip = false
 import {
@@ -28,6 +32,7 @@ FastClick.attach(document.body)
 new Vue({
   el: '#app',
   router,
+  store,
   components: {
     App
   },

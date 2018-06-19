@@ -1,4 +1,4 @@
 var settings = {
-  server: "http://www.xyys.ltd/swagger/docs/v1"
+  server: "http://www.xyys.ltd/api"
 }
 module.exports = settings;
