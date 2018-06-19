@@ -68,6 +68,7 @@
 <script>
 import { Actionsheet, Toast, Popup, Rater, Range } from "vux";
 import AddCase from "./AddCase";
+import { setTimeout } from "timers";
 export default {
   components: {
     Actionsheet,
@@ -233,6 +234,45 @@ export default {
     console.log("当前页面API：" + this.$route.path);
     console.log("个人数据：", this.form);
     console.log("过敏食物列表：", this.gmsw);
+
+    // this.$http({
+    //   url: "/api/HealthyArchive/GetPersonalHealthyArchive",
+    //   type: "get",
+    //   data: {
+    //     referid: "1",
+    //     openid: "2",
+    //     nickname: "3",
+    //     headurl: "4"
+    //   },
+    //   success: function(data) {
+    //     console.log(data);
+    //   },
+    //   error: function(data) {
+    //     console.log(data);
+    //   }
+    // });
+
+    var d = this.$store.getters.getLogin;
+    console.log("-----------------");
+    console.log(d);
+    $.ajax({
+      url: "http://www.xyys.ltd/api/HealthyArchive/GetPersonalHealthyArchive",
+      type: "get",
+      // dataType: "jsonp",
+      headers: {
+        a: "1111",
+        userid: d.userid,
+        Token: d.Token,
+        "Content-Type": "text/html;charset=utf-8"
+      },
+      success: function(data) {
+        //成功的处理
+        console.log(data);
+      },
+      error: function() {
+        //错误处理
+      }
+    });
   }
 };
 </script>

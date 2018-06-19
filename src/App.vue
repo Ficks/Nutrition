@@ -13,18 +13,28 @@ export default {
     return {};
   },
   mounted() {
-    $.ajax({
-      url: "http://www.xyys.ltd/api/WeChat/WeChatLogin",
-      type: "get",
-      success: function(data) {
-        //成功的处理
-        console.log(data);
-        alert();
-      },
-      error: function() {
-        //错误处理
-      }
-    });
+    var _this = this;
+    // $.ajax({
+    //   url: "http://www.xyys.ltd/api/WeChat/MoniWeChatLogin",
+    //   type: "get",
+    //   data: {
+    //     referid: "1",
+    //     openid: "2",
+    //     nickname: "3",
+    //     headurl: "4"
+    //   },
+    //   success: function(data) {
+    //     //成功的处理
+    //     var d = {
+    //       userid: data.Data.userid,
+    //       Token: data.Token
+    //     };
+    //     _this.$store.commit("setLogin", d);
+    //   },
+    //   error: function() {
+    //     //错误处理
+    //   }
+    // });
   }
 };
 </script>

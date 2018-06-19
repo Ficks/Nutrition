@@ -4,19 +4,24 @@ Vue.use(Vuex);
 
 
 const store = new Vuex.Store({
-    state: {
-        isLogin: 0,
-    },
-    getters: {
-        getIsLogin(state) {
-            return state.isLogin;
-        }
-    },
-    mutations: {
-        setIsLogin(state, data) {
-            state.isLogin = data;
-        }
+  state: {
+    userid: "",
+    Token: "",
+  },
+  getters: {
+    getLogin(state) {
+      return {
+        userid: state.userid,
+        Token: state.Token
+      }
     }
+  },
+  mutations: {
+    setLogin(state, data) {
+      state.userid = data.userid;
+      state.Token = data.Token;
+    }
+  }
 })
 
 export default store;
