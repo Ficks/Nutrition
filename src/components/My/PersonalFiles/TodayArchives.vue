@@ -14,21 +14,21 @@
                   <div class="center"></div>
                   <div class="right">预计所需</div>
               </li>
-              <li v-for="(item,index) in listArr[0]">
-                  <div class="left">{{item.title}}</div>
+              <li v-for="(item,index) in listArr">
+                  <div class="left">{{item.name}}</div>
                   <div class="center">
                       <div class="kdc">
-                          <div :class="{over:fomatFloat(item)>100}" class="jdt" :style="{width:fomatFloat(item)+'%'}">
-                            <template v-if="fomatFloat(item)<100">{{item.spedValName}}</template>
-                            <template v-else>{{fomatFloat(item,true)}}</template>
+                          <div :class="{over:item.bfb>100}" class="jdt" :style="{width:item.bfb+'%'}">
+                            <template v-if="item.bfb<100">{{item.spedVal+item.unit}}</template>
+                            <template v-else>{{item.bfbc}}</template>
                           </div>
                       </div>
                   </div>
-                  <div class="right">{{item.valueName}}</div>
+                  <div class="right">{{item.totalVal+item.unit}}</div>
               </li>
           </ul>
           <h2 class="tl">各餐摄入组成</h2>
-          <ul>
+          <!-- <ul>
               <li>
                   <div class="left">餐次</div>
                   <div class="center"></div>
@@ -41,9 +41,9 @@
                           <div :class="{over:fomatFloat(item)>100}" class="jdt" :style="{width:fomatFloat(item)+'%'}"></div>
                       </div>
                   </div>
-                  <div class="right">{{item.valueName}}</div>
+                  <div class="right">{{item.totalVal+item.unit}}</div>
               </li>
-          </ul>
+          </ul> -->
         </div>
       </scroller>
     </div>
@@ -53,82 +53,51 @@ export default {
   data() {
     return {
       date: "",
-      listArr: [
-        [
-          {
-            title: "热量",
-            spedVal: "650",
-            spedValName: "650kcal",
-            valueName: "1000kcal",
-            value: "1000"
-          },
-          {
-            title: "蛋白质",
-            spedVal: "1.02",
-            spedValName: "1.02g",
-            valueName: "2.05g",
-            value: "2.05"
-          },
-          {
-            title: "脂肪",
-            spedVal: "6.22",
-            spedValName: "6.22g",
-            valueName: "7.05g",
-            value: "7.05"
-          },
-          {
-            title: "碳水",
-            spedVal: "4.22",
-            spedValName: "4.22g",
-            valueName: "6.05g",
-            value: "6.05"
-          },
-          {
-            title: "膳食纤维",
-            spedVal: "3.2",
-            spedValName: "3.2mg",
-            valueName: "5.05mg",
-            value: "5.05"
-          }
-        ],
-        [
-          {
-            title: "早餐",
-            spedVal: "10",
-            valueName: "20%",
-            value: "20"
-          },
-          {
-            title: "中餐",
-            spedVal: "40",
-            valueName: "50%",
-            value: "50"
-          },
-          {
-            title: "晚餐",
-            spedVal: "40",
-            valueName: "30%",
-            value: "30"
-          }
-        ]
-      ]
+      listArr: []
     };
   },
-  methods: {
+  filters: {
+    myCurrency: function(myInput) {
+      return 0;
+    },
     fomatFloat(item, isT) {
       if (isT) {
-        var num = parseFloat(item.spedVal) / parseFloat(item.value) * 100;
+        var num = parseFloat(item.spedVal) / parseFloat(item.totalVal) * 100;
         num = num - 100;
         return (
           "超过" + Math.round(num * Math.pow(10, 2)) / Math.pow(10, 2) + "%"
         );
       } else {
-        var num = parseFloat(item.spedVal) / parseFloat(item.value) * 100;
+        var num = parseFloat(item.spedVal) / parseFloat(item.totalVal) * 100;
         return Math.round(num * Math.pow(10, 2)) / Math.pow(10, 2);
       }
     }
   },
+  methods: {
+    getBfb(item) {
+      if (item.totalVal == 0 && item.spedVal == 0) {
+        return 0;
+      }
+      var num = parseFloat(item.spedVal) / parseFloat(item.totalVal) * 100;
+      return Math.round(num * Math.pow(10, 2)) / Math.pow(10, 2);
+    },
+    getCg(item) {
+      var num = item - 100;
+      return "超过" + Math.round(num * Math.pow(10, 2)) / Math.pow(10, 2) + "%";
+    },
+    setData(data) {
+      this.listArr = data;
+      for (let i = 0; i < this.listArr.length; i++) {
+        var v = this.listArr[i];
+        v.bfb = this.getBfb(v);
+        if (v.bfb > 100) {
+          v.bfbc = this.getCg(v.bfb);
+        }
+      }
+    }
+  },
   mounted() {
+    var _this = this;
     var myDate = new Date();
     var year = myDate.getFullYear(); //获取完整的年份(4位,1970-????)
     var month = myDate.getMonth() + 1;
@@ -136,6 +105,22 @@ export default {
     this.date = year + "-" + month + "-" + date;
     console.log("当前页面API" + this.$route.path);
     console.log("数据格式：", this.listArr);
+
+    this.$http({
+      url: "/api/HealthyArchive/GetDailyNutrientIntake",
+      type: "get",
+      data: {
+        start: this.date,
+        end: this.date
+      },
+      success: function(data) {
+        //成功的处理
+        _this.setData(data.Data);
+      },
+      error: function() {
+        //错误处理
+      }
+    });
   }
 };
 </script>

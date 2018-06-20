@@ -21,13 +21,14 @@
                   <li @click="actionsheetFn('jtsr')">家庭收入<div class="right">{{form.jtsr.name==''?"请选择":form.jtsr.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                 </ul>
                 <ul>
-                  <li @click="jbsFn">疾病史<div class="right">{{form.jbs==''?"请选择":form.jbs}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="jbsFn">疾病史<div class="right">{{form.jbs.name==null?"请选择":form.jbs.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('ysxh')">饮食喜好<div class="right">{{form.ysxh.name==''?"请选择":form.ysxh.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('llsp')">劳力水平<div class="right">{{form.llsp.name==''?"请选择":form.llsp.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="gmswFn">过敏食物<div class="right">去添加<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                 </ul>
                 <div class="gmsw">
                     <h3>过敏食物</h3>
+                    <p v-if="gmsw.length==0">暂无添加过敏食物</p>
                     <ul>
                         <li v-for="(item,index) in gmsw">{{item.name}} <i v-if="!read" @click="removeIndex=index;remove.value=true;" class="iconfont icon-shanchu"></i></li>
                     </ul>
@@ -104,6 +105,7 @@ export default {
         weight: false
       },
       form: {
+        id: "",
         name: "",
         sex: {
           value: "",
@@ -133,7 +135,10 @@ export default {
           name: ""
         },
         disease: "",
-        jbs: "",
+        jbs: {
+          value: "",
+          name: ""
+        },
         ysxh: {
           value: "",
           name: ""
@@ -145,8 +150,8 @@ export default {
       },
       menu: {
         sex: {
-          "0": "女",
-          "1": "男"
+          "0": "男",
+          "1": "女"
         },
         mz: {
           "0": "汉族",
@@ -278,13 +283,40 @@ export default {
     addJbs(item) {
       // 添加的疾病
       if (item !== "back") {
-        this.form.jbs = item.name;
+        this.form.jbs.name = item.Name;
+        this.form.jbs.value = item.Id;
       }
       this.jbsTrue = false;
     },
     submit() {
       // 提交数据;
       console.log(this.form);
+      var d = JSON.stringify({
+        id: this.form.id,
+        name: this.form.name,
+        sexvalue: this.form.sex.value,
+        age: this.form.age,
+        height: this.form.height,
+        weight: this.form.weight,
+        jbsid: this.form.jbs.value,
+        ysxhid: this.form.ysxh.value,
+        llspid: this.form.llsp.value
+      });
+
+      console.log(d);
+      this.$http({
+        url: "/api/HealthyArchive/UpdatePersonalHealthyArchive",
+        type: "post",
+        data: d,
+        success: function(data) {
+          //成功的处理
+          console.log("-----------------");
+          console.log(data);
+        },
+        error: function() {
+          //错误处理
+        }
+      });
       this.$vux.toast.show({
         text: "保存成功",
         type: "success"
@@ -328,20 +360,22 @@ export default {
         //成功的处理
         console.log("-----------------");
         console.log(data);
-        _this.form.name = data.Data.name;
-        _this.form.age = data.Data.age;
-        _this.form.sexname = data.Data.sexname;
-        _this.form.sexvalue = data.Data.sexvalue;
-        _this.form.height = data.Data.height;
-        _this.form.weight = data.Data.weight;
-        _this.form.jbsid = data.Data.jbsid;
-        _this.form.jbsname = data.Data.jbsname;
-        _this.form.jbsid = data.Data.jbsid;
-        _this.form.ysxhid = data.Data.ysxhid;
-        _this.form.ysxhname = data.Data.ysxhname;
-        _this.form.llspid = data.Data.llspid;
-        _this.form.llspname = data.Data.llspname;
-        _this.gmsw = data.Data.alleryarr;
+        console.log(data);
+        console.log(data);
+        // _this.form.id = data.Data.id;
+        // _this.form.name = data.Data.name;
+        // _this.form.age = data.Data.age;
+        // _this.form.sex.name = data.Data.sexname;
+        // _this.form.sex.value = data.Data.sexvalue;
+        // _this.form.height = data.Data.height;
+        // _this.form.weight = data.Data.weight;
+        // _this.form.jbs.value = data.Data.jbsid;
+        // _this.form.jbs.name = data.Data.jbsname;
+        // _this.form.ysxh.value = data.Data.ysxhid;
+        // _this.form.ysxh.name = data.Data.ysxhname;
+        // _this.form.llsp.value = data.Data.llspid;
+        // _this.form.llsp.name = data.Data.llspname;
+        // _this.gmsw = data.Data.alleryarr;
       },
       error: function() {
         //错误处理
@@ -517,7 +551,12 @@ export default {
       padding-left: 15px;
       color: #333;
     }
-
+    p {
+      text-align: center;
+      color: #ddd;
+      padding: 20px 0;
+      font-size: 14px;
+    }
     ul {
       padding: 0 30px;
       box-sizing: border-box;

@@ -9,13 +9,13 @@
       <scroller lock-x height="-45px" ref="scrollerBottom">
         <div class="box scroller_box">
            <div class="select" @click="select.show=true">
-              {{select.value}}
+              {{select.value | getVal}}
               <i class="iconfont icon-xiala"></i>
           </div>
             <ul>
-                <li v-for="(item,index) in arrList">
-                    <div class="left">{{item.title}}</div>
-                    <div class="right">{{item.valueName}}</div>
+                <li v-for="(item,index) in listArr">
+                    <div class="left">{{item.name}}</div>
+                    <div class="right">{{item.value+item.unit}}</div>
                 </li>
             </ul>
         </div>
@@ -25,83 +25,66 @@
         <div class="afxm"  :style="{bottom:select.show?0:-200+'px'}">
             <h3>请选择</h3>
             <ul>
-                <li @click="setSelect('正常成人值')">正常成人值</li>
-                <li @click="setSelect('婴幼儿值')">婴幼儿值</li>
-                <li @click="setSelect('青少年值')">青少年值</li>
-                <li @click="setSelect('老年人值')">老年人值</li>
+                <li @click="setSelect(1)">正常成人值</li>
+                <li @click="setSelect(2)">婴幼儿值</li>
+                <li @click="setSelect(3)">青少年值</li>
+                <li @click="setSelect(4)">老年人值</li>
             </ul>
         </div>
     </div>
 </template>
 <script>
 export default {
+  filters: {
+    getVal(val) {
+      if (val == 1) {
+        return "正常成人值";
+      } else if (val == 2) {
+        return "婴幼儿值";
+      } else if (val == 3) {
+        return "青少年值";
+      } else if (val == 4) {
+        return "老年人值";
+      }
+    }
+  },
   data() {
     return {
       select: {
-        value: "正常成人值",
+        value: 1,
         show: false
       },
-      arrList: [
-        {
-          title: "热量",
-          valueName: "1000kcal"
-        },
-        {
-          title: "蛋白质",
-          valueName: "2.05g"
-        },
-        {
-          title: "脂肪",
-          valueName: "2.05g"
-        },
-        {
-          title: "碳水",
-          valueName: "2.05g"
-        },
-        {
-          title: "膳食纤维",
-          valueName: "2.05g"
-        },
-        {
-          title: "维生素A",
-          valueName: "2.05g"
-        },
-        {
-          title: "维生素B",
-          valueName: "2.05g"
-        },
-        {
-          title: "钙",
-          valueName: "2.05g"
-        },
-        {
-          title: "铁",
-          valueName: "2.05g"
-        },
-        {
-          title: "锌",
-          valueName: "2.05g"
-        },
-        {
-          title: "镁",
-          valueName: "2.05g"
-        },
-        {
-          title: "碘",
-          valueName: "2.05g"
-        }
-      ]
+      listArr: []
     };
   },
   methods: {
     setSelect(val) {
+      var _this = this;
       this.select.value = val;
       this.select.show = false;
-
+      this.$http({
+        url: "/api/HealthyArchive/GetNutrientStandard",
+        type: "get",
+        data: {
+          ageType: this.select.value
+        },
+        success: function(data) {
+          //成功的处理
+          _this.setData(data.Data);
+        },
+        error: function() {
+          //错误处理
+        }
+      });
       //   获取数据
+    },
+    setData(data) {
+      this.listArr = data;
     }
   },
-  mounted() {}
+  mounted() {
+    this.setSelect(1);
+  }
 };
 </script>
 <style scoped lang="less">

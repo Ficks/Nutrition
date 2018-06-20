@@ -31,86 +31,66 @@ export default {
   data() {
     return {
       searchVal: {
-        value: "",
+        pageNum: 0,
+        pageSize: 10,
         onFetching: false,
         uptext: "滑动查看更多"
       },
-      listArr: [
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
-        },
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
-        },
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
-        },
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
-        },
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示..."
-        }
-      ]
+      listArr: []
     };
   },
   methods: {
     getList() {
+      if (this.searchVal.uptext == "没有更多数据了") {
+        return;
+      }
+      var _this = this;
       if (this.searchVal.onFetching) {
         // do nothing
       } else {
         this.searchVal.onFetching = true;
         setTimeout(() => {
-          this.listArr.push(
-            {
-              title: "资讯标题",
-              src: "/static/images/searchm.jpg",
-              desc: "资讯内容缩略显示...",
-              url: "/Tool/SearchList/Details"
+          this.searchVal.pageNum++;
+          this.$http({
+            url: "/api/NewsInfo/GetNewsList",
+            get: "get",
+            data: this.searchVal,
+            success(data) {
+              _this.setData(data.Data);
             },
-            {
-              title: "资讯标题",
-              src: "/static/images/searchm.jpg",
-              desc: "资讯内容缩略显示...",
-              url: "/Tool/SearchList/Details"
-            },
-            {
-              title: "资讯标题",
-              src: "/static/images/searchm.jpg",
-              desc: "资讯内容缩略显示...",
-              url: "/Tool/SearchList/Details"
-            },
-            {
-              title: "资讯标题",
-              src: "/static/images/searchm.jpg",
-              desc: "资讯内容缩略显示...",
-              url: "/Tool/SearchList/Details"
-            }
-          );
-          this.$nextTick(() => {
-            this.$refs.scrollerBottom.reset();
+            error() {}
           });
-          this.searchVal.onFetching = false;
-        }, 2000);
+        }, 800);
       }
     },
-    toPathDetails(url) {
+    setData(data) {
+      console.log(data);
+      if (data.length == 0) {
+        this.searchVal.uptext = "没有更多数据了";
+        this.searchVal.pageNum--;
+        this.searchVal.onFetching = false;
+        return;
+      }
+      for (let i = 0; i < data.length; i++) {
+        data[i].src = data[i].src || "/static/images/searchm.jpg";
+        this.listArr.push(data[i]);
+      }
+      this.$nextTick(() => {
+        this.$refs.scrollerBottom.reset();
+      });
+      this.searchVal.onFetching = false;
+    },
+    toPathDetails(item) {
       this.$router.push({
-        path: "/Find/FindDetails"
+        path: "/Find/FindDetails",
+        query: {
+          id: item.id
+        }
       });
     }
   },
   mounted() {
+    this.getList();
     console.log("当前页面API：" + this.$route.path);
     console.log("当前页面数据列表", this.listArr);
   }

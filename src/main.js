@@ -57,10 +57,10 @@ router.beforeEach((to, from, next) => {
             headers: {
               "userid": d.userid,
               "Token": d.Token,
-              "Content-Type": "text/plain;charset=UTF-8"
+              "Content-Type": "application/json;charset=UTF-8"
             },
             type: fd.type,
-            data: fd.data,
+            data: fd.data || {},
             success: function (data) {
               //成功的处理
               fd.success(data);

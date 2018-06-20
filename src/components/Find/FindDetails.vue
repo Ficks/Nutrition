@@ -24,7 +24,7 @@
                   </li>
               </ul>
               <div class="more">
-                  <span  v-show="!loading">滑动查看更多</span>
+                  <span  v-show="!loading">{{searchVal.uptext}}</span>
                   <load-more tip="loading" v-show="loading"></load-more>
               </div>
           </div>
@@ -76,6 +76,12 @@ export default {
                 </p>`
       },
       loading: false,
+      searchVal: {
+        id: "",
+        pageNum: 0,
+        pageSize: 10,
+        uptext: "滑动查看更多"
+      },
       commentShow: false,
       commentVal: "",
       listArr: [
@@ -99,34 +105,49 @@ export default {
   },
   methods: {
     getList() {
+      if (this.searchVal.uptext == "没有更多数据了") {
+        return false;
+      }
+      var _this = this;
       if (this.loading) {
         // do nothing
       } else {
         this.loading = true;
         setTimeout(() => {
-          this.listArr.push(
-            {
-              lou: "1楼",
-              p: " 文章写的很好，都是干货，给了我很大的启发！",
-              date: "4月20日"
+          this.searchVal.pageNum++;
+          this.$http({
+            url: "/api/NewsInfo/GetNewsInfoComments",
+            type: "get",
+            data: this.searchVal,
+            success: function(data) {
+              //成功的处理
+              console.log(data);
+              _this.setData(data.Data);
             },
-            {
-              lou: "2楼",
-              p: " 文章写的很好，都是干货，给了我很大的启发！",
-              date: "4月20日"
-            },
-            {
-              lou: "3楼",
-              p: " 文章写的很好，都是干货，给了我很大的启发！",
-              date: "4月20日"
+            error: function() {
+              //错误处理
             }
-          );
-          this.$nextTick(() => {
-            this.$refs.scrollerBottom.reset();
           });
-          this.loading = false;
-        }, 2000);
+        }, 800);
       }
+    },
+    setData(data) {
+      console.log(data);
+      if (data.length == 0) {
+        this.searchVal.uptext = "没有更多数据了";
+        this.searchVal.pageNum--;
+        this.loading = false;
+        return;
+      }
+      for (let i = 0; i < data.length; i++) {
+        data[i].src = data[i].src || "/static/images/searchm.jpg";
+        this.listArr.push(data[i]);
+      }
+
+      this.$nextTick(() => {
+        this.$refs.scrollerBottom.reset();
+      });
+      this.loading = false;
     },
     submitComment() {
       if (this.commentVal !== "") {
@@ -151,12 +172,30 @@ export default {
         // 收藏
         this.$vux.toast.text("收藏成功", "bottom");
       }
+    },
+    getDetails() {
+      var _this = this;
+      this.searchVal.id = this.$route.query.id;
+      this.$http({
+        url: "/api/NewsInfo/GetNewsInfoDetails",
+        get: "get",
+        data: { id: this.$route.query.id },
+        success(data) {
+          _this.details.title = data.Data.title;
+          _this.details.date = data.Data.date;
+          _this.details.author = data.Data.auth;
+          _this.details.text = data.Data.text;
+        },
+        error() {}
+      });
     }
   },
   mounted() {
     console.log("当前页面API：" + this.$route.path);
     console.log("详细数据格式：", this.details);
     console.log("评论数据格式：", this.listArr);
+    this.getDetails();
+    this.getList();
   }
 };
 </script>

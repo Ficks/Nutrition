@@ -13,7 +13,7 @@
           <scroller lock-x height="-95px" ref="scrollerBottom">
               <div class="scroller_box list_mds">
                   <ul>
-                      <li @click="addJb(item)" v-for="(item,index) in list">{{item.name}}</li>
+                      <li @click="addJb(item)" v-for="(item,index) in list">{{item.Name}}</li>
                   </ul>
               </div>            
           </scroller>
@@ -25,14 +25,7 @@ export default {
     return {
       searchVal: "",
       loading: false,
-      listArr: [
-        {
-          name: "心脏病"
-        },
-        {
-          name: "糖尿病"
-        }
-      ]
+      listArr: []
     };
   },
   computed: {
@@ -59,7 +52,20 @@ export default {
       this.$emit("addJbsBd", item);
     }
   },
-  mounted() {}
+  mounted() {
+    var _this = this;
+    this.$http({
+      url: "/api/HealthyArchive/GetDiseaseList",
+      type: "get",
+      success: function(data) {
+        //成功的处理
+        _this.listArr = data.Data.Data;
+      },
+      error: function() {
+        //错误处理
+      }
+    });
+  }
 };
 </script>
 <style scoped lang="less">

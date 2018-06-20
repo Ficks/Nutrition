@@ -7,7 +7,7 @@
       </div>
         <div class="search">
             <div class="input">
-              <input type="text" v-model="searchVal.value" placeholder="输入文字搜索食谱">
+              <input type="text" v-model="searchVal.dishName" placeholder="输入文字搜索食谱">
               <i class="iconfont icon-sousuo" @click="getList"></i>
             </div>
         </div>
@@ -22,6 +22,7 @@
 </template>
 <script>
 import { LoadMore, Panel } from "vux";
+import { setTimeout } from "timers";
 
 export default {
   components: {
@@ -32,7 +33,10 @@ export default {
     return {
       title: "",
       searchVal: {
-        value: "",
+        dishesType: 1,
+        dishName: "",
+        pageNum: 0,
+        pageSize: "10",
         onFetching: false,
         uptext: "滑动查看更多"
       },
@@ -70,10 +74,13 @@ export default {
       // 请求那个接口
       if (this.$route.path === "/Tool/Recipes") {
         // 菜谱检索
+        this.searchVal.dishesType = 1;
       } else if (this.$route.path === "/Tool/MaterialRetrieval") {
         // 食材检索
+        this.searchVal.dishesType = 3;
       } else if (this.$route.path === "/Tool/OtherRetrieval") {
         // 其他食品检索
+        this.searchVal.dishesType = 2;
       } else if (
         this.$route.path === "/My/PersonalFiles/AllergicFood/Details"
       ) {
@@ -83,6 +90,8 @@ export default {
       console.log("当前页面API：" + this.$route.path);
       console.log("列表数据格式：", this.listArr);
       console.log("这个页面可以变成添加过敏食物的列表页");
+
+      this.getList();
     },
     toPathDetails(url) {
       this.$router.push({
@@ -93,42 +102,64 @@ export default {
       });
     },
     getList() {
+      var _this = this;
       if (this.searchVal.onFetching) {
         // do nothing
       } else {
         this.searchVal.onFetching = true;
+
+        console.log(9999999);
         setTimeout(() => {
-          this.listArr.push(
-            {
-              title: "辣椒炒肉",
-              src: "/static/images/searchm.jpg",
-              desc: "131kcal(100g)",
-              url: "/Tool/SearchList/Details"
+          this.searchVal.pageNum++;
+          console.log(this.searchVal.pageNum);
+          this.$http({
+            url: "/api/HealthyDiet/GetDishesList",
+            type: "get",
+            data: this.searchVal,
+            success: function(data) {
+              //成功的处理
+              console.log("-----------------");
+              console.log(data);
+              _this.searchVal.onFetching = false;
             },
-            {
-              title: "辣椒炒肉",
-              src: "/static/images/searchm.jpg",
-              desc: "131kcal(100g)",
-              url: "/Tool/SearchList/Details"
-            },
-            {
-              title: "辣椒炒肉",
-              src: "/static/images/searchm.jpg",
-              desc: "131kcal(100g)",
-              url: "/Tool/SearchList/Details"
-            },
-            {
-              title: "辣椒炒肉",
-              src: "/static/images/searchm.jpg",
-              desc: "131kcal(100g)",
-              url: "/Tool/SearchList/Details"
+            error: function() {
+              //错误处理
             }
-          );
-          this.$nextTick(() => {
-            this.$refs.scrollerBottom.reset();
           });
-          this.searchVal.onFetching = false;
-        }, 2000);
+        }, 800);
+
+        // setTimeout(() => {
+        //   this.listArr.push(
+        //     {
+        //       title: "辣椒炒肉",
+        //       src: "/static/images/searchm.jpg",
+        //       desc: "131kcal(100g)",
+        //       url: "/Tool/SearchList/Details"
+        //     },
+        //     {
+        //       title: "辣椒炒肉",
+        //       src: "/static/images/searchm.jpg",
+        //       desc: "131kcal(100g)",
+        //       url: "/Tool/SearchList/Details"
+        //     },
+        //     {
+        //       title: "辣椒炒肉",
+        //       src: "/static/images/searchm.jpg",
+        //       desc: "131kcal(100g)",
+        //       url: "/Tool/SearchList/Details"
+        //     },
+        //     {
+        //       title: "辣椒炒肉",
+        //       src: "/static/images/searchm.jpg",
+        //       desc: "131kcal(100g)",
+        //       url: "/Tool/SearchList/Details"
+        //     }
+        //   );
+        //   this.$nextTick(() => {
+        //     this.$refs.scrollerBottom.reset();
+        //   });
+        //   this.searchVal.onFetching = false;
+        // }, 2000);
       }
     }
   },
