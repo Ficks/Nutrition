@@ -12,14 +12,19 @@
                   <li>姓名<div class="input"><input :readonly="read" type="text" placeholder="请输入姓名" v-model="form.name"></div></li>
                   <li @click="actionsheetFn('sex')">性别<div class="right">{{form.sex.name==''?"请选择":form.sex.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="theMshow('age')">年龄<div class="right">{{form.age==''?"请选择":form.age+'岁'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
-                  <li @click="theMshow('height')">身高<div class="right">{{form.height==''?"请选择":form.height}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
-                  <li @click="theMshow('weight')">体重<div class="right">{{form.weight==''?"请选择":form.weight}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="theMshow('height')">身高<div class="right">{{form.height==''?"请选择":form.height+'cm'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="theMshow('weight')">体重<div class="right">{{form.weight==''?"请选择":form.weight+'kg'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="actionsheetFn('mz')">民族<div class="right">{{form.mz.name==''?"请选择":form.mz.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="actionsheetFn('zy')">职业<div class="right">{{form.zy.name==''?"请选择":form.zy.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="actionsheetFn('hyzk')">婚姻状况<div class="right">{{form.hyzk.name==''?"请选择":form.hyzk.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="actionsheetFn('whcd')">文化程度<div class="right">{{form.whcd.name==''?"请选择":form.whcd.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="actionsheetFn('jtsr')">家庭收入<div class="right">{{form.jtsr.name==''?"请选择":form.jtsr.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                 </ul>
                 <ul>
                   <li @click="jbsFn">疾病史<div class="right">{{form.jbs==''?"请选择":form.jbs}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('ysxh')">饮食喜好<div class="right">{{form.ysxh.name==''?"请选择":form.ysxh.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('llsp')">劳力水平<div class="right">{{form.llsp.name==''?"请选择":form.llsp.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
-                  <li @click="gmswFn">过敏食物<div class="right">{{form.weight==''?"请选择":form.weight}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="gmswFn">过敏食物<div class="right">去添加<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                 </ul>
                 <div class="gmsw">
                     <h3>过敏食物</h3>
@@ -45,7 +50,7 @@
 
         <div class="afxm" :style="{bottom:formShow.height?0:-200+'px'}">
             <h3>选择身高</h3>
-            <div class="vuels">年龄：{{form.height}} cm</div>
+            <div class="vuels">身高：{{form.height}} cm</div>
             <div class="sle">
               <range v-model="form.height"  :min="0" :max="210"></range>
             </div>
@@ -53,7 +58,7 @@
 
         <div class="afxm" :style="{bottom:formShow.weight?0:-200+'px'}">
             <h3>选择体重</h3>
-            <div class="vuels">年龄：{{form.weight}} kg</div>
+            <div class="vuels">体重：{{form.weight}} kg</div>
             <div class="sle">
               <range v-model="form.weight"  :min="0" :max="150"></range>
             </div>
@@ -107,6 +112,26 @@ export default {
         age: 0,
         height: 0,
         weight: 0,
+        mz: {
+          value: "",
+          name: ""
+        },
+        zy: {
+          value: "",
+          name: ""
+        },
+        hyzk: {
+          value: "",
+          name: ""
+        },
+        whcd: {
+          value: "",
+          name: ""
+        },
+        jtsr: {
+          value: "",
+          name: ""
+        },
         disease: "",
         jbs: "",
         ysxh: {
@@ -122,6 +147,49 @@ export default {
         sex: {
           "0": "女",
           "1": "男"
+        },
+        mz: {
+          "0": "汉族",
+          "1": "其他"
+        },
+        zy: {
+          "0": "国家公务员",
+          "1": "专业技术人员",
+          "2": "职员",
+          "3": "企业管理者",
+          "4": "工人",
+          "5": "农民",
+          "6": "学生",
+          "7": "现役军人",
+          "8": "个体经营者",
+          "9": "无业人员",
+          "10": "退（离）休人员",
+          "11": "其他"
+        },
+        hyzk: {
+          "0": "已婚一起生活",
+          "1": "离异",
+          "2": "已婚分居一月以上",
+          "3": "鳏/寡居",
+          "4": "单身，从未婚",
+          "5": "未婚同居",
+          "6": "其他"
+        },
+        whcd: {
+          "0": "小学及以下",
+          "1": "初中",
+          "2": "高中/中专/高职",
+          "3": "大专/大学",
+          "4": "研究生及以上"
+        },
+        jtsr: {
+          "0": "3万以下",
+          "1": "3-8",
+          "2": "8-15",
+          "3": "15-30",
+          "4": "30-50",
+          "5": "50-100",
+          "6": "100万以上"
         },
         ysxh: {
           "0": "素菜",
@@ -227,6 +295,7 @@ export default {
     }
   },
   mounted() {
+    var _this = this;
     // 判断是否只读
     if (this.$route.query.read == true) {
       this.read = true;
@@ -234,7 +303,6 @@ export default {
     console.log("当前页面API：" + this.$route.path);
     console.log("个人数据：", this.form);
     console.log("过敏食物列表：", this.gmsw);
-
     // this.$http({
     //   url: "/api/HealthyArchive/GetPersonalHealthyArchive",
     //   type: "get",
@@ -253,26 +321,50 @@ export default {
     // });
 
     var d = this.$store.getters.getLogin;
-    console.log("-----------------");
-    console.log(d);
-    $.ajax({
-      url: "http://www.xyys.ltd/api/HealthyArchive/GetPersonalHealthyArchive",
+    this.$http({
+      url: "/api/HealthyArchive/GetPersonalHealthyArchive",
       type: "get",
-      // dataType: "jsonp",
-      headers: {
-        a: "1111",
-        userid: d.userid,
-        Token: d.Token,
-        "Content-Type": "text/html;charset=utf-8"
-      },
       success: function(data) {
         //成功的处理
+        console.log("-----------------");
         console.log(data);
+        _this.form.name = data.Data.name;
+        _this.form.age = data.Data.age;
+        _this.form.sexname = data.Data.sexname;
+        _this.form.sexvalue = data.Data.sexvalue;
+        _this.form.height = data.Data.height;
+        _this.form.weight = data.Data.weight;
+        _this.form.jbsid = data.Data.jbsid;
+        _this.form.jbsname = data.Data.jbsname;
+        _this.form.jbsid = data.Data.jbsid;
+        _this.form.ysxhid = data.Data.ysxhid;
+        _this.form.ysxhname = data.Data.ysxhname;
+        _this.form.llspid = data.Data.llspid;
+        _this.form.llspname = data.Data.llspname;
+        _this.gmsw = data.Data.alleryarr;
       },
       error: function() {
         //错误处理
       }
     });
+    // $.ajax({
+    //   url: "http://www.xyys.ltd/api/HealthyArchive/GetPersonalHealthyArchive",
+    //   type: "get",
+    //   // dataType: "jsonp",
+    //   headers: {
+    //     userid: d.userid,
+    //     Token: d.Token,
+    //     "Content-Type": "text/html;charset=utf-8"
+    //   },
+    //   success: function(data) {
+    //     //成功的处理
+    //     console.log("-----------------");
+    //     console.log(data);
+    //   },
+    //   error: function() {
+    //     //错误处理
+    //   }
+    // });
   }
 };
 </script>

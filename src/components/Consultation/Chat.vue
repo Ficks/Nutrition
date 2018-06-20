@@ -205,10 +205,9 @@ export default {
 <style lang="less" scoped>
 .container {
   height: 100%;
-  overflow: auto;
   background: #f3f3f3;
-  padding-top: 55px;
-  padding-bottom: 55px;
+  padding-top: 45px;
+  padding-bottom: 45px;
   box-sizing: border-box;
   .header {
     position: fixed;

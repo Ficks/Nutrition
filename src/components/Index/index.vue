@@ -2,7 +2,7 @@
   <div class="container">
     <Menu :index="0"></Menu>
     <!-- 顶部 -->
-      <div class="top">
+      <div class="top top_on">
           <div class="search">
             <span>长沙市</span>
             <div class="input">
@@ -11,6 +11,11 @@
             </div>
             <router-link to="/My/PersonalFiles"><i class="iconfont icon-dangan2"></i></router-link>
           </div>
+      </div>
+
+      <scroller lock-x height="-105px"  ref="scrollerBottom">
+        <div class="scroller_box">
+          <div class="top top_er">
           <div class="cont">
             <div class="left">
               <div class="qd" @click="signInFn">
@@ -74,6 +79,7 @@
             </grid-item>
           </grid>
       </div>
+
       <!-- 膳食推荐 -->
       <div class="recommend" v-if="!isTNB">
         <div class="box">
@@ -91,9 +97,8 @@
             </tab-item>
           </tab>
           <div class="recommend_box" @click="mastri">
-            <swiper v-model="reIndex" :show-dots="false">
-              <swiper-item v-for="(item,index) in recommendData" :key="index">
-                <div class="tab-swiper vux-center">
+            <div class="li_t" v-for="(item,index) in recommendData" :key="index">
+              <div class="tab-swiper vux-center" v-show="index===reIndex">
                   <ul>
                     <li v-for="jtem in item[0]">
                       <h3>{{jtem.name}}</h3>
@@ -108,12 +113,10 @@
                     </li>
                   </ul>
                 </div>
-              </swiper-item>
-            </swiper>
+            </div>
           </div>
         </div>
       </div>
-
       <!-- 糖尿病膳食推荐 -->
       <div class="recommend" v-else>
         <div class="box">
@@ -144,6 +147,9 @@
           </li>
         </ul>
       </div>
+        </div>
+      </scroller>
+
       <div class="fenx" @click="isFx=false"  v-show="isFx">
         <div class="img"><img src="/static/images/fx.png" alt=""></div>
         <p>请点击右上角 <br>将它发送给指定朋友<br>或分享到朋友圈</p>
@@ -334,6 +340,13 @@ export default {
 };
 </script>
 <style scoped lang="less">
+.top.top_on {
+  height: 50px;
+}
+.top.top_er {
+  box-sizing: border-box;
+  height: 180px;
+}
 .fenx {
   position: fixed;
   width: 100%;
@@ -361,10 +374,13 @@ export default {
   z-index: 999;
   background: rgba(0, 0, 0, 0.8);
 }
+.scroller_box {
+  height: 100%;
+  padding-bottom: 80px;
+}
 .container {
   box-sizing: border-box;
   height: 100%;
-  padding-bottom: 80px;
   overflow: auto;
 
   .grid_m {

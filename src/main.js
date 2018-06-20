@@ -51,26 +51,26 @@ router.beforeEach((to, from, next) => {
         store.state.userid = d.userid;
         store.state.Token = d.Token;
 
-        // Vue.prototype.$http = function (fd) {
-        //   return $.ajax({
-        //     url: 'http://www.xyys.ltd' + fd.url,
-        //     headers: {
-        //       "userid": d.userid,
-        //       "Token": d.Token,
-        //       "Content-Type": "text/plain;charset=UTF-8"
-        //     },
-        //     type: fd.type,
-        //     data: fd.data,
-        //     success: function (data) {
-        //       //成功的处理
-        //       fd.success(data);
-        //     },
-        //     error: function () {
-        //       //错误处理
-        //       fd.error(data) || "";
-        //     }
-        //   });
-        // }
+        Vue.prototype.$http = function (fd) {
+          return $.ajax({
+            url: 'http://www.xyys.ltd' + fd.url,
+            headers: {
+              "userid": d.userid,
+              "Token": d.Token,
+              "Content-Type": "text/plain;charset=UTF-8"
+            },
+            type: fd.type,
+            data: fd.data,
+            success: function (data) {
+              //成功的处理
+              fd.success(data);
+            },
+            error: function () {
+              //错误处理
+              fd.error(data) || "";
+            }
+          });
+        }
 
         next();
       },
