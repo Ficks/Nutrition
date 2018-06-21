@@ -106,13 +106,34 @@ export default {
         }
       ],
       searchVal: {
-        value: "",
+        pageNum: 0,
+        pageSize: 15,
         onFetching: false,
         uptext: "滑动查看更多"
       }
     };
   },
   methods: {
+    setData(data) {
+      console.log(data);
+    },
+    getList() {
+      var _this = this;
+      this.searchVal.pageNum++;
+      this.$http({
+        url: "/api/NewsInfo/GetDynamicNewsList",
+        type: "get",
+        data: this.searchVal,
+        success: function(data) {
+          //成功的处理
+          console.log(data);
+          _this.setData(data.Data);
+        },
+        error: function() {
+          //错误处理
+        }
+      });
+    },
     onSwiperItemIndexChange(index) {
       console.log("demo item change", index);
       let box = document
@@ -122,68 +143,7 @@ export default {
       if (this.listArr.length >= 10) {
         if (index > this.listArr.length - 3) {
           // 请求加入列表
-          this.listArr.push(
-            {
-              src: "/static/images/ys.jpg",
-              text: "#饮食行为分享#今天又去吃好吃的了！",
-              time: "1小时前"
-            },
-            {
-              src: "/static/images/dt.jpg",
-              text: "#饮食行为分享#今天又去吃好吃的了！",
-              time: "1小时前"
-            },
-            {
-              src: "/static/images/ys.jpg",
-              text: "#饮食行为分享#今天又去吃好吃的了！",
-              time: "1小时前"
-            },
-            {
-              src: "/static/images/dt.jpg",
-              text: "#饮食行为分享#今天又去吃好吃的了！",
-              time: "1小时前"
-            },
-            {
-              src: "/static/images/ys.jpg",
-              text: "#饮食行为分享#今天又去吃好吃的了！",
-              time: "1小时前"
-            },
-            {
-              src: "/static/images/dt.jpg",
-              text: "#饮食行为分享#今天又去吃好吃的了！",
-              time: "1小时前"
-            },
-            {
-              src: "/static/images/ys.jpg",
-              text: "#饮食行为分享#今天又去吃好吃的了！",
-              time: "1小时前"
-            },
-            {
-              src: "/static/images/dt.jpg",
-              text: "#饮食行为分享#今天又去吃好吃的了！",
-              time: "1小时前"
-            },
-            {
-              src: "/static/images/ys.jpg",
-              text: "#饮食行为分享#今天又去吃好吃的了！",
-              time: "1小时前"
-            },
-            {
-              src: "/static/images/dt.jpg",
-              text: "#饮食行为分享#今天又去吃好吃的了！",
-              time: "1小时前"
-            },
-            {
-              src: "/static/images/ys.jpg",
-              text: "#饮食行为分享#今天又去吃好吃的了！",
-              time: "1小时前"
-            },
-            {
-              src: "/static/images/dt.jpg",
-              text: "#饮食行为分享#今天又去吃好吃的了！",
-              time: "1小时前"
-            }
-          );
+          // 方法
         }
       }
     },
@@ -209,6 +169,8 @@ export default {
       this.$refs.swiper.xheight = box.offsetHeight + "px";
       console.log("当前页面API：" + this.$route.path);
       console.log("数据列表格式：", this.listArr);
+
+      this.getList();
     }, 100);
     // console.log("当前页面数据列表", this.listArr);
   }

@@ -37,10 +37,10 @@ router.beforeEach((to, from, next) => {
       url: "http://www.xyys.ltd/api/WeChat/MoniWeChatLogin",
       type: "get",
       data: {
-        referid: "1",
-        openid: "2",
-        nickname: "3",
-        headurl: "4"
+        referid: "2",
+        openid: "3",
+        nickname: "4",
+        headurl: "5"
       },
       success: function (data) {
         //成功的处理

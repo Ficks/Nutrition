@@ -26,7 +26,11 @@
     </div>
 </template>
 <script>
+import { Toast } from "vux";
 export default {
+  components: {
+    Toast
+  },
   data() {
     return {
       listArr: [
@@ -174,22 +178,54 @@ export default {
   },
   methods: {
     getList() {
-      console.log("请求题目列表API：" + this.$route.path);
-      console.log("题目列表格式：", this.listArr);
+      var _this = this;
+      this.$http({
+        url: "/api/Questionnaire/GetQuestionsAndOptions",
+        type: "get",
+        data: { id: this.$route.query.id },
+        success(data) {
+          _this.setData(data.Data);
+        },
+        error() {}
+      });
+    },
+    setData(data) {
+      for (let i = 0; i < data.length; i++) {
+        data[i].abcd = "";
+      }
+      this.listArr = data;
     },
     onchanges(i, j) {
+      console.log(this.listArr[i].arr[j].fraction);
       this.listArr[i].abcd = j;
       this.listArr[i].score = this.listArr[i].arr[j].fraction;
     },
     submit() {
+      var _this = this;
       for (let i = 0; i < this.listArr.length; i++) {
+        if (this.listArr[i].abcd == "") {
+          this.$vux.toast.show({
+            text: "请完成所有选项",
+            type: "warn"
+          });
+          return;
+        }
         this.score += this.listArr[i].score;
       }
-      this.$router.push({
-        path: this.$route.matched[0].path + "/AssessmentResult",
-        query: {
-          score: this.score
-        }
+      this.$http({
+        url: "/api/Questionnaire/SubmitQuestionnaireAndGainScore",
+        type: "post",
+        data: { id: this.$route.query.id },
+        success(data) {
+          console.log(data);
+          _this.$router.push({
+            path: _this.$route.matched[0].path + "/AssessmentResult",
+            query: {
+              score: _this.score
+            }
+          });
+        },
+        error() {}
       });
     }
   },

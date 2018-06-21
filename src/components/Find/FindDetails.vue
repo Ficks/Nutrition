@@ -36,8 +36,8 @@
                       <textarea v-model="commentVal" :style="{height:commentShow?'150px':'25px'}" placeholder="我也来说两句..." @focus="commentShow=true" @blur="commentShow=false"></textarea>
                   </div>
                   <div class="right" v-show="!commentShow">
-                      <i class="iconfont icon-dianzan" @click="setWenz(true)"></i>
-                      <i class="iconfont icon-shoucang" @click="setWenz(false)"></i>
+                      <i :class="{active:details.islikeone}" class="iconfont icon-dianzan" @click="setWenz(true)"></i>
+                      <i :class="{active:details.isfavorone}" class="iconfont icon-shoucang" @click="setWenz(false)"></i>
                   </div>
               </div>
               <div class="submit_btn" @click="submitComment" v-show="commentShow">确定发表</div>
@@ -45,15 +45,18 @@
     </div>
 </template>
 <script>
-import { LoadMore } from "vux";
+import { LoadMore, Toast } from "vux";
 export default {
   components: {
-    LoadMore
+    LoadMore,
+    Toast
   },
   data() {
     return {
       details: {
         title: "正常成人膳食指南 6项权威解答",
+        islikeone: false,
+        isfavorone: false,
         date: "2018-05-14 17:14",
         author: "admin",
         text: ` <p>      一直以来人们都非常关注饮食对健康的影响，那么到底
@@ -84,30 +87,11 @@ export default {
       },
       commentShow: false,
       commentVal: "",
-      listArr: [
-        {
-          lou: "1楼",
-          p: " 文章写的很好，都是干货，给了我很大的启发！",
-          date: "4月20日"
-        },
-        {
-          lou: "2楼",
-          p: " 文章写的很好，都是干货，给了我很大的启发！",
-          date: "4月20日"
-        },
-        {
-          lou: "3楼",
-          p: " 文章写的很好，都是干货，给了我很大的启发！",
-          date: "4月20日"
-        }
-      ]
+      listArr: []
     };
   },
   methods: {
-    getList() {
-      if (this.searchVal.uptext == "没有更多数据了") {
-        return false;
-      }
+    getList(time) {
       var _this = this;
       if (this.loading) {
         // do nothing
@@ -128,11 +112,10 @@ export default {
               //错误处理
             }
           });
-        }, 800);
+        }, time || 800);
       }
     },
     setData(data) {
-      console.log(data);
       if (data.length == 0) {
         this.searchVal.uptext = "没有更多数据了";
         this.searchVal.pageNum--;
@@ -140,7 +123,9 @@ export default {
         return;
       }
       for (let i = 0; i < data.length; i++) {
+        console.log(data[i]);
         data[i].src = data[i].src || "/static/images/searchm.jpg";
+
         this.listArr.push(data[i]);
       }
 
@@ -150,7 +135,23 @@ export default {
       this.loading = false;
     },
     submitComment() {
+      // 发表评论
       if (this.commentVal !== "") {
+        var _this = this;
+        var d = {
+          NewsInfoId: this.$route.query.id,
+          CommentsStr: this.commentVal
+        };
+        d = JSON.stringify(d);
+        this.$http({
+          url: "/api/NewsInfo/SubmitNewsInfoComments",
+          type: "post",
+          data: d,
+          success(data) {
+            console.log(data);
+          },
+          error() {}
+        });
         this.listArr.push({
           lou: "4楼",
           p: this.commentVal,
@@ -158,19 +159,64 @@ export default {
         });
         this.commentVal = "";
         // 显示文字
-        this.$vux.toast.text("发表成功", "bottom");
+        this.$vux.toast.show({
+          text: "发表成功",
+          type: "success"
+        });
       } else {
-        this.$vux.toast.text("评论不能为空", "bottom");
+        this.$vux.toast.show({
+          text: "评论不能为空",
+          type: "warn"
+        });
         return false;
       }
     },
     setWenz(isX) {
+      var _this = this;
+      var d = { id: this.$route.query.id };
+      d = JSON.stringify(d);
       if (isX) {
+        if (this.details.islikeone) {
+          this.$vux.toast.show({
+            text: "您已经点过赞了",
+            type: "warn"
+          });
+          return;
+        }
+
         // 点赞
-        this.$vux.toast.text("点赞成功", "bottom");
+        this.$http({
+          url: "/api/NewsInfo/DoLike",
+          type: "post",
+          data: d,
+          success(data) {
+            _this.details.islikeone = true;
+            _this.$vux.toast.show({
+              text: data.Message,
+              type: "success"
+            });
+          },
+          error() {}
+        });
       } else {
         // 收藏
-        this.$vux.toast.text("收藏成功", "bottom");
+        this.$http({
+          url: "/api/NewsInfo/DoCollect",
+          type: "post",
+          data: d,
+          success(data) {
+            if (data.Message == "已取消收藏") {
+              _this.details.isfavorone = false;
+            } else {
+              _this.details.isfavorone = true;
+            }
+            _this.$vux.toast.show({
+              text: data.Message,
+              type: "success"
+            });
+          },
+          error() {}
+        });
       }
     },
     getDetails() {
@@ -178,9 +224,11 @@ export default {
       this.searchVal.id = this.$route.query.id;
       this.$http({
         url: "/api/NewsInfo/GetNewsInfoDetails",
-        get: "get",
+        type: "get",
         data: { id: this.$route.query.id },
         success(data) {
+          _this.details.islikeone = data.Data.islikeone;
+          _this.details.isfavorone = data.Data.isfavorone;
           _this.details.title = data.Data.title;
           _this.details.date = data.Data.date;
           _this.details.author = data.Data.auth;
@@ -195,7 +243,7 @@ export default {
     console.log("详细数据格式：", this.details);
     console.log("评论数据格式：", this.listArr);
     this.getDetails();
-    this.getList();
+    this.getList(1);
   }
 };
 </script>
@@ -321,9 +369,13 @@ export default {
 
       .iconfont {
         font-size: 22px;
-        color: #8dc13b;
         padding: 0 5px;
         box-sizing: border-box;
+        color: #333;
+
+        &.active {
+          color: #8dc13b;
+        }
       }
     }
   }

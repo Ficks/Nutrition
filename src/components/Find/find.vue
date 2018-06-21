@@ -40,7 +40,7 @@ export default {
     };
   },
   methods: {
-    getList() {
+    getList(time) {
       if (this.searchVal.uptext == "没有更多数据了") {
         return;
       }
@@ -53,18 +53,17 @@ export default {
           this.searchVal.pageNum++;
           this.$http({
             url: "/api/NewsInfo/GetNewsList",
-            get: "get",
+            type: "get",
             data: this.searchVal,
             success(data) {
               _this.setData(data.Data);
             },
             error() {}
           });
-        }, 800);
+        }, time || 800);
       }
     },
     setData(data) {
-      console.log(data);
       if (data.length == 0) {
         this.searchVal.uptext = "没有更多数据了";
         this.searchVal.pageNum--;
@@ -90,7 +89,7 @@ export default {
     }
   },
   mounted() {
-    this.getList();
+    this.getList(1);
     console.log("当前页面API：" + this.$route.path);
     console.log("当前页面数据列表", this.listArr);
   }

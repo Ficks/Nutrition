@@ -52,7 +52,8 @@ export default {
         }
       },
       searchVal: {
-        value: "",
+        pageNum: 0,
+        pageSize: 10,
         onFetching: false,
         uptext: "滑动查看更多"
       },
@@ -121,49 +122,39 @@ export default {
         type: "success"
       });
     },
-    getList() {
-      console.log(this.$route.path);
+    getList(time) {
+      var _this = this;
       if (this.searchVal.onFetching) {
         // do nothing
       } else {
         this.searchVal.onFetching = true;
         setTimeout(() => {
-          this.listArr.push(
-            {
-              title: "我的收藏",
-              src: "/static/images/searchm.jpg",
-              desc: "收藏内容缩略显示...",
-              edit: false,
-              link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
+          this.searchVal.pageNum++;
+          this.$http({
+            url: "/api/NewsInfo/GetFavoriteNewsList",
+            type: "get",
+            data: this.searchVal,
+            success: function(data) {
+              //成功的处理
+              console.log(data);
+              _this.setData(data.Data);
             },
-            {
-              title: "我的收藏",
-              src: "/static/images/searchm.jpg",
-              desc: "收藏内容缩略显示...",
-              edit: false,
-              link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
-            },
-            {
-              title: "我的收藏",
-              src: "/static/images/searchm.jpg",
-              desc: "收藏内容缩略显示...",
-              edit: false,
-              link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
-            },
-            {
-              title: "我的收藏",
-              src: "/static/images/searchm.jpg",
-              desc: "收藏内容缩略显示...",
-              edit: false,
-              link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
+            error: function() {
+              //错误处理
             }
-          );
-          this.$nextTick(() => {
-            this.$refs.scrollerBottom.reset();
           });
-          this.searchVal.onFetching = false;
-        }, 2000);
+        }, time || 800);
       }
+    },
+    setData(data) {
+      if (data.length === 0) {
+        this.searchVal.pageNum--;
+      }
+      this.$nextTick(() => {
+        this.$refs.scrollerBottom.reset();
+      });
+      this.searchVal.onFetching = false;
+      console.log(data);
     },
     editRemove() {
       if (this.operation) {
@@ -189,6 +180,7 @@ export default {
   mounted() {
     console.log("当前页面API：" + this.$route.path);
     console.log("当前页面数据列表", this.listArr);
+    this.getList(1);
   }
 };
 </script>

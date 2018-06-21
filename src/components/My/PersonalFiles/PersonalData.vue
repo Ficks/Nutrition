@@ -9,7 +9,7 @@
               <scroller lock-x height="-45px"  ref="scrollerBottom">
               <div class="my_list scroller_box">
                 <ul>
-                  <li>姓名<div class="input"><input :readonly="read" type="text" placeholder="请输入姓名" v-model="form.name"></div></li>
+                  <li>姓名<div class="input"><input :readonly="read" type="text" class="name_cor" placeholder="请输入姓名" v-model="form.name"></div></li>
                   <li @click="actionsheetFn('sex')">性别<div class="right">{{form.sex.name==''?"请选择":form.sex.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="theMshow('age')">年龄<div class="right">{{form.age==''?"请选择":form.age+'岁'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="theMshow('height')">身高<div class="right">{{form.height==''?"请选择":form.height+'cm'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
@@ -22,6 +22,7 @@
                 </ul>
                 <ul>
                   <li @click="jbsFn">疾病史<div class="right">{{form.jbs.name==null?"请选择":form.jbs.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="actionsheetFn('yfxx')">孕妇选项<div class="right">{{form.yfxx.name==''?"请选择":form.yfxx.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('ysxh')">饮食喜好<div class="right">{{form.ysxh.name==''?"请选择":form.ysxh.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('llsp')">劳力水平<div class="right">{{form.llsp.name==''?"请选择":form.llsp.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="gmswFn">过敏食物<div class="right">去添加<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
@@ -139,6 +140,10 @@ export default {
           value: "",
           name: ""
         },
+        yfxx: {
+          value: "",
+          name: ""
+        },
         ysxh: {
           value: "",
           name: ""
@@ -195,6 +200,12 @@ export default {
           "4": "30-50",
           "5": "50-100",
           "6": "100万以上"
+        },
+        yfxx: {
+          "0": '<span style="color:#f00">否</span>',
+          "1": "早孕期",
+          "2": "中孕期",
+          "3": "晚孕期"
         },
         ysxh: {
           "0": "素菜",
@@ -262,6 +273,10 @@ export default {
         return;
       }
       console.log(key, val);
+      if (val.indexOf("</span>") >= 0) {
+        val = "否";
+      }
+      console.log(val);
       this.form[this.menuKey].value = key;
       this.form[this.menuKey].name = val;
     },
@@ -362,20 +377,20 @@ export default {
         console.log(data);
         console.log(data);
         console.log(data);
-        // _this.form.id = data.Data.id;
-        // _this.form.name = data.Data.name;
-        // _this.form.age = data.Data.age;
-        // _this.form.sex.name = data.Data.sexname;
-        // _this.form.sex.value = data.Data.sexvalue;
-        // _this.form.height = data.Data.height;
-        // _this.form.weight = data.Data.weight;
-        // _this.form.jbs.value = data.Data.jbsid;
-        // _this.form.jbs.name = data.Data.jbsname;
-        // _this.form.ysxh.value = data.Data.ysxhid;
-        // _this.form.ysxh.name = data.Data.ysxhname;
-        // _this.form.llsp.value = data.Data.llspid;
-        // _this.form.llsp.name = data.Data.llspname;
-        // _this.gmsw = data.Data.alleryarr;
+        _this.form.id = data.Data.id;
+        _this.form.name = data.Data.name;
+        _this.form.age = data.Data.age;
+        _this.form.sex.name = data.Data.sexname;
+        _this.form.sex.value = data.Data.sexvalue;
+        _this.form.height = data.Data.height;
+        _this.form.weight = data.Data.weight;
+        _this.form.jbs.value = data.Data.jbsid;
+        _this.form.jbs.name = data.Data.jbsname;
+        _this.form.ysxh.value = data.Data.ysxhid;
+        _this.form.ysxh.name = data.Data.ysxhname;
+        _this.form.llsp.value = data.Data.llspid;
+        _this.form.llsp.name = data.Data.llspname;
+        _this.gmsw = data.Data.alleryarr;
       },
       error: function() {
         //错误处理
@@ -405,7 +420,9 @@ export default {
 <style scoped lang="less">
 .container {
   height: 100%;
-
+  .name_cor {
+    color: #aeaeae;
+  }
   .top_box {
     padding: 30px 25px;
     padding-top: 10px;
@@ -466,13 +483,14 @@ export default {
 
         .input {
           position: absolute;
-          width: 150px;
+          width: 100%;
           right: 0;
           box-sizing: border-box;
           top: 0;
           font-size: 15px;
 
           input {
+            padding-left: 100px;
             font-size: 15px;
             text-align: right;
             background: none;

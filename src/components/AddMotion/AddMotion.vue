@@ -53,6 +53,11 @@ export default {
   data() {
     return {
       searchVal: "",
+      search: {
+        name: "",
+        pageNum: 1,
+        pageSize: 100
+      },
       loading: false,
       addBom: -500,
       addData: {
@@ -136,12 +141,24 @@ export default {
         text: "添加成功",
         type: "success"
       });
+    },
+    getList() {
+      this.$http({
+        url: "/api/HealthyArchive/GetSportsItemList",
+        type: "get",
+        data: this.search,
+        success: function(data) {},
+        error: function(data) {
+          console.log(data);
+        }
+      });
     }
   },
   mounted() {
     console.log("当前页面API：" + this.$route.path);
     console.log("数据列表一次性请求完", this.listArr);
     console.log("添加运动发送给后台的数据：", this.addData);
+    this.getList();
   }
 };
 </script>
