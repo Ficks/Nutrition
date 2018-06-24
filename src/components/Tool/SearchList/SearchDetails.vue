@@ -18,7 +18,7 @@
                   </div>
               </div>
               <div class="desc">
-                  <p>禁忌：<span>{{details.taboo}}</span></p>
+                  <p>禁忌：<span v-for="item in details.taboo">{{item.Value}}</span></p>
                   <p>适宜：<span>{{details.suitable}}</span></p>
               </div>
           </div>
@@ -26,7 +26,7 @@
               描述
           </h2>
           <div class="describe">
-              <p><i class="iconfont icon-jieyibiaozhi1"></i>辣椒炒肉，这道色香味俱全的菜肴，是湖南人每家每户必吃的招牌土菜，是最具代表性的湘菜之一。</p>
+              <p><i class="iconfont icon-jieyibiaozhi1"></i>{{details.describe}}</p>
           </div>
           <h2 class="title_hb">
               所含营养素
@@ -34,9 +34,9 @@
           </h2>
           <div class="box_list">
               <ul>
-                  <li v-for="item in details.nutrientArr">
-                      {{item.title}}
-                      <span>{{item.value}}</span>
+                  <li v-for="item in details.nutrientarr">
+                      {{item.name}}
+                      <span>{{item.value+item.unit}}</span>
                   </li>
               </ul>
           </div>
@@ -45,7 +45,7 @@
           </h2>
           <div class="box_list" v-if="$route.query.path==='/Tool/MaterialRetrieval'">
               <ul>
-                  <li v-for="item in details.traceElementArr">
+                  <li v-for="item in details.taboo">
                       {{item.title}}
                       <span>{{item.value}}</span>
                   </li>
@@ -60,7 +60,7 @@
       <div class="nav_bom_zoom" @click="openBom(false)" v-show="detailsFix===0"></div>
       <div class="details_fix" :style="{bottom:detailsFix+'px'}">
         <div class="top">
-          2018-05-22
+          {{date}}
           <span @click="openBom(false)">取消</span>
         </div>
         <div class="twbm">
@@ -75,11 +75,11 @@
         
         <div class="s">
           <div class="z">
-            <span>54.0kcal</span>
-            {{datakcal+`g(${datakcal / 50}两)`}}
+            <span>{{details.kcal}}</span>
+            {{grams+`g(${grams / 50}两)`}}
           </div>
           <div class="kdc">
-            <range v-model="datakcal"  :min="1" :max="1000"></range>
+            <range v-model="grams"  :min="1" :max="1000"></range>
           </div>
         </div>
 
@@ -99,65 +99,16 @@ export default {
   data() {
     return {
       title: "",
+      api: "/api/HealthyDiet/AddToTodaysDiet",
       detailsFix: -500,
-      datakcal: 100,
-      details: {
-        title: "辣椒炒肉辣椒炒肉辣椒炒肉",
-        src: "/static/images/searchm.jpg",
-        kcal: "131kcal(100g)",
-        taboo: "糖尿病、冠心病",
-        suitable: "一般人群",
-        describe:
-          "辣椒炒肉，这道色香味俱全的菜肴，是湖南人每家每户必吃的招牌土菜，是最具代表性的湘菜之一。",
-        nutrientArr: [
-          {
-            title: "热量",
-            value: "131kcal"
-          },
-          {
-            title: "蛋白质",
-            value: "2.05g"
-          },
-          {
-            title: "脂肪",
-            value: "7.05g"
-          },
-          {
-            title: "碳水化合物",
-            value: "6.05g"
-          },
-          {
-            title: "6.05g",
-            value: "5.05mg"
-          }
-        ],
-        traceElementArr: [
-          {
-            title: "热量2",
-            value: "131kcal"
-          },
-          {
-            title: "蛋白质3",
-            value: "2.05g"
-          },
-          {
-            title: "脂肪4",
-            value: "7.05g"
-          },
-          {
-            title: "碳水化合物5",
-            value: "6.05g"
-          },
-          {
-            title: "666",
-            value: "5.05mg"
-          }
-        ]
-      }
+      grams: 100,
+      date: "",
+      details: {}
     };
   },
   methods: {
     getDetails() {
+      var _this = this;
       var api = this.$route.query.path;
 
       console.log("当前页面API：" + this.$route.path);
@@ -173,16 +124,34 @@ export default {
         this.title = "其他食品";
       }
       // 获取信息
+
+      this.$http({
+        url: "/api/HealthyDiet/GetDishesDetail",
+        type: "get",
+        data: { id: this.$route.query.id },
+        success: function(data) {
+          //成功的处理
+          _this.setData(data.Data);
+        },
+        error: function() {
+          //错误处理
+        }
+      });
+    },
+    setData(data) {
+      // 设置详情
+      this.details = data;
+      this.details.src = this.$route.query.src;
     },
     // 打开底部
     openBom(isTrue) {
       if (this.title == "过敏食物添加") {
-        this.$vux.toast.show({
-          text: "添加成功"
-        });
+        this.api = "/api/HealthyDiet/AddToAllergyFood";
+        this.addJrys();
         return;
       }
       if (isTrue) {
+        // 添加食物
         this.detailsFix = 0;
       } else {
         this.detailsFix = -500;
@@ -190,11 +159,37 @@ export default {
     },
     // 加入饮食
     addJrys() {
+      var _this = this;
+      var d = { id: this.details.id };
+      if (this.title != "过敏食物添加") {
+        d.grams = this.grams;
+      }
       this.detailsFix = -500;
+      this.$http({
+        url: this.api,
+        type: "post",
+        data: JSON.stringify(d),
+        success: function(data) {
+          console.log(data);
+          //成功的处理
+          _this.$vux.toast.show({
+            text: data.Message,
+            width: "10em"
+          });
+        },
+        error: function() {
+          //错误处理
+        }
+      });
     }
   },
   mounted() {
     this.getDetails();
+    var date = new Date();
+    var year = date.getFullYear();
+    var mouth = date.getMonth() + 1;
+    var r = date.getDate();
+    this.date = year + "-" + mouth + "-" + r;
   }
 };
 </script>
@@ -220,6 +215,7 @@ export default {
       font-size: 16px;
 
       span {
+        margin-right: 8px;
         color: #666666;
       }
     }

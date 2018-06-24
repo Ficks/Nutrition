@@ -68,9 +68,11 @@ export default {
     return {
       searchVal: {
         value: "",
+        pageNum: 0,
+        pageSize: 10,
         region: false, //地域
-        praise: false, //好评度
-        familiarity: false, //熟悉度
+        praise: 0, //好评度
+        familiarity: 0, //熟悉度
         onFetching: false,
         uptext: "滑动查看更多"
       },
@@ -139,79 +141,37 @@ export default {
     };
   },
   methods: {
-    getList() {
+    setData(data) {
+      if (data.length > 0) {
+        console.log(data);
+      } else {
+        this.searchVal.pageNum--;
+      }
+      this.$nextTick(() => {
+        this.$refs.scrollerBottom.reset();
+      });
+      this.searchVal.onFetching = false;
+    },
+    getList(time) {
       if (this.searchVal.onFetching) {
         // do nothing
       } else {
         this.searchVal.onFetching = true;
         setTimeout(() => {
-          this.listArr.push(
-            {
-              name: "用户名",
-              src: "/static/images/ystx.jpg",
-              praise: "98",
-              company: "中南大学医学院",
-              technology: "病后营养调理、健身营养调理",
-              money: 50,
-              number: 1000,
-              time: "9:00 ~ 11:00"
+          var _this = this;
+          this.searchVal.pageNum++;
+          this.$http({
+            url: "/api/Consultation/DietitianList",
+            type: "get",
+            data: this.searchVal,
+            success: function(data) {
+              _this.setData(data.Data.Data);
             },
-            {
-              name: "用户名",
-              src: "/static/images/ystx.jpg",
-              praise: "98",
-              company: "中南大学医学院",
-              technology: "病后营养调理、健身营养调理",
-              money: 50,
-              number: 1000,
-              time: "9:00 ~ 11:00"
-            },
-            {
-              name: "用户名",
-              src: "/static/images/ystx.jpg",
-              praise: "98",
-              company: "中南大学医学院",
-              technology: "病后营养调理、健身营养调理",
-              money: 50,
-              number: 1000,
-              time: "9:00 ~ 11:00"
-            },
-            {
-              name: "用户名",
-              src: "/static/images/ystx.jpg",
-              praise: "98",
-              company: "中南大学医学院",
-              technology: "病后营养调理、健身营养调理",
-              money: 50,
-              number: 1000,
-              time: "9:00 ~ 11:00"
-            },
-            {
-              name: "用户名",
-              src: "/static/images/ystx.jpg",
-              praise: "98",
-              company: "中南大学医学院",
-              technology: "病后营养调理、健身营养调理",
-              money: 50,
-              number: 1000,
-              time: "9:00 ~ 11:00"
-            },
-            {
-              name: "用户名",
-              src: "/static/images/ystx.jpg",
-              praise: "98",
-              company: "中南大学医学院",
-              technology: "病后营养调理、健身营养调理",
-              money: 50,
-              number: 1000,
-              time: "9:00 ~ 11:00"
+            error: function() {
+              //错误处理
             }
-          );
-          this.$nextTick(() => {
-            this.$refs.scrollerBottom.reset();
           });
-          this.searchVal.onFetching = false;
-        }, 2000);
+        }, time || 800);
       }
     },
     toPathDetails(url) {
@@ -221,6 +181,7 @@ export default {
     }
   },
   mounted() {
+    this.getList(1);
     console.log("当前页面API：" + this.$route.path);
     console.log("当前页面数据列表", this.listArr);
     console.log("当前页面筛选数据", this.searchVal);

@@ -116,6 +116,7 @@ export default {
   methods: {
     setData(data) {
       console.log(data);
+      console.log(data);
     },
     getList() {
       var _this = this;

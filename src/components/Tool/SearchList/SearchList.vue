@@ -40,33 +40,7 @@ export default {
         onFetching: false,
         uptext: "滑动查看更多"
       },
-      listArr: [
-        {
-          title: "辣椒炒肉辣椒炒肉辣椒炒肉",
-          src: "/static/images/searchm.jpg",
-          desc: "131kcal(100g)"
-        },
-        {
-          title: "辣椒炒肉",
-          src: "/static/images/searchm.jpg",
-          desc: "131kcal(100g)"
-        },
-        {
-          title: "辣椒炒肉",
-          src: "/static/images/searchm.jpg",
-          desc: "131kcal(100g)"
-        },
-        {
-          title: "辣椒炒肉",
-          src: "/static/images/searchm.jpg",
-          desc: "131kcal(100g)"
-        },
-        {
-          title: "辣椒炒肉",
-          src: "/static/images/searchm.jpg",
-          desc: "131kcal(100g)"
-        }
-      ]
+      listArr: []
     };
   },
   methods: {
@@ -84,6 +58,7 @@ export default {
       } else if (
         this.$route.path === "/My/PersonalFiles/AllergicFood/Details"
       ) {
+        this.searchVal.dishesType = "";
         // 过敏食物筛选
       }
 
@@ -91,75 +66,58 @@ export default {
       console.log("列表数据格式：", this.listArr);
       console.log("这个页面可以变成添加过敏食物的列表页");
 
-      this.getList();
+      this.getList(1);
     },
-    toPathDetails(url) {
+    toPathDetails(item) {
+      console.log(item);
       this.$router.push({
         path: "/Tool/SearchList/Details",
         query: {
-          path: this.$route.path
+          path: this.$route.path,
+          id: item.id,
+          src: item.src
         }
       });
     },
-    getList() {
+    setData(data) {
+      if (data.length > 0) {
+        for (let i = 0; i < data.length; i++) {
+          data[i].src = data[i].src || "/static/images/searchm.jpg";
+          this.listArr.push(data[i]);
+        }
+      } else {
+        this.searchVal.uptext = "没有更多数据了";
+        this.searchVal.pageNum--;
+      }
+
+      this.searchVal.onFetching = false;
+      this.$nextTick(() => {
+        this.$refs.scrollerBottom.reset();
+      });
+    },
+    getList(time) {
       var _this = this;
       if (this.searchVal.onFetching) {
         // do nothing
       } else {
         this.searchVal.onFetching = true;
-
-        console.log(9999999);
+        console.log(this.searchVal);
         setTimeout(() => {
           this.searchVal.pageNum++;
-          console.log(this.searchVal.pageNum);
           this.$http({
             url: "/api/HealthyDiet/GetDishesList",
             type: "get",
             data: this.searchVal,
             success: function(data) {
               //成功的处理
-              console.log("-----------------");
               console.log(data);
-              _this.searchVal.onFetching = false;
+              _this.setData(data.Data);
             },
             error: function() {
               //错误处理
             }
           });
-        }, 800);
-
-        // setTimeout(() => {
-        //   this.listArr.push(
-        //     {
-        //       title: "辣椒炒肉",
-        //       src: "/static/images/searchm.jpg",
-        //       desc: "131kcal(100g)",
-        //       url: "/Tool/SearchList/Details"
-        //     },
-        //     {
-        //       title: "辣椒炒肉",
-        //       src: "/static/images/searchm.jpg",
-        //       desc: "131kcal(100g)",
-        //       url: "/Tool/SearchList/Details"
-        //     },
-        //     {
-        //       title: "辣椒炒肉",
-        //       src: "/static/images/searchm.jpg",
-        //       desc: "131kcal(100g)",
-        //       url: "/Tool/SearchList/Details"
-        //     },
-        //     {
-        //       title: "辣椒炒肉",
-        //       src: "/static/images/searchm.jpg",
-        //       desc: "131kcal(100g)",
-        //       url: "/Tool/SearchList/Details"
-        //     }
-        //   );
-        //   this.$nextTick(() => {
-        //     this.$refs.scrollerBottom.reset();
-        //   });
-        //   this.searchVal.onFetching = false;
-        // }, 2000);
+        }, time || 800);
       }
     }
   },
