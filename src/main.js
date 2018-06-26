@@ -7,8 +7,8 @@ import router from './router'
 import Settings from '@/config/settings.js'
 import Axios from 'axios'
 import store from '@/vuex/store'
-
-
+import { ConfirmPlugin } from 'vux'
+Vue.use(ConfirmPlugin)
 Vue.config.productionTip = false
 import {
   ToastPlugin,
@@ -20,12 +20,12 @@ Vue.use(ToastPlugin)
 Vue.use(LoadingPlugin)
 
 Vue.component('scroller', Scroller)
+Vue.prototype.$Axios = Axios;
 
 Vue.use(Vuex)
 // 直接使用 WeUI 样式并引入 fastclick 会导致一些点击问题，VUX 组件内部已经做了相关处理。
 const FastClick = require('fastclick')
 FastClick.attach(document.body)
-
 
 
 router.beforeEach((to, from, next) => {
@@ -34,7 +34,7 @@ router.beforeEach((to, from, next) => {
 
   if (userid == "") { //没有token或者要去的path不是login就清除userinfo和token，并跳转到登录页面
     $.ajax({
-      url: "http://www.xyys.ltd/api/WeChat/MoniWeChatLogin",
+      url: Settings.server + "/api/WeChat/MoniWeChatLogin",
       type: "get",
       data: {
         referid: "2",
@@ -53,7 +53,7 @@ router.beforeEach((to, from, next) => {
 
         Vue.prototype.$http = function (fd) {
           return $.ajax({
-            url: 'http://www.xyys.ltd' + fd.url,
+            url: Settings.server + fd.url,
             headers: {
               "userid": d.userid,
               "Token": d.Token,

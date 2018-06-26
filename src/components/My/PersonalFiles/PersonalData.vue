@@ -205,7 +205,8 @@ export default {
           "0": '<span style="color:#f00">否</span>',
           "1": "早孕期",
           "2": "中孕期",
-          "3": "晚孕期"
+          "3": "晚孕期",
+          "4": "哺乳期"
         },
         ysxh: {
           "0": "素菜",
@@ -249,10 +250,20 @@ export default {
       this.jbsTrue = true;
     },
     gmswFn() {
+      var _this = this;
       if (this.read) {
         return;
       }
-      this.$router.push({ path: "/My/PersonalFiles/AllergicFood" });
+      this.$vux.confirm.show({
+        title: "请先保存当前修改，跳转后资料会丢失",
+        confirmText: "添加过敏食物",
+        cancelText: "先去保存",
+        // 组件除show外的属性
+        onCancel() {},
+        onConfirm() {
+          _this.$router.push({ path: "/My/PersonalFiles/AllergicFood" });
+        }
+      });
     },
     closeAll() {
       // 关闭所有弹窗
@@ -339,6 +350,19 @@ export default {
       this.$router.push({
         path: "/My"
       });
+    },
+    setYfName(index) {
+      if (index === 0) {
+        return "否";
+      } else if (index == 1) {
+        return "早孕期";
+      } else if (index == 2) {
+        return "中孕期";
+      } else if (index == 3) {
+        return "晚孕期";
+      } else if (index == 4) {
+        return "哺乳期";
+      }
     }
   },
   mounted() {
@@ -371,26 +395,25 @@ export default {
     this.$http({
       url: "/api/HealthyArchive/GetPersonalHealthyArchive",
       type: "get",
-      success: function(data) {
+      success: data => {
         //成功的处理
-        console.log("-----------------");
         console.log(data);
-        console.log(data);
-        console.log(data);
-        _this.form.id = data.Data.id;
-        _this.form.name = data.Data.name;
-        _this.form.age = data.Data.age;
-        _this.form.sex.name = data.Data.sexname;
-        _this.form.sex.value = data.Data.sexvalue;
-        _this.form.height = data.Data.height;
-        _this.form.weight = data.Data.weight;
-        _this.form.jbs.value = data.Data.jbsid;
-        _this.form.jbs.name = data.Data.jbsname;
-        _this.form.ysxh.value = data.Data.ysxhid;
-        _this.form.ysxh.name = data.Data.ysxhname;
-        _this.form.llsp.value = data.Data.llspid;
-        _this.form.llsp.name = data.Data.llspname;
-        _this.gmsw = data.Data.alleryarr;
+        this.form.id = data.Data.id;
+        this.form.name = data.Data.name;
+        this.form.age = data.Data.age;
+        this.form.sex.name = data.Data.sexname;
+        this.form.sex.value = data.Data.sexvalue;
+        this.form.height = data.Data.height;
+        this.form.weight = data.Data.weight;
+        this.form.jbs.value = data.Data.jbsid;
+        this.form.jbs.name = data.Data.jbsname;
+        this.form.yfxx.value = data.Data.hyzt;
+        this.form.yfxx.name = this.setYfName(data.Data.hyzt);
+        this.form.ysxh.value = data.Data.ysxhid;
+        this.form.ysxh.name = data.Data.ysxhname;
+        this.form.llsp.value = data.Data.llspid;
+        this.form.llsp.name = data.Data.llspname;
+        this.gmsw = data.Data.alleryarr;
       },
       error: function() {
         //错误处理

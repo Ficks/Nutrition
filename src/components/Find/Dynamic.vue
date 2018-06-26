@@ -119,16 +119,16 @@ export default {
       console.log(data);
     },
     getList() {
-      var _this = this;
       this.searchVal.pageNum++;
       this.$http({
-        url: "/api/NewsInfo/GetDynamicNewsList",
+        url: "/api/User/GetMoment",
         type: "get",
         data: this.searchVal,
-        success: function(data) {
+        success: data => {
           //成功的处理
           console.log(data);
-          _this.setData(data.Data);
+          console.log(data);
+          this.setData(data.Data);
         },
         error: function() {
           //错误处理

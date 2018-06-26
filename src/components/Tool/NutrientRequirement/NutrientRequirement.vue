@@ -8,11 +8,8 @@
      
       <scroller lock-x height="-45px" ref="scrollerBottom">
         <div class="box scroller_box">
-           <div class="select" @click="select.show=true">
-              {{select.value | getVal}}
-              <i class="iconfont icon-xiala"></i>
-          </div>
-            <ul>
+            <p class="userinfotip" v-if="!userInfo">用户信息不完善，请前往 <router-link to="/My/PersonalData">个人中心</router-link> 完善信息</p>
+            <ul v-if="userInfo">
                 <li v-for="(item,index) in listArr">
                     <div class="left">{{item.name}}</div>
                     <div class="right">{{item.value+item.unit}}</div>
@@ -21,56 +18,29 @@
         </div>
       </scroller>
 
-        <div class="nav_bom_zoom" v-show="select.show" @click="select.show=false"></div>
-        <div class="afxm"  :style="{bottom:select.show?0:-200+'px'}">
-            <h3>请选择</h3>
-            <ul>
-                <li @click="setSelect(1)">正常成人值</li>
-                <li @click="setSelect(2)">婴幼儿值</li>
-                <li @click="setSelect(3)">青少年值</li>
-                <li @click="setSelect(4)">老年人值</li>
-            </ul>
-        </div>
     </div>
 </template>
 <script>
 export default {
-  filters: {
-    getVal(val) {
-      if (val == 1) {
-        return "正常成人值";
-      } else if (val == 2) {
-        return "婴幼儿值";
-      } else if (val == 3) {
-        return "青少年值";
-      } else if (val == 4) {
-        return "老年人值";
-      }
-    }
-  },
   data() {
     return {
-      select: {
-        value: 1,
-        show: false
-      },
+      userInfo: true,
       listArr: []
     };
   },
   methods: {
-    setSelect(val) {
+    getList() {
       var _this = this;
-      this.select.value = val;
-      this.select.show = false;
       this.$http({
         url: "/api/HealthyArchive/GetNutrientStandard",
         type: "get",
-        data: {
-          ageType: this.select.value
-        },
         success: function(data) {
           //成功的处理
-          _this.setData(data.Data);
+          if (data.Code == 9005) {
+            _this.userInfo = false;
+          } else {
+            _this.setData(data.Data);
+          }
         },
         error: function() {
           //错误处理
@@ -83,7 +53,7 @@ export default {
     }
   },
   mounted() {
-    this.setSelect(1);
+    this.getList();
   }
 };
 </script>
@@ -176,6 +146,12 @@ export default {
     right: 10px;
     font-size: 18px;
   }
+}
+.userinfotip {
+  color: #666;
+  font-size: 14px;
+  padding: 20px;
+  box-sizing: border-box;
 }
 </style>
 
