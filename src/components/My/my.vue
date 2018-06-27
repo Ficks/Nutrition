@@ -10,8 +10,8 @@
             <img src="/static/images/tx.jpg" alt="">
           </div>
           <div class="wz">
-            <h1>lok666</h1>
-            <p>男 27岁</p>
+            <h1>{{details.name}}</h1>
+            <p>{{details.sexname+' '+details.age}}</p>
           </div>
         </div>
         <div class="my_box">
@@ -42,7 +42,9 @@ export default {
     Menu
   },
   data() {
-    return {};
+    return {
+      details: {}
+    };
   },
   methods: {
     isLogin() {
@@ -66,6 +68,18 @@ export default {
   },
   mounted() {
     console.log("当前页面API：" + this.$route.path);
+    this.$http({
+      url: "/api/HealthyArchive/GetPersonalHealthyArchive",
+      type: "get",
+      success: data => {
+        //成功的处理
+        console.log(data);
+        this.details = data.Data;
+      },
+      error: function() {
+        //错误处理
+      }
+    });
   }
 };
 </script>

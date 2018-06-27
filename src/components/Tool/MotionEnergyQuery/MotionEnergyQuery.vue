@@ -7,18 +7,17 @@
         </div>
       <scroller lock-x height="-45px" ref="scrollerBottom">
         <div class="list_wr scroller_box">
-            <div class="list" v-for="(item,index) in arr">
+            <div class="list" v-for="(item,index) in listArr">
                 <div class="left">
                     <i class="iconfont icon-buhang"></i>
-                    <p>{{item.title}}</p>
-                    <p>{{item.stepNumber}}步</p>
+                    <p>{{item.datedescc}}</p>
                 </div>
                 <div class="right">
-                    <p>消耗{{item.consume}}</p>
+                    <p>消耗{{item.kcal}}kcal</p>
                     <div class="sped_wr">
-                        <div class="sped" :style="{width:(item.stepNumber/item.proposal)*100+'%'}"></div>
+                        <div class="sped" :style="{width:(item.kcal/item.proposalkcal)*100+'%'}"></div>
                     </div>
-                    <p class="f14">建议运动量{{item.proposal}}步</p>
+                    <p class="f14">建议消耗{{item.proposalkcal}}kcal</p>
                 </div>
             </div>
         </div>
@@ -29,30 +28,29 @@
 export default {
   data() {
     return {
-      arr: [
-        {
-          stepNumber: 1000,
-          title: "今日步数",
-          consume: "2000kcal",
-          proposal: 10000
-        },
-        {
-          stepNumber: 1000,
-          title: "昨日步数",
-          consume: "2000kcal",
-          proposal: 10000
-        },
-        {
-          stepNumber: 1000,
-          title: "前日步数",
-          consume: "2000kcal",
-          proposal: 10000
-        }
-      ]
+      listArr: []
     };
   },
-  methods: {},
-  mounted() {}
+  methods: {
+    getList() {
+      this.$http({
+        url: "/api/HealthyArchive/GetTodaysSport",
+        type: "get",
+        data: {
+          start: this.$getDate(-2),
+          end: this.$getDate(1)
+        },
+        success: data => {
+          console.log(data);
+          this.listArr = data.Data;
+        },
+        error: data => {}
+      });
+    }
+  },
+  mounted() {
+    this.getList();
+  }
 };
 </script>
 <style scoped lang="less">
@@ -103,6 +101,7 @@ export default {
         position: relative;
         border-radius: 4px;
         margin: 10px 0;
+        overflow: hidden;
 
         .sped {
           position: absolute;

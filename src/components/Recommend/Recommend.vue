@@ -5,16 +5,16 @@
         <div class="title">{{$route.name}}</div>
         <div class="right"></div>
       </div>
-        <scroller lock-x height="-45px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
+        <scroller lock-x height="-45px" ref="scrollerBottom">
         <div class="box search_list scroller_box">
             <p class="wxts">温馨提示：本食谱仅作为饮食参考，疾病相关请咨询医生</p>
-            <ul class="list_re">
-                <li v-for="(item,index) in listArr" @click="toPathDetails(item)">
+            <ul class="list_re" v-for="(item,index) in listArr">
+                <li v-for="(jtem,jindex) in item.dishes" @click="toPathDetails(jtem)">
                     <div class="img">
-                        <img :src="item.src" alt="">
+                        <img :src="$HTTPURL+jtem.src" alt="">
                     </div>
-                    <h3>{{item.title}}</h3>
-                    <p>{{item.kcal}}</p>
+                    <h3>{{jtem.name}}</h3>
+                    <p>{{jtem.kcal}}kcal/{{jtem.unit}}g*{{jtem.number}}</p>
                 </li>
             </ul>
             <load-more tip="loading" v-show="searchVal.onFetching"></load-more>
@@ -37,33 +37,7 @@ export default {
         onFetching: false,
         uptext: "滑动查看更多"
       },
-      listArr: [
-        {
-          src: "/static/images/searchm.jpg",
-          title: "生菜牙白",
-          kcal: "75kcal(100g)"
-        },
-        {
-          src: "/static/images/searchm.jpg",
-          title: "生菜牙白",
-          kcal: "75kcal(100g)"
-        },
-        {
-          src: "/static/images/searchm.jpg",
-          title: "生菜牙白",
-          kcal: "75kcal(100g)"
-        },
-        {
-          src: "/static/images/searchm.jpg",
-          title: "生菜牙白",
-          kcal: "75kcal(100g)"
-        },
-        {
-          src: "/static/images/searchm.jpg",
-          title: "生菜牙白",
-          kcal: "75kcal(100g)"
-        }
-      ]
+      listArr: []
     };
   },
   methods: {
@@ -72,9 +46,11 @@ export default {
       console.log("当前页面数据列表", this.listArr);
     },
     toPathDetails(item) {
-      console.log(item);
       this.$router.push({
-        path: "/Tool/SearchList/Details"
+        path: "/Tool/SearchList/Details",
+        query: {
+          id: item.id
+        }
       });
     },
     getList() {
@@ -124,6 +100,19 @@ export default {
     // this.$nextTick(() => {
     //   this.$refs.scrollerBottom.reset({ top: 0 });
     // });
+
+    this.$http({
+      url: "/api/HealthyDiet/GetMenuDietDetail",
+      type: "get",
+      data: {
+        id: this.$route.query.id
+      },
+      success: data => {
+        console.log(data);
+        this.listArr = data.Data;
+      },
+      error: error => {}
+    });
   }
 };
 </script>

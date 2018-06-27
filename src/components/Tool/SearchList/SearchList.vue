@@ -69,7 +69,6 @@ export default {
       this.getList(1);
     },
     toPathDetails(item) {
-      console.log(item);
       this.$router.push({
         path: "/Tool/SearchList/Details",
         query: {
@@ -87,7 +86,7 @@ export default {
     setData(data) {
       if (data.length > 0) {
         for (let i = 0; i < data.length; i++) {
-          data[i].src = data[i].src || "/static/images/searchm.jpg";
+          data[i].src = this.$HTTPURL + data[i].src;
           this.listArr.push(data[i]);
         }
       } else {

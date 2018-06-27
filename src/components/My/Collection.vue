@@ -10,7 +10,7 @@
             <div class="sclb">
                 <div class="sclb__bd">
                     <a href="javascript:void(0);" @click="operationFn(item)" v-for="(item,index) in listArr">
-                        <div class="left">
+                        <div v-if="item.src"  class="left">
                             <img :src="item.src" alt="" class="weui-media-box__thumb">
                         </div>
                         <div class="right">
@@ -57,43 +57,7 @@ export default {
         onFetching: false,
         uptext: "滑动查看更多"
       },
-      listArr: [
-        {
-          title: "我的收藏1",
-          src: "/static/images/searchm.jpg",
-          desc: "收藏内容缩略显示...",
-          edit: false,
-          link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
-        },
-        {
-          title: "我的收藏2",
-          src: "/static/images/searchm.jpg",
-          desc: "收藏内容缩略显示...",
-          edit: false,
-          link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
-        },
-        {
-          title: "我的收藏3",
-          src: "/static/images/searchm.jpg",
-          desc: "收藏内容缩略显示...",
-          edit: false,
-          link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
-        },
-        {
-          title: "我的收藏4",
-          src: "/static/images/searchm.jpg",
-          desc: "收藏内容缩略显示...",
-          edit: false,
-          link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
-        },
-        {
-          title: "我的收藏5",
-          src: "/static/images/searchm.jpg",
-          desc: "收藏内容缩略显示...",
-          edit: false,
-          link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
-        }
-      ]
+      listArr: []
     };
   },
   methods: {
@@ -136,7 +100,6 @@ export default {
             data: this.searchVal,
             success: function(data) {
               //成功的处理
-              console.log(data);
               _this.setData(data.Data);
             },
             error: function() {
@@ -149,6 +112,10 @@ export default {
     setData(data) {
       if (data.length === 0) {
         this.searchVal.pageNum--;
+      } else {
+        for (let i = 0; i < data.length; i++) {
+          this.listArr.push(data[i]);
+        }
       }
       this.$nextTick(() => {
         this.$refs.scrollerBottom.reset();

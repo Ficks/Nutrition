@@ -71,7 +71,7 @@ export default {
         return;
       }
       for (let i = 0; i < data.length; i++) {
-        data[i].src = data[i].src || "/static/images/searchm.jpg";
+        data[i].src = this.$HTTPURL + data[i].src;
         this.listArr.push(data[i]);
       }
       this.$nextTick(() => {

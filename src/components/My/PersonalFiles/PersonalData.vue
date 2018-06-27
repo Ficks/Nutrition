@@ -363,80 +363,50 @@ export default {
       } else if (index == 4) {
         return "哺乳期";
       }
+    },
+    setData(data) {
+      this.form.id = data.Data.id;
+      this.form.name = data.Data.name;
+      this.form.age = data.Data.age;
+      this.form.sex.name = data.Data.sexname;
+      this.form.sex.value = data.Data.sexvalue;
+      this.form.height = data.Data.height;
+      this.form.weight = data.Data.weight;
+      this.form.jbs.value = data.Data.jbsid;
+      this.form.jbs.name = data.Data.jbsname;
+      this.form.yfxx.value = data.Data.hyzt;
+      this.form.yfxx.name = this.setYfName(data.Data.hyzt);
+      this.form.ysxh.value = data.Data.ysxhid;
+      this.form.ysxh.name = data.Data.ysxhname;
+      this.form.llsp.value = data.Data.llspid;
+      this.form.llsp.name = data.Data.llspname;
+      this.gmsw = data.Data.alleryarr;
     }
   },
   mounted() {
-    var _this = this;
+    var url = "/api/HealthyArchive/GetPersonalHealthyArchive";
+    // var d = this.$store.getters.getLogin;
+    var id = "";
     // 判断是否只读
-    if (this.$route.query.read == true) {
+    if (this.$route.query.id != "") {
+      url = "/api/HealthyArchive/GetPersonalHealthyArchiveByUserId";
+      id = this.$route.query.id;
       this.read = true;
+    } else {
+      url = "/api/HealthyArchive/GetPersonalHealthyArchive";
     }
-    console.log("当前页面API：" + this.$route.path);
-    console.log("个人数据：", this.form);
-    console.log("过敏食物列表：", this.gmsw);
-    // this.$http({
-    //   url: "/api/HealthyArchive/GetPersonalHealthyArchive",
-    //   type: "get",
-    //   data: {
-    //     referid: "1",
-    //     openid: "2",
-    //     nickname: "3",
-    //     headurl: "4"
-    //   },
-    //   success: function(data) {
-    //     console.log(data);
-    //   },
-    //   error: function(data) {
-    //     console.log(data);
-    //   }
-    // });
-
-    var d = this.$store.getters.getLogin;
     this.$http({
-      url: "/api/HealthyArchive/GetPersonalHealthyArchive",
+      url: url,
       type: "get",
+      data: { id: id },
       success: data => {
         //成功的处理
-        console.log(data);
-        this.form.id = data.Data.id;
-        this.form.name = data.Data.name;
-        this.form.age = data.Data.age;
-        this.form.sex.name = data.Data.sexname;
-        this.form.sex.value = data.Data.sexvalue;
-        this.form.height = data.Data.height;
-        this.form.weight = data.Data.weight;
-        this.form.jbs.value = data.Data.jbsid;
-        this.form.jbs.name = data.Data.jbsname;
-        this.form.yfxx.value = data.Data.hyzt;
-        this.form.yfxx.name = this.setYfName(data.Data.hyzt);
-        this.form.ysxh.value = data.Data.ysxhid;
-        this.form.ysxh.name = data.Data.ysxhname;
-        this.form.llsp.value = data.Data.llspid;
-        this.form.llsp.name = data.Data.llspname;
-        this.gmsw = data.Data.alleryarr;
+        this.setData(data);
       },
       error: function() {
         //错误处理
       }
     });
-    // $.ajax({
-    //   url: "http://www.xyys.ltd/api/HealthyArchive/GetPersonalHealthyArchive",
-    //   type: "get",
-    //   // dataType: "jsonp",
-    //   headers: {
-    //     userid: d.userid,
-    //     Token: d.Token,
-    //     "Content-Type": "text/html;charset=utf-8"
-    //   },
-    //   success: function(data) {
-    //     //成功的处理
-    //     console.log("-----------------");
-    //     console.log(data);
-    //   },
-    //   error: function() {
-    //     //错误处理
-    //   }
-    // });
   }
 };
 </script>

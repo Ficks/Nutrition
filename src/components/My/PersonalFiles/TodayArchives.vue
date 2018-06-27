@@ -28,54 +28,49 @@
               </li>
           </ul>
           <h2 class="tl">各餐摄入组成</h2>
-          <!-- <ul>
+          <ul>
               <li>
                   <div class="left">餐次</div>
                   <div class="center"></div>
                   <div class="right">参考比例</div>
               </li>
-              <li v-for="(item,index) in listArr[1]">
-                  <div class="left">{{item.title}}</div>
+              <li v-for="(item,index) in mealArr">
+                  <div class="left">{{item.type | name}}</div>
                   <div class="center">
                       <div class="kdc">
-                          <div :class="{over:fomatFloat(item)>100}" class="jdt" :style="{width:fomatFloat(item)+'%'}"></div>
+                          <div :class="{over:item.bfb>90}" class="jdt" :style="{width:item.bfb+'%'}"></div>
                       </div>
                   </div>
-                  <div class="right">{{item.totalVal+item.unit}}</div>
+                  <div class="right">{{item.proposalratio}}</div>
               </li>
-          </ul> -->
+          </ul>
         </div>
       </scroller>
     </div>
 </template>
 <script>
 export default {
-  data() {
-    return {
-      date: "",
-      listArr: []
-    };
-  },
   filters: {
-    myCurrency: function(myInput) {
-      return 0;
-    },
-    fomatFloat(item, isT) {
-      if (isT) {
-        var num = parseFloat(item.spedVal) / parseFloat(item.totalVal) * 100;
-        num = num - 100;
-        return (
-          "超过" + Math.round(num * Math.pow(10, 2)) / Math.pow(10, 2) + "%"
-        );
-      } else {
-        var num = parseFloat(item.spedVal) / parseFloat(item.totalVal) * 100;
-        return Math.round(num * Math.pow(10, 2)) / Math.pow(10, 2);
+    name(item) {
+      if (item == 1) {
+        return "早餐";
+      } else if (item == 2) {
+        return "中餐";
+      } else if (item == 3) {
+        return "晚餐";
       }
     }
   },
+  data() {
+    return {
+      date: "",
+      listArr: [],
+      mealArr: []
+    };
+  },
   methods: {
     getBfb(item) {
-      if (item.totalVal == 0 && item.spedVal == 0) {
+      if (item.totalVal == 0 || item.spedVal == 0) {
         return 0;
       }
       var num = parseFloat(item.spedVal) / parseFloat(item.totalVal) * 100;
@@ -86,9 +81,17 @@ export default {
       return "超过" + Math.round(num * Math.pow(10, 2)) / Math.pow(10, 2) + "%";
     },
     setData(data) {
-      this.listArr = data;
+      this.listArr = data.nutrient;
+      this.mealArr = data.meal;
       for (let i = 0; i < this.listArr.length; i++) {
         var v = this.listArr[i];
+        v.bfb = this.getBfb(v);
+        if (v.bfb > 100) {
+          v.bfbc = this.getCg(v.bfb);
+        }
+      }
+      for (let i = 0; i < this.mealArr.length; i++) {
+        var v = this.mealArr[i];
         v.bfb = this.getBfb(v);
         if (v.bfb > 100) {
           v.bfbc = this.getCg(v.bfb);
@@ -97,25 +100,23 @@ export default {
     }
   },
   mounted() {
-    var _this = this;
-    var myDate = new Date();
-    var year = myDate.getFullYear(); //获取完整的年份(4位,1970-????)
-    var month = myDate.getMonth() + 1;
-    var date = myDate.getDate();
-    this.date = year + "-" + month + "-" + date;
-    console.log("当前页面API" + this.$route.path);
-    console.log("数据格式：", this.listArr);
-
+    var url = "/api/HealthyArchive/GetDailyNutrientIntakeAndMealRatio";
+    var id = "";
+    // 判断是否只读
+    if (this.$route.query.id != "") {
+      url = "/api/HealthyArchive/GetDailyNutrientIntakeAndMealRatioByUserId";
+      id = this.$route.query.id;
+    } else {
+      url = "/api/HealthyArchive/GetDailyNutrientIntakeAndMealRatio";
+    }
     this.$http({
-      url: "/api/HealthyArchive/GetDailyNutrientIntake",
+      url: "/api/HealthyArchive/GetDailyNutrientIntakeAndMealRatio",
       type: "get",
-      data: {
-        start: this.date,
-        end: this.date
-      },
-      success: function(data) {
+      data: { id: id },
+      success: data => {
         //成功的处理
-        _this.setData(data.Data);
+        console.log(data);
+        this.setData(data.Data);
       },
       error: function() {
         //错误处理

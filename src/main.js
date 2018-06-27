@@ -8,7 +8,9 @@ import Settings from '@/config/settings.js'
 import Axios from 'axios'
 import store from '@/vuex/store'
 import filters from '@/filters/filters'
-import { ConfirmPlugin } from 'vux'
+import {
+  ConfirmPlugin
+} from 'vux'
 Vue.use(ConfirmPlugin)
 Vue.config.productionTip = false
 import {
@@ -27,10 +29,12 @@ Vue.use(Vuex)
 // 直接使用 WeUI 样式并引入 fastclick 会导致一些点击问题，VUX 组件内部已经做了相关处理。
 const FastClick = require('fastclick')
 FastClick.attach(document.body)
-
+// 注册过滤器
 for (let key in filters) {
   Vue.filter(key, filters[key])
 }
+// 服务器地址
+Vue.prototype.$HTTPURL = Settings.server + '/';
 router.beforeEach((to, from, next) => {
   var userid = store.state.userid;
   var Token = store.state.Token;
@@ -41,7 +45,7 @@ router.beforeEach((to, from, next) => {
       type: "get",
       data: {
         referid: "2",
-        openid: "3",
+        openid: "5",
         nickname: "4",
         headurl: "5"
       },
@@ -86,6 +90,15 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
+Vue.prototype.$getDate = function (AddDayCount) {
+  var dd = new Date();
+  dd.setDate(dd.getDate() + AddDayCount); //获取AddDayCount天后的日期
+  var y = dd.getFullYear();
+  var m = dd.getMonth() + 1; //获取当前月份的日期
+  var d = dd.getDate();
+  return y + "-" + m + "-" + d;
+}
 
 /* eslint-disable no-new */
 new Vue({

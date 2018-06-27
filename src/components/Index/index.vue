@@ -26,7 +26,7 @@
             <div class="center">
               <div class="box">
                 <span>健康得分</span>
-                <h2>100</h2>
+                <h2>{{score}}</h2>
                 <router-link to="/My/PersonalData">完善个人档案></router-link>
               </div>
             </div>
@@ -83,7 +83,7 @@
       <!-- 膳食推荐 -->
       <div class="recommend" v-if="!isTNB">
         <div class="box">
-          <h2>膳食推荐<span @click="isDisease()">换一批</span></h2>
+          <h2>膳食推荐<span @click="getDietRecommend">换一批</span></h2>
 
           <tab custom-bar-width="27px" v-model="reIndex"  prevent-default @on-before-index-change="recommend">
             <tab-item selected>
@@ -96,7 +96,7 @@
               晚餐
             </tab-item>
           </tab>
-          <div class="recommend_box" @click="mastri">
+          <!-- <div class="recommend_box" @click="mastri">
             <div class="li_t" v-for="(item,index) in recommendData" :key="index">
               <div class="tab-swiper vux-center" v-show="index===reIndex">
                   <ul>
@@ -114,6 +114,18 @@
                   </ul>
                 </div>
             </div>
+          </div> -->
+          <div class="recommend_box" @click="mastri">
+            <div class="li_t" v-for="(item,index) in recommendData" :key="index">
+              <div class="tab-swiper vux-center" v-show="index===reIndex">
+                  <ul>
+                    <li v-for="jtem in item.dishes">
+                      <h3>{{jtem.name}}</h3>
+                      <span>{{jtem.kcal}}kcal/{{jtem.unit}}g*{{jtem.number}}</span>
+                    </li>
+                  </ul>
+                </div>
+            </div>
           </div>
         </div>
       </div>
@@ -123,13 +135,13 @@
           <h2>膳食推荐</h2>
           <div class="recommend_box">
             <ul>
-              <li v-for="item in TnbListArr">
+              <li v-for="item in recommendData[0].dishes">
                 <h3>{{item.name}}</h3>
-                <span>{{item.kcal}}</span>
+                <span>{{item.kcal}}kcal/{{item.unit}}g*{{item.number}}</span>
               </li>
             </ul>
             <div class="more">
-              <router-link to="/Index/Recommend">查看更多></router-link>
+              <router-link :to="{path:'/Index/Recommend',query:{id:KeyId}}">查看更多></router-link>
             </div>
           </div>
         </div>
@@ -140,10 +152,10 @@
         <ul>
           <li v-for="(item,index) in nutCon" @click="toDetails(item)">
               <div class="img">
-                <img :src="item.img" alt="">
+                <img :src="$HTTPURL+item.HeadUrl" alt="">
               </div>
-              <h3>{{item.name}}</h3>
-              <h4>{{item.fname}}</h4>
+              <h3>{{item.Name}}</h3>
+              <h4>{{item.Company}}</h4>
           </li>
         </ul>
       </div>
@@ -173,26 +185,14 @@ export default {
   },
   data() {
     return {
+      score: 0,
       qiandao: "签到",
       isFx: false,
       searchVal: "",
       reIndex: 0,
       isTNB: false,
+      KeyId: "",
       // 早中晚餐推荐
-      TnbListArr: [
-        {
-          name: "酸奶",
-          kcal: "114kcal/1.0"
-        },
-        {
-          name: "鸡蛋",
-          kcal: "114kcal/1.0"
-        },
-        {
-          name: "馒头",
-          kcal: "114kcal/1.0"
-        }
-      ],
       recommendData: [
         // 早餐
         [
@@ -265,26 +265,7 @@ export default {
         ]
       ],
       // 营养咨询
-      nutCon: [
-        {
-          img: "/static/images/ys.jpg",
-          name: "陈医生",
-          fname: "中南医学院博士",
-          link: "/Consultation/ConsultationDetails"
-        },
-        {
-          img: "/static/images/ys.jpg",
-          name: "陈医生",
-          fname: "中南医学院博士",
-          link: "/Consultation/ConsultationDetails"
-        },
-        {
-          img: "/static/images/ys.jpg",
-          name: "陈医生",
-          fname: "中南医学院博士",
-          link: "/Consultation/ConsultationDetails"
-        }
-      ]
+      nutCon: []
     };
   },
   methods: {
@@ -296,6 +277,21 @@ export default {
     // 膳食推荐table
     recommend(index) {
       this.reIndex = index;
+    },
+    getSignInFn() {
+      this.$http({
+        url: "/api/HealthyArchive/GetPersonalHealthyScore",
+        type: "get",
+        success: data => {
+          console.log(data);
+          if (data.Data.issign) {
+            this.qiandao = "已签到";
+          }
+          this.score = data.Data.score;
+          this.isTNB = data.Data.isdiabetes; //糖尿病
+        },
+        error: error => {}
+      });
     },
     // 签到
     signInFn() {
@@ -318,18 +314,40 @@ export default {
     share() {
       this.isFx = true;
     },
-    // 判断是否为糖尿病患者
-    isDisease() {
-      // this.recommendData = [];
-      console.log("判断是否为糖尿病患者是的话改变成糖尿病患者的推荐食物");
-    },
     getDietRecommend() {
       // 膳食推荐，早中晚餐
       console.log("膳食推荐，早中晚餐推荐数据格式：", this.recommendData);
+      this.$http({
+        url: "/api/HealthyDiet/GetRecommendMenu",
+        type: "get",
+        success: data => {
+          this.recommendData = data.Data.Value;
+          this.KeyId = data.Data.Key;
+        },
+        error: error => {}
+      });
     },
     getNutritionConsultation() {
       // 推荐营养咨询
-      console.log("推荐营养咨询数据格式：", this.nutCon);
+      this.$http({
+        url: "/api/Consultation/DietitianList",
+        type: "get",
+        data: {
+          pageNum: 1,
+          pageSize: 3,
+          DietitianName: "",
+          praise: 1,
+          familiarity: 1
+        },
+        success: data => {
+          console.log("data");
+          console.log(data);
+          this.nutCon = data.Data.Data;
+        },
+        error: function() {
+          //错误处理
+        }
+      });
     },
     toDetails(item) {
       // 跳转到营养师详情
@@ -339,9 +357,7 @@ export default {
     }
   },
   mounted() {
-    // 判断是否为糖尿病患者首页推荐食谱不同
-    this.isDisease();
-
+    this.getSignInFn(); //获取用户是否签到和健康得分
     this.getDietRecommend();
     this.getNutritionConsultation();
   }

@@ -18,8 +18,8 @@
         <div class="search_type">
             <ul>
                 <!-- <li @click="searchOn(1)" :class="{rotate:searchVal.region==2}">地域 <i class="iconfont icon-xiala" style="transiform"></i></li> -->
-                <li @click="searchOn(2)" :class="{rotate:searchVal.praise==2}">好评度 <i class="iconfont icon-xiala"></i></li>
-                <li @click="searchOn(3)" :class="{rotate:searchVal.familiarity==2}">熟悉度 <i class="iconfont icon-xiala"></i></li>
+                <li @click="searchOn(2)" :class="{rotate:searchVal.praise==1}">好评度 <i class="iconfont icon-xiala"></i></li>
+                <li @click="searchOn(3)" :class="{rotate:searchVal.familiarity==1}">熟悉度 <i class="iconfont icon-xiala"></i></li>
             </ul>
         </div>
         <div class="box_wr">
@@ -72,9 +72,9 @@ export default {
         DietitianName: "",
         pageNum: 0,
         pageSize: 10,
-        region: 1, //地域
-        praise: 1, //好评度
-        familiarity: 1, //熟悉度
+        region: 2, //地域
+        praise: 2, //好评度
+        familiarity: 2, //熟悉度
         onFetching: false,
         uptext: "滑动查看更多"
       },

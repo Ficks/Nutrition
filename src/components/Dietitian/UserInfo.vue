@@ -8,9 +8,9 @@
             <scroller lock-x height="-45px"  ref="scrollerBottom">
             <div class="my_list scroller_box">
               <ul>
-                <li><router-link :to="{path:'/My/PersonalData',query:{read:true}}">用户资料<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
-                <li><router-link to="/My/TodayArchives">今日档案<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
-                <li><router-link to="/My/PersonalFiles">个人档案<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
+                <li><router-link :to="{path:'/My/PersonalData',query:{id:$route.query.id}}">用户资料<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
+                <li><router-link :to="{path:'/My/TodayArchives',query:{id:$route.query.id}}">今日档案<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
+                <li><router-link :to="{path:'/My/PersonalFiles',query:{id:$route.query.id}}">个人档案<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
               </ul>
             </div>
             </scroller>

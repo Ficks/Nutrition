@@ -7,11 +7,11 @@
     <scroller lock-x height="-45px" @on-scroll-bottom="getList" ref="scrollerBottom">
       <div class="scroller_box bsxz">
          <div class="list_w" v-for="(item,index) in listArr">
-           <div class="tx"><img :src="item.src" alt=""></div>
+           <div class="tx"><img :src="item.HeadUrl" alt=""></div>
            <div class="wz">
-             <h2>{{item.name}}</h2>
-             <p>{{item.startTime}}</p>
-             <p>{{item.endTime}}</p>
+             <h2>{{item.NickName}}</h2>
+             <p>{{item.CreateDate | mouthTimeGsh}}</p>
+             <p>{{item.EndDate | mouthTimeGsh}}</p>
            </div>
            <div class="btns">
              <div class="btn_m xxx" @click="chat(item)" v-show="item.msg">新消息</div>
@@ -37,38 +37,19 @@ export default {
       searchVal: {
         pageNum: 0,
         pageSize: 10,
-        uptext: "获取更多数据"
+        uptext: "滑动查看更多"
       },
       loading: false,
-      listArr: [
-        {
-          name: "用户名",
-          src: "/static/images/tx.jpg",
-          startTime: "04-15 15:21:00",
-          endTime: "04-16 15:21:00",
-          msg: true
-        },
-        {
-          name: "用户名",
-          src: "/static/images/tx.jpg",
-          startTime: "04-15 15:21:00",
-          endTime: "04-16 15:21:00",
-          msg: true
-        },
-        {
-          name: "用户名",
-          src: "/static/images/tx.jpg",
-          startTime: "04-15 15:21:00",
-          endTime: "04-16 15:21:00",
-          msg: false
-        }
-      ]
+      listArr: []
     };
   },
   methods: {
     userInfo(item) {
       this.$router.push({
-        path: "/Dietitian/UserInfo"
+        path: "/Dietitian/UserInfo",
+        query: {
+          id: item.UserId
+        }
       });
     },
     chat(item) {
@@ -93,7 +74,7 @@ export default {
             data: this.searchVal,
             success: data => {
               console.log(data);
-              this.setData(data.Data);
+              this.setData(data.Data.Data);
             },
             error: error => {}
           });
@@ -113,19 +94,6 @@ export default {
         this.$refs.scrollerBottom.reset();
       });
       this.loading = false;
-    },
-    timestampToTime(timestamp) {
-      var date = new Date(timestamp * 1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
-      Y = date.getFullYear() + "-";
-      M =
-        (date.getMonth() + 1 < 10
-          ? "0" + (date.getMonth() + 1)
-          : date.getMonth() + 1) + "-";
-      D = date.getDate() + " ";
-      h = date.getHours() + ":";
-      m = date.getMinutes() + ":";
-      s = date.getSeconds();
-      return Y + M + D + h + m + s;
     }
   },
   mounted() {

@@ -14,7 +14,7 @@
               <swiper-item  class="swiper-demo-img" v-for="(item, index) in listArr" :key="index">
                 <div class="box_getht">
                   <div class="imgs_m">
-                    <img v-if="item.picurl!=''" :src="item.picurl">
+                    <img v-if="item.picurl!=''" :src="$HTTPURL+'/'+item.picurl">
                   </div>
                   <p>{{item.text}}</p>
                   <div class="time">{{item.datedesc}}</div>
@@ -40,6 +40,7 @@ export default {
     SwiperItem,
     Menu
   },
+  computed: {},
   data() {
     return {
       swiperItemIndex: 0,

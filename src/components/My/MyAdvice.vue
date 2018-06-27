@@ -3,7 +3,7 @@
       <div class="header">
         <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
         <div class="title">{{$route.name}}</div>
-        <div class="right" @click="getList">搜索</div>
+        <div class="right" @click="searchOn">搜索</div>
       </div>
         <div class="search">
             <div class="input">
@@ -15,18 +15,18 @@
             <scroller lock-x height="-95px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
             <div class="box search_list">
                 <div class="list_me" v-for="(item,index) in listArr" @click="toPathDetails(item)">
-                    <div class="tx"><img :src="item.src" alt=""></div>
+                    <div class="tx"><img :src="item.HeadUrl" alt=""></div>
                     <div class="box_wz">
                         <div class="list_ts">
-                            <h3>{{item.name}}
-                                <span :class="{jiesu:item.state==0}">{{item.state==0?"已结束":"咨询中"}}</span>
+                            <h3>{{item.Name}}
+                                <span :class="{jiesu:item.IsEnd==0}">{{item.IsEnd==0?"已结束":"咨询中"}}</span>
                             </h3>
                         </div>
                         <div class="list_ts">
-                            <p>{{item.company}}</p>
+                            <p>{{item.Company}}</p>
                         </div>
                         <div class="list_ts">
-                            <p>擅长：{{item.technology}}</p>
+                            <p>擅长：{{item.GoodAt}}</p>
                         </div>
                     </div>
                 </div>
@@ -52,52 +52,11 @@ export default {
       searchVal: {
         value: "",
         onFetching: false,
-        uptext: "滑动查看更多"
+        uptext: "滑动查看更多",
+        pageNum: 0,
+        pageSize: 10
       },
-      listArr: [
-        {
-          name: "用户名",
-          src: "/static/images/ystx.jpg",
-          company: "中南大学医学院",
-          technology: "病后营养调理、健身营养调理",
-          state: 1
-        },
-        {
-          name: "用户名",
-          src: "/static/images/ystx.jpg",
-          company: "中南大学医学院",
-          technology: "病后营养调理、健身营养调理",
-          state: 0
-        },
-        {
-          name: "用户名",
-          src: "/static/images/ystx.jpg",
-          company: "中南大学医学院",
-          technology: "病后营养调理、健身营养调理",
-          state: 0
-        },
-        {
-          name: "用户名",
-          src: "/static/images/ystx.jpg",
-          company: "中南大学医学院",
-          technology: "病后营养调理、健身营养调理",
-          state: 0
-        },
-        {
-          name: "用户名",
-          src: "/static/images/ystx.jpg",
-          company: "中南大学医学院",
-          technology: "病后营养调理、健身营养调理",
-          state: 0
-        },
-        {
-          name: "用户名",
-          src: "/static/images/ystx.jpg",
-          company: "中南大学医学院",
-          technology: "病后营养调理、健身营养调理",
-          state: 0
-        }
-      ]
+      listArr: []
     };
   },
   methods: {
@@ -108,69 +67,53 @@ export default {
         this.navBottom = -300;
       }
     },
-    getList() {
+    searchOn() {
+      this.searchVal.pageNum = 0;
+      this.listArr = [];
+      this.getList(1);
+    },
+    getList(time) {
       if (this.searchVal.onFetching) {
         // do nothing
       } else {
         this.searchVal.onFetching = true;
         setTimeout(() => {
-          this.listArr.push(
-            {
-              name: "用户名",
-              src: "/static/images/ystx.jpg",
-              company: "中南大学医学院",
-              technology: "病后营养调理、健身营养调理",
-              state: 1
+          this.searchVal.pageNum++;
+          this.$http({
+            url: "/api/Consultation/UserConsultationList",
+            type: "get",
+            data: this.searchVal,
+            success: data => {
+              console.log(data);
+              this.setData(data.Data.Data);
             },
-            {
-              name: "用户名",
-              src: "/static/images/ystx.jpg",
-              company: "中南大学医学院",
-              technology: "病后营养调理、健身营养调理",
-              state: 0
-            },
-            {
-              name: "用户名",
-              src: "/static/images/ystx.jpg",
-              company: "中南大学医学院",
-              technology: "病后营养调理、健身营养调理",
-              state: 0
-            },
-            {
-              name: "用户名",
-              src: "/static/images/ystx.jpg",
-              company: "中南大学医学院",
-              technology: "病后营养调理、健身营养调理",
-              state: 1
-            },
-            {
-              name: "用户名",
-              src: "/static/images/ystx.jpg",
-              company: "中南大学医学院",
-              technology: "病后营养调理、健身营养调理",
-              state: 0
-            },
-            {
-              name: "用户名",
-              src: "/static/images/ystx.jpg",
-              company: "中南大学医学院",
-              technology: "病后营养调理、健身营养调理",
-              state: 0
-            }
-          );
-          this.$nextTick(() => {
-            this.$refs.scrollerBottom.reset();
+            error: error => {}
           });
-          this.searchVal.onFetching = false;
-        }, 2000);
+        }, time || 800);
       }
     },
+    setData(data) {
+      if (data.length > 0) {
+        for (let i = 0; i < data.length; i++) {
+          this.listArr.push(data[i]);
+        }
+      } else {
+        this.searchVal.pageNum--;
+        this.searchVal.uptext = "没有更多数据了";
+      }
+      this.$nextTick(() => {
+        this.$refs.scrollerBottom.reset();
+      });
+      this.searchVal.onFetching = false;
+    },
     toPathDetails(item) {
-      if (item.state == 0) {
+      if (item.IsEnd == 0) {
         //   营养师详情
         this.$router.push({
           path: "/Consultation/ConsultationDetails",
-          query: {}
+          query: {
+            id: item.DietitianId
+          }
         });
       } else {
         //   聊天
@@ -184,9 +127,7 @@ export default {
     }
   },
   mounted() {
-    console.log("当前页面API：" + this.$route.path);
-    console.log("当前页面数据列表", this.listArr);
-    console.log("当前页面筛选数据", this.searchVal);
+    this.getList(1);
   }
 };
 </script>
