@@ -10,7 +10,7 @@
           <div class="details">
             <div class="title">
                   <h1>{{details.title}}</h1>
-                  <p>发布时间：{{details.date}} 作者：{{details.author}}</p>
+                  <p>发布时间：{{details.date | timeGsh}} 作者：{{details.author}}</p>
               </div>
               <div class="content" v-html="details.text">
               </div>
@@ -19,7 +19,7 @@
               <h2><span>以下为评论</span></h2>
               <ul>
                   <li v-for="(item,index) in listArr">
-                      <div class="top">{{item.lou}} <span>{{item.date}}</span></div>
+                      <div class="top">{{item.lou}} <span>{{item.date | dateTimeGsh}}</span></div>
                       <p>{{item.p}}</p>
                   </li>
               </ul>
@@ -36,8 +36,8 @@
                       <textarea v-model="commentVal" :style="{height:commentShow?'150px':'25px'}" placeholder="我也来说两句..." @focus="commentShow=true" @blur="commentShow=false"></textarea>
                   </div>
                   <div class="right" v-show="!commentShow">
-                      <i :class="{active:details.islikeone}" class="iconfont icon-dianzan" @click="setWenz(true)"></i>
-                      <i :class="{active:details.isfavorone}" class="iconfont icon-shoucang" @click="setWenz(false)"></i>
+                      <i :class="{'icon-dianzan':!details.islikeone,'icon-dianzan2':details.islikeone}" class="iconfont" @click="setWenz(true)"></i>
+                      <i :class="{'icon-shoucang':!details.isfavorone,'icon-shoucang2':details.isfavorone}" class="iconfont" @click="setWenz(false)"></i>
                   </div>
               </div>
               <div class="submit_btn" @click="submitComment" v-show="commentShow">确定发表</div>
@@ -105,6 +105,8 @@ export default {
             data: this.searchVal,
             success: function(data) {
               //成功的处理
+              console.log(data);
+              console.log(data);
               console.log(data);
               _this.setData(data.Data);
             },
@@ -371,11 +373,7 @@ export default {
         font-size: 22px;
         padding: 0 5px;
         box-sizing: border-box;
-        color: #333;
-
-        &.active {
-          color: #8dc13b;
-        }
+        color: #8dc13b;
       }
     }
   }

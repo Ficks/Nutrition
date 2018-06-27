@@ -19,6 +19,7 @@
              <!-- <div class="btn_m end" :style="{'margin-top':item.msg?'8px':'20px'}">已结束</div> -->
            </div>
          </div>
+         <p class="logss">{{searchVal.uptext}}</p>
           <load-more tip="loading" v-show="loading"></load-more>
       </div>
     </scroller>
@@ -33,6 +34,11 @@ export default {
   },
   data() {
     return {
+      searchVal: {
+        pageNum: 0,
+        pageSize: 10,
+        uptext: "获取更多数据"
+      },
       loading: false,
       listArr: [
         {
@@ -73,42 +79,40 @@ export default {
         }
       });
     },
-    getList() {
+    getList(time) {
       // 列表
       if (this.loading) {
         // do nothing
       } else {
         this.loading = true;
         setTimeout(() => {
-          this.listArr.push(
-            {
-              name: "用户名",
-              src: "/static/images/tx.jpg",
-              startTime: "04-15 15:21:00",
-              endTime: "04-16 15:21:00",
-              msg: true
+          this.searchVal.pageNum++;
+          this.$http({
+            url: "/api/Consultation/ConsultationList",
+            type: "get",
+            data: this.searchVal,
+            success: data => {
+              console.log(data);
+              this.setData(data.Data);
             },
-            {
-              name: "用户名",
-              src: "/static/images/tx.jpg",
-              startTime: "04-15 15:21:00",
-              endTime: "04-16 15:21:00",
-              msg: true
-            },
-            {
-              name: "用户名",
-              src: "/static/images/tx.jpg",
-              startTime: "04-15 15:21:00",
-              endTime: "04-16 15:21:00",
-              msg: false
-            }
-          );
-          this.$nextTick(() => {
-            this.$refs.scrollerBottom.reset();
+            error: error => {}
           });
-          this.loading = false;
-        }, 2000);
+        }, time || 800);
       }
+    },
+    setData(data) {
+      if (data.length > 0) {
+        for (let i = 0; i < data.length; i++) {
+          this.listArr.push(data[i]);
+        }
+      } else {
+        this.searchVal.pageNum--;
+        this.searchVal.uptext = "没有更多数据了";
+      }
+      this.$nextTick(() => {
+        this.$refs.scrollerBottom.reset();
+      });
+      this.loading = false;
     },
     timestampToTime(timestamp) {
       var date = new Date(timestamp * 1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
@@ -127,6 +131,7 @@ export default {
   mounted() {
     console.log("当前页面API：", +this.$route.path);
     console.log("列表数据", this.listArr);
+    this.getList(1);
   }
 };
 </script>
@@ -193,6 +198,12 @@ export default {
         background: #949494;
       }
     }
+  }
+  .logss {
+    font-size: 14px;
+    color: #ccc;
+    text-align: center;
+    padding: 20px 0;
   }
 }
 </style>

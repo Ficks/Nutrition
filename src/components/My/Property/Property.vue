@@ -6,12 +6,12 @@
       </div>
         <div class="balance" v-if="$route.path=='/My/Property'">
             <ul>
-                <li>
-                    <h2>500.00</h2>
+                <li @click="searchOn(2)" :class="{active:searchVal.currencyId==2}">
+                    <h2>{{yeData.xj}}</h2>
                     <p>账户余额(元)</p>
                 </li>
-                <li>
-                    <h2>1000</h2>
+                <li @click="searchOn(1)"  :class="{active:searchVal.currencyId==1}">
+                    <h2>{{yeData.jf}}</h2>
                     <p>积分余额</p>
                 </li>
             </ul>
@@ -25,15 +25,16 @@
                            <span class="right">￥{{item.price}}</span>
                         </div>
                         <div class="bom">
-                            {{item.date}}
+                            {{item.date | dateTimeGsh}}
                             <div class="btns right">
-                                <span class="sr" v-if="item.type==1">收入</span>
-                                <span class="tk" @click="refund(item)" v-if="item.type==0">退款</span>
-                                <span class="zc" v-if="item.type==0">支出</span>
+                                <span class="sr" v-if="item.price>0">收入</span>
+                                <span class="tk" @click="refund(item)" v-if="item.price<0">退款</span>
+                                <span class="zc" v-if="item.price<0">支出</span>
                             </div>
                         </div>
                     </li>
                 </ul>
+                <p class="lgss">{{searchVal.uptext}}</p>
                 <load-more tip="loading" v-show="loading"></load-more>
             </div>
         </scroller>
@@ -53,86 +54,60 @@ export default {
   },
   data() {
     return {
+      searchVal: {
+        pageNum: 0,
+        pageSize: 10,
+        currencyId: 2,
+        uptext: "获取更多数据"
+      },
+      yeData: {
+        xj: 0,
+        jf: 0
+      },
       loading: false,
-      listArr: [
-        {
-          name: "咨询服务",
-          price: 100,
-          date: "2018.04.16 18:00:21",
-          type: 1
-        },
-        {
-          name: "咨询支付",
-          price: 100,
-          date: "2018.04.16 18:00:21",
-          type: 0
-        },
-        {
-          name: "咨询支付",
-          price: 100,
-          date: "2018.04.16 18:00:21",
-          type: 0
-        },
-        {
-          name: "咨询支付",
-          price: 100,
-          date: "2018.04.16 18:00:21",
-          type: 0
-        },
-        {
-          name: "咨询支付",
-          price: 100,
-          date: "2018.04.16 18:00:21",
-          type: 0
-        }
-      ]
+      listArr: []
     };
   },
   methods: {
-    getList() {
-      console.log(this.$route.path);
+    searchOn(type) {
+      this.searchVal.currencyId = type;
+      this.searchVal.pageNum = 0;
+      this.listArr = [];
+      this.getList(1);
+    },
+    setData(data) {
+      console.log(data);
+      if (data.length > 0) {
+        for (let i = 0; i < data.length; i++) {
+          console.log(data[i]);
+          this.listArr.push(data[i]);
+        }
+      } else {
+        this.searchVal.pageNum--;
+        this.searchVal.uptext = "没有更多数据了";
+      }
+      this.$nextTick(() => {
+        this.$refs.scrollerBottom.reset();
+      });
+      this.loading = false;
+    },
+    getList(time) {
       if (this.loading) {
         // do nothing
       } else {
         this.loading = true;
         setTimeout(() => {
-          this.listArr.push(
-            {
-              name: "咨询服务",
-              price: 100,
-              date: "2018.04.16 18:00:21",
-              type: 1
+          this.searchVal.pageNum++;
+          this.$http({
+            url: "/api/Financial/GetIncomeAndExpendDetail",
+            type: "get",
+            data: this.searchVal,
+            success: data => {
+              this.setData(data.Data.Data);
             },
-            {
-              name: "咨询支付",
-              price: 100,
-              date: "2018.04.16 18:00:21",
-              type: 0
-            },
-            {
-              name: "咨询支付",
-              price: 100,
-              date: "2018.04.16 18:00:21",
-              type: 0
-            },
-            {
-              name: "咨询支付",
-              price: 100,
-              date: "2018.04.16 18:00:21",
-              type: 0
-            },
-            {
-              name: "咨询支付",
-              price: 100,
-              date: "2018.04.16 18:00:21",
-              type: 0
-            }
-          );
-          this.$nextTick(() => {
-            this.$refs.scrollerBottom.reset();
+            error: error => {}
           });
-          this.loading = false;
-        }, 2000);
+        }, time || 800);
       }
     },
     refund() {
@@ -140,13 +115,31 @@ export default {
       this.$router.push({
         path: "/My/Property/Refund"
       });
+    },
+    getYe() {
+      this.$http({
+        url: "/api/Financial/GetWalletDetail",
+        type: "get",
+        data: {
+          currencyId: ""
+        },
+        success: data => {
+          console.log(data);
+          for (let i = 0; i < data.Data.length; i++) {
+            if (data.Data[i].currencyid == 2) {
+              this.yeData.xj = data.Data[i].balance;
+            } else if (data.Data[i].currencyid == 1) {
+              this.yeData.jf = data.Data[i].balance;
+            }
+          }
+        },
+        error: error => {}
+      });
     }
   },
   mounted() {
-    if (this.$route.path == "/My/Property") {
-      console.log("当前页面API：" + this.$route.path);
-      console.log("当前页面数据列表", this.listArr);
-    }
+    this.getYe();
+    this.getList(1);
   }
 };
 </script>
@@ -162,6 +155,9 @@ export default {
     padding-bottom: 30px;
     padding-top: 20px;
 
+    li.active {
+      color: #666;
+    }
     li {
       float: left;
       width: 50%;
@@ -228,5 +224,11 @@ export default {
       color: #fff;
     }
   }
+}
+.lgss {
+  font-size: 14px;
+  color: #ccc;
+  padding: 20px 0;
+  text-align: center;
 }
 </style>

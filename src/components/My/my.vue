@@ -28,7 +28,7 @@
               <ul>
                 <li><router-link to="/My/WalkIntoUs">走进我们<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
                 <li><router-link to="/My/Partner">合作伙伴<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
-                <li><router-link to="/Dietitian">营养师用户<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
+                <li @click="isLogin">营养师用户<i class="iconfont icon-chanpinxiangqing_qianwang"></i></li>
               </ul>
             </div>
             </scroller>
@@ -44,7 +44,26 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    isLogin() {
+      this.$http({
+        url: "/api/Consultation/IsDietitianLogin",
+        type: "get",
+        success: data => {
+          if (data.Code == 20000) {
+            this.$router.push({
+              path: "/Dietitian/DietitianList"
+            });
+          } else {
+            this.$router.push({
+              path: "/Dietitian"
+            });
+          }
+        },
+        error: error => {}
+      });
+    }
+  },
   mounted() {
     console.log("当前页面API：" + this.$route.path);
   }
@@ -101,16 +120,17 @@ export default {
         height: 95/2px;
         line-height: 95/2px;
         border-bottom: 1px solid #e3e3e3;
+        color: #555;
+        font-size: 15px;
         a {
           display: block;
           color: #555555;
           font-size: 15px;
-
-          i {
-            float: right;
-            color: #8b8b8b;
-            font-size: 12px;
-          }
+        }
+        i {
+          float: right;
+          color: #8b8b8b;
+          font-size: 12px;
         }
       }
     }

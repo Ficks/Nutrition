@@ -63,12 +63,54 @@ export default {
         return false;
       }
 
-      this.$router.push({
-        path: "/Dietitian/DietitianList"
+      this.$http({
+        url: "/api/Consultation/DietitianLogin",
+        type: "get",
+        data: { mobile: this.tel, password: this.password },
+        success: data => {
+          //成功的处理
+          if (data.Code == 20000) {
+            this.$router.push({
+              path: "/Dietitian/DietitianList"
+            });
+          } else {
+            this.$vux.toast.show({
+              type: "error",
+              text: data.Error,
+              width: "11em"
+            });
+          }
+        },
+        error: function() {
+          //错误处理
+        }
       });
     }
   },
-  mounted() {}
+  mounted() {
+    this.$http({
+      url: "/api/Consultation/DietitianLogin",
+      type: "get",
+      data: { mobile: "123456789", password: "xy123456" },
+      success: data => {
+        //成功的处理
+        if (data.Code == 20000) {
+          this.$router.push({
+            path: "/Dietitian/DietitianList"
+          });
+        } else {
+          this.$vux.toast.show({
+            type: "error",
+            text: data.Error,
+            width: "11em"
+          });
+        }
+      },
+      error: function() {
+        //错误处理
+      }
+    });
+  }
 };
 </script>
 <style lang="less" scoped>

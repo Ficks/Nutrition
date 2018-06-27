@@ -7,6 +7,7 @@ import router from './router'
 import Settings from '@/config/settings.js'
 import Axios from 'axios'
 import store from '@/vuex/store'
+import filters from '@/filters/filters'
 import { ConfirmPlugin } from 'vux'
 Vue.use(ConfirmPlugin)
 Vue.config.productionTip = false
@@ -27,7 +28,9 @@ Vue.use(Vuex)
 const FastClick = require('fastclick')
 FastClick.attach(document.body)
 
-
+for (let key in filters) {
+  Vue.filter(key, filters[key])
+}
 router.beforeEach((to, from, next) => {
   var userid = store.state.userid;
   var Token = store.state.Token;

@@ -9,15 +9,15 @@
 
             <div class="right"><router-link to="/Dynamic/Release"><i class="iconfont icon-xiangji"></i></router-link></div>
         </div>
-        <div @click="toPathDetails" class="swiper_wr" v-if="listArr.length>0">
+        <div class="swiper_wr" @click="toPathDetails" v-if="listArr.length>0">
          <swiper ref="swiper" :aspect-ratio="1/1" height="190px" @on-index-change="onSwiperItemIndexChange" v-model="swiperItemIndex" :show-dots="false">
-              <swiper-item class="swiper-demo-img" v-for="(item, index) in listArr" :key="index">
+              <swiper-item  class="swiper-demo-img" v-for="(item, index) in listArr" :key="index">
                 <div class="box_getht">
                   <div class="imgs_m">
-                    <img v-if="item.src!=''" :src="item.src">
+                    <img v-if="item.picurl!=''" :src="item.picurl">
                   </div>
                   <p>{{item.text}}</p>
-                  <div class="time">{{item.time}}</div>
+                  <div class="time">{{item.datedesc}}</div>
                 </div>
               </swiper-item>
           </swiper>
@@ -43,68 +43,7 @@ export default {
   data() {
     return {
       swiperItemIndex: 0,
-      listArr: [
-        {
-          src: "/static/images/ys.jpg",
-          text: "#饮食行为分享#今天又去吃好吃的了！",
-          time: "1小时前"
-        },
-        {
-          src: "/static/images/dt.jpg",
-          text: "#饮食行为分享#今天又去吃好吃的了！",
-          time: "1小时前"
-        },
-        {
-          src: "/static/images/ys.jpg",
-          text: "#饮食行为分享#今天又去吃好吃的了！",
-          time: "1小时前"
-        },
-        {
-          src: "/static/images/dt.jpg",
-          text: "#饮食行为分享#今天又去吃好吃的了！",
-          time: "1小时前"
-        },
-        {
-          src: "/static/images/ys.jpg",
-          text: "#饮食行为分享#今天又去吃好吃的了！",
-          time: "1小时前"
-        },
-        {
-          src: "/static/images/dt.jpg",
-          text: "#饮食行为分享#今天又去吃好吃的了！",
-          time: "1小时前"
-        },
-        {
-          src: "/static/images/ys.jpg",
-          text: "#饮食行为分享#今天又去吃好吃的了！",
-          time: "1小时前"
-        },
-        {
-          src: "/static/images/dt.jpg",
-          text: "#饮食行为分享#今天又去吃好吃的了！",
-          time: "1小时前"
-        },
-        {
-          src: "/static/images/ys.jpg",
-          text: "#饮食行为分享#今天又去吃好吃的了！",
-          time: "1小时前"
-        },
-        {
-          src: "/static/images/dt.jpg",
-          text: "#饮食行为分享#今天又去吃好吃的了！",
-          time: "1小时前"
-        },
-        {
-          src: "/static/images/ys.jpg",
-          text: "#饮食行为分享#今天又去吃好吃的了！",
-          time: "1小时前"
-        },
-        {
-          src: "/static/images/dt.jpg",
-          text: "#饮食行为分享#今天又去吃好吃的了！",
-          time: "1小时前"
-        }
-      ],
+      listArr: [],
       searchVal: {
         pageNum: 0,
         pageSize: 15,
@@ -115,8 +54,14 @@ export default {
   },
   methods: {
     setData(data) {
-      console.log(data);
-      console.log(data);
+      if (data.length > 0) {
+        for (let i = 0; i < data.length; i++) {
+          this.listArr.push(data[i]);
+        }
+        console.log(this.listArr);
+      } else {
+        this.searchVal.pageNum--;
+      }
     },
     getList() {
       this.searchVal.pageNum++;
@@ -126,8 +71,6 @@ export default {
         data: this.searchVal,
         success: data => {
           //成功的处理
-          console.log(data);
-          console.log(data);
           this.setData(data.Data);
         },
         error: function() {
@@ -136,25 +79,38 @@ export default {
       });
     },
     onSwiperItemIndexChange(index) {
-      console.log("demo item change", index);
       let box = document
         .getElementsByClassName("vux-swiper-item")
         [index].getElementsByClassName("box_getht")[0];
-      this.$refs.swiper.xheight = box.offsetHeight + "px";
+      this.$refs.swiper.xheight = box.offsetHeight + 20 + "px";
       if (this.listArr.length >= 10) {
         if (index > this.listArr.length - 3) {
           // 请求加入列表
-          // 方法
+          this.getList();
         }
       }
     },
-    toPathDetails(url) {
+    toPathDetails() {
       this.$router.push({
-        path: "/Dynamic/DynamicDetails"
+        path: "/Dynamic/DynamicDetails",
+        query: {
+          id: this.listArr[this.swiperItemIndex].id
+        }
       });
     },
     love() {
       // 喜欢收藏
+      this.$http({
+        url: "/api/User/DoLike",
+        type: "get",
+        data: { id: this.listArr[this.swiperItemIndex].id },
+        success: data => {
+          //成功的处理
+        },
+        error: function() {
+          //错误处理
+        }
+      });
       this.swiperItemIndex++;
     },
     noLove() {
@@ -163,17 +119,14 @@ export default {
     }
   },
   mounted() {
+    this.getList();
+    // console.log("当前页面数据列表", this.listArr);
     setTimeout(() => {
       let box = document
         .getElementsByClassName("vux-swiper-item")
         [this.swiperItemIndex].getElementsByClassName("box_getht")[0];
-      this.$refs.swiper.xheight = box.offsetHeight + "px";
-      console.log("当前页面API：" + this.$route.path);
-      console.log("数据列表格式：", this.listArr);
-
-      this.getList();
+      this.$refs.swiper.xheight = box.offsetHeight + 20 + "px";
     }, 100);
-    // console.log("当前页面数据列表", this.listArr);
   }
 };
 </script>

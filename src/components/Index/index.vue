@@ -302,6 +302,14 @@ export default {
       // 显示文字
       if (this.qiandao == "签到") {
         this.$vux.toast.text("今日签到成功，奖励积分（+1）");
+        this.$http({
+          url: "/api/User/Sign",
+          type: "get",
+          success: data => {
+            console.log(data);
+          },
+          error: error => {}
+        });
         this.qiandao = "已签到";
       }
       // this.$vux.toast.text("今天已经签过啦，改天再来吧~");

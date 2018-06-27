@@ -7,43 +7,45 @@
             <div class="title">
                 营养师列表
             </div>
-            <div class="right" @click="getList">搜索</div>
+            <div class="right" @click="searchOn">搜索</div>
         </div>
         <div class="search">
             <div class="input">
-              <input type="text" v-model="searchVal.value" placeholder="输入姓名来搜索营养师">
+              <input type="text" v-model="searchVal.DietitianName" placeholder="输入姓名来搜索营养师">
               <i class="iconfont icon-sousuo" @click="getList"></i>
             </div>
         </div>
         <div class="search_type">
             <ul>
-                <li @click="searchVal.region=!searchVal.region" :class="{rotate:searchVal.region}">地域 <i class="iconfont icon-xiala" style="transiform"></i></li>
-                <li @click="searchVal.praise=!searchVal.praise" :class="{rotate:searchVal.praise}">好评度 <i class="iconfont icon-xiala"></i></li>
-                <li @click="searchVal.familiarity=!searchVal.familiarity" :class="{rotate:searchVal.familiarity}">熟悉度 <i class="iconfont icon-xiala"></i></li>
+                <!-- <li @click="searchOn(1)" :class="{rotate:searchVal.region==2}">地域 <i class="iconfont icon-xiala" style="transiform"></i></li> -->
+                <li @click="searchOn(2)" :class="{rotate:searchVal.praise==2}">好评度 <i class="iconfont icon-xiala"></i></li>
+                <li @click="searchOn(3)" :class="{rotate:searchVal.familiarity==2}">熟悉度 <i class="iconfont icon-xiala"></i></li>
             </ul>
         </div>
         <div class="box_wr">
             <scroller lock-x height="-185px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
             <div class="box search_list">
-                <div class="list_me" v-for="(item,index) in listArr" @click="toPathDetails">
-                    <div class="tx"><img :src="item.src" alt=""></div>
+                <div class="list_me" v-for="(item,index) in listArr" @click="toPathDetails(item)">
+                    <div class="tx"><img :src="item.HeadUrl" alt=""></div>
                     <div class="box_wz">
                         <div class="list_ts">
-                            <h3>{{item.name}} <span>{{item.praise}}%五星好评</span></h3>
+                            <h3>{{item.Name}} <span>{{item.Praise}}%五星好评</span></h3>
                         </div>
                         <div class="list_ts">
-                            <p>{{item.company}}</p>
+                            <p>{{item.Company}}</p>
                         </div>
                         <div class="list_ts">
-                            <p>擅长：{{item.technology}}</p>
+                            <p>擅长：{{item.GoodAt}}</p>
                         </div>
                         <div class="list_ts bom">
                             <div class="left">
-                                <span>￥{{item.money}}/次 </span>
-                                {{item.number}}人咨询过
+                                <span>￥{{item.Price}}/次 </span>
+                                {{item.ServiceTimes}}人咨询过
                             </div>
                             <div class="right">
-                                {{item.time}}
+                                {{item.BeginWorkHour+':'+item.BeginWorkMinue}}
+                                ~
+                                {{item.EndWorkHour+':'+item.EndWordMinue}}
                             </div>
                         </div>
                     </div>
@@ -67,85 +69,39 @@ export default {
   data() {
     return {
       searchVal: {
-        value: "",
+        DietitianName: "",
         pageNum: 0,
         pageSize: 10,
-        region: false, //地域
-        praise: 0, //好评度
-        familiarity: 0, //熟悉度
+        region: 1, //地域
+        praise: 1, //好评度
+        familiarity: 1, //熟悉度
         onFetching: false,
         uptext: "滑动查看更多"
       },
-      listArr: [
-        {
-          name: "用户名",
-          src: "/static/images/ystx.jpg",
-          praise: "98",
-          company: "中南大学医学院",
-          technology: "病后营养调理、健身营养调理",
-          money: 50,
-          number: 1000,
-          time: "9:00 ~ 11:00"
-        },
-        {
-          name: "用户名",
-          src: "/static/images/ystx.jpg",
-          praise: "98",
-          company: "中南大学医学院",
-          technology: "病后营养调理、健身营养调理",
-          money: 50,
-          number: 1000,
-          time: "9:00 ~ 11:00"
-        },
-        {
-          name: "用户名",
-          src: "/static/images/ystx.jpg",
-          praise: "98",
-          company: "中南大学医学院",
-          technology: "病后营养调理、健身营养调理",
-          money: 50,
-          number: 1000,
-          time: "9:00 ~ 11:00"
-        },
-        {
-          name: "用户名",
-          src: "/static/images/ystx.jpg",
-          praise: "98",
-          company: "中南大学医学院",
-          technology: "病后营养调理、健身营养调理",
-          money: 50,
-          number: 1000,
-          time: "9:00 ~ 11:00"
-        },
-        {
-          name: "用户名",
-          src: "/static/images/ystx.jpg",
-          praise: "98",
-          company: "中南大学医学院",
-          technology: "病后营养调理、健身营养调理",
-          money: 50,
-          number: 1000,
-          time: "9:00 ~ 11:00"
-        },
-        {
-          name: "用户名",
-          src: "/static/images/ystx.jpg",
-          praise: "98",
-          company: "中南大学医学院",
-          technology: "病后营养调理、健身营养调理",
-          money: 50,
-          number: 1000,
-          time: "9:00 ~ 11:00"
-        }
-      ]
+      listArr: []
     };
   },
   methods: {
+    searchOn(num) {
+      if (num == 1) {
+        this.searchVal.region = this.searchVal.region == 1 ? 2 : 1;
+      } else if (num == 2) {
+        this.searchVal.praise = this.searchVal.praise == 1 ? 2 : 1;
+      } else if (num == 3) {
+        this.searchVal.familiarity = this.searchVal.familiarity == 1 ? 2 : 1;
+      }
+      this.searchVal.pageNum = 0;
+      this.listArr = [];
+      this.getList(1);
+    },
     setData(data) {
       if (data.length > 0) {
-        console.log(data);
+        for (let i = 0; i < data.length; i++) {
+          this.listArr.push(data[i]);
+        }
       } else {
         this.searchVal.pageNum--;
+        this.searchVal.uptext = "没有更多数据了";
       }
       this.$nextTick(() => {
         this.$refs.scrollerBottom.reset();
@@ -157,15 +113,15 @@ export default {
         // do nothing
       } else {
         this.searchVal.onFetching = true;
+        console.log(this.searchVal);
         setTimeout(() => {
-          var _this = this;
           this.searchVal.pageNum++;
           this.$http({
             url: "/api/Consultation/DietitianList",
             type: "get",
             data: this.searchVal,
-            success: function(data) {
-              _this.setData(data.Data.Data);
+            success: data => {
+              this.setData(data.Data.Data);
             },
             error: function() {
               //错误处理
@@ -174,9 +130,13 @@ export default {
         }, time || 800);
       }
     },
-    toPathDetails(url) {
+    toPathDetails(item) {
+      console.log(item);
       this.$router.push({
-        path: "/Consultation/ConsultationDetails"
+        path: "/Consultation/ConsultationDetails",
+        query: {
+          id: item.DietitianId
+        }
       });
     }
   },
@@ -254,7 +214,7 @@ export default {
     border-bottom: 1px solid #dfdfdf;
     li {
       float: left;
-      width: 33.333%;
+      width: 50%;
       text-align: center;
       height: 33px;
       line-height: 33px;

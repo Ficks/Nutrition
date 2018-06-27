@@ -3,7 +3,7 @@
       <div class="header">
         <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
         <div class="title">{{$route.name}}</div>
-        <div class="right" @click="getList">搜索</div>
+        <div class="right" @click="searchOn">搜索</div>
       </div>
         <div class="search">
             <div class="input">
@@ -78,6 +78,11 @@ export default {
           src: item.src
         }
       });
+    },
+    searchOn() {
+      this.searchVal.pageNum = 0;
+      this.listArr = [];
+      this.getList(1);
     },
     setData(data) {
       if (data.length > 0) {

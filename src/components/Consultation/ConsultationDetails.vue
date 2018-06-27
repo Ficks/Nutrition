@@ -11,21 +11,21 @@
               <div class="info">
                 <div class="top">
                   <div class="img">
-                    <img :src="details.src" alt="">
+                    <img :src="details.HeadImg" alt="">
                   </div>
                   <div class="wz">
-                    <h1>{{details.name}}</h1>
-                    <h2>{{details.experience}}</h2>
-                    <p>{{details.company}}</p>
+                    <h1>{{details.Name}}</h1>
+                    <h2>{{details.Experience}}经验</h2>
+                    <p>{{details.Company}}</p>
                   </div>
                 </div>
                 <div class="bom">
                   <div class="bom_list">
-                    <div class="ws"><span>{{details.serviceNum}}</span>次</div>
+                    <div class="ws"><span>{{details.ServiceTimes}}</span>次</div>
                     <p>服务次数</p>
                   </div>
                   <div class="bom_list">
-                    <div class="ws"><span>{{details.fabulousNum}}</span>次</div>
+                    <div class="ws"><span>{{details.PraiseCount}}</span>次</div>
                     <p>点赞次数</p>
                   </div>
                 </div>
@@ -34,15 +34,15 @@
               <div class="content">
                 <div class="list">
                   <h2>擅长领域</h2>
-                  <p>{{details.technology}}</p>
+                  <p>{{details.GoodAt}}</p>
                 </div>
                 <div class="list">
                   <h2>医学教育背景</h2>
-                  <p>{{details.education}}</p>
+                  <p>{{details.EducationalBackground}}</p>
                 </div>
 
                 <div class="pt_title">
-                  患者评价<span>({{listArrLen}})</span>
+                  患者评价<span>({{searchVal.len}})</span>
                 </div>
                 <div class="pj_box" v-for="(item,index) in listArr">
                   <div class="pj_list">
@@ -54,7 +54,8 @@
                   </div>
                 </div>
               </div>
-
+            
+            <p class="lgss">{{searchVal.uptext}}</p>
             <load-more tip="loading" v-show="loading"></load-more>
             </div>
         </scroller>
@@ -78,6 +79,12 @@ export default {
   data() {
     return {
       loading: false,
+      searchVal: {
+        pageNum: 0,
+        pageSize: 10,
+        len: 300,
+        uptext: "滑动获取更多评论"
+      },
       payment: {
         value: false,
         menu: {
@@ -100,7 +107,6 @@ export default {
         education:
           "进行膳食调查和评价、人体营养状况测定和评价营养咨询和教育、膳食指导和评估、食品营养评价社区营养管理和营养干预、"
       },
-      listArrLen: 300,
       listArr: [
         {
           accord: "很满意",
@@ -123,7 +129,7 @@ export default {
   methods: {
     init() {
       this.payment.menu.price = `<span style='color:#8dc13b'>微信支付 (${
-        this.details.price
+        this.details.Price
       }元)</span>`;
       this.payment.menu.integral = `积分支付 (${this.details.integral})`;
     },
@@ -148,7 +154,6 @@ export default {
           }
         });
       }
-      console.log(key);
     },
     back() {
       if (this.$route.query.back) {
@@ -159,43 +164,66 @@ export default {
         this.$router.back(-1);
       }
     },
-    getList() {
+    getList(time) {
       // 获取评论列表
       if (this.loading) {
         // do nothing
       } else {
         this.loading = true;
         setTimeout(() => {
-          this.listArr.push(
-            {
-              accord: "很满意",
-              date: "5月15日",
-              text: "陈医生的解答很有耐心，非常好的平台！感谢！"
+          this.searchVal.pageNum++;
+          this.$http({
+            url: "/api/Consultation/DietitianEvaluationList",
+            type: "get",
+            data: {
+              DietitianId: this.$route.query.id,
+              pageNum: this.searchVal.pageNum,
+              pageSize: this.searchVal.pageSize
             },
-            {
-              accord: "很满意",
-              date: "5月15日",
-              text: "陈医生的解答很有耐心，非常好的平台！感谢！"
+            success: data => {
+              console.log("--------1-----------------");
+              console.log(data);
+              this.setData(data.Data);
             },
-            {
-              accord: "很满意",
-              date: "5月15日",
-              text: "陈医生的解答很有耐心，非常好的平台！感谢！"
+            error: function() {
+              //错误处理
             }
-          );
-          this.$nextTick(() => {
-            this.$refs.scrollerBottom.reset();
           });
-          this.loading = false;
-        }, 2000);
+        }, time || 800);
       }
+    },
+    setData(data) {
+      if (data.Data.length > 0) {
+        for (let i = 0; i < data.length; i++) {
+          this.listArr.push(data[i]);
+        }
+      } else {
+        this.searchVal.pageNum--;
+        this.searchVal.uptext = "没有更多评论了";
+      }
+      this.$nextTick(() => {
+        this.$refs.scrollerBottom.reset();
+      });
+      this.loading = false;
     }
   },
   mounted() {
     this.init();
-    console.log("当前页面API：" + this.$route.path);
-    console.log("详情数据：", this.details);
-    console.log("评论列表数据：", this.listArr);
+    this.$http({
+      url: "/api/Consultation/DietitianDetail",
+      type: "get",
+      data: { DietitianId: this.$route.query.id },
+      success: data => {
+        console.log("-------------------------");
+        console.log(data);
+        this.details = data.Data;
+      },
+      error: function() {
+        //错误处理
+      }
+    });
+
+    this.getList(1);
   }
 };
 </script>
@@ -347,5 +375,12 @@ export default {
       color: #ddd;
     }
   }
+}
+
+.lgss {
+  text-align: center;
+  padding: 10px 0;
+  color: #ccc;
+  font-size: 14px;
 }
 </style>

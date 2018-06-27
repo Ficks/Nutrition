@@ -88,17 +88,17 @@ export default {
       let img1 = event.target.files[0];
       let type = img1.type; //文件的类型，判断是否是图片
       let size = img1.size; //文件的大小，判断图片的大小
-      if (this.data.imgData.accept.indexOf(type) == -1) {
+      if (type == "" || this.data.imgData.accept.indexOf(type) == -1) {
         this.$vux.toast.show({
           type: "warn",
           text: "图片格式只支持：gif、jpg、png、jpeg"
         });
         return false;
       }
-      if (size > 3145728) {
+      if (size > 10485760) {
         this.$vux.toast.show({
           type: "warn",
-          text: "请选择3M以内的图片！"
+          text: "请选择10M以内的图片！"
         });
         return false;
       }
