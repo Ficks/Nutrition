@@ -26,42 +26,13 @@ export default {
     return {
       title: "",
       searchVal: {
-        value: "",
+        pageNum: 0,
+        pageSize: 10,
         onFetching: false,
+        module: 2,
         uptext: "滑动查看更多"
       },
-      listArr: [
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示...",
-          link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
-        },
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示...",
-          link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
-        },
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示...",
-          link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
-        },
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示...",
-          link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
-        },
-        {
-          title: "资讯标题",
-          src: "/static/images/searchm.jpg",
-          desc: "资讯内容缩略显示...",
-          link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
-        }
-      ]
+      listArr: []
     };
   },
   methods: {
@@ -71,53 +42,56 @@ export default {
     },
     toPathDetails(item) {
       console.log(item);
+      // this.$router.push({
+      //   path: item.link
+      // });
       this.$router.push({
-        path: item.link
+        path: "/Find/FindDetails",
+        query: {
+          id: item.id
+        }
       });
     },
-    getList() {
-      console.log(this.$route.path);
+    getList(time) {
       if (this.searchVal.onFetching) {
         // do nothing
       } else {
         this.searchVal.onFetching = true;
         setTimeout(() => {
-          this.listArr.push(
-            {
-              title: "资讯标题",
-              src: "/static/images/searchm.jpg",
-              desc: "资讯内容缩略显示...",
-              link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
+          this.searchVal.pageNum++;
+          this.$http({
+            url: "/api/NewsInfo/GetNewsList",
+            type: "get",
+            data: this.searchVal,
+            success: data => {
+              console.log(data);
+              this.setData(data.Data);
             },
-            {
-              title: "资讯标题",
-              src: "/static/images/searchm.jpg",
-              desc: "资讯内容缩略显示...",
-              link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
-            },
-            {
-              title: "资讯标题",
-              src: "/static/images/searchm.jpg",
-              desc: "资讯内容缩略显示...",
-              link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
-            },
-            {
-              title: "资讯标题",
-              src: "/static/images/searchm.jpg",
-              desc: "资讯内容缩略显示...",
-              link: "/Tool/NutrientKnowledge/NutrientKnowledgeDetails"
-            }
-          );
-          this.$nextTick(() => {
-            this.$refs.scrollerBottom.reset();
+            error() {}
           });
-          this.searchVal.onFetching = false;
-        }, 2000);
+        }, time || 800);
       }
+    },
+    setData(data) {
+      if (data.length == 0) {
+        this.searchVal.uptext = "没有更多数据了";
+        this.searchVal.pageNum--;
+        this.searchVal.onFetching = false;
+        return;
+      }
+      for (let i = 0; i < data.length; i++) {
+        data[i].src = this.$HTTPURL + data[i].src;
+        this.listArr.push(data[i]);
+      }
+      this.$nextTick(() => {
+        this.$refs.scrollerBottom.reset();
+      });
+      this.searchVal.onFetching = false;
     }
   },
   mounted() {
     this.apiFn(); //判断需要搜索什么
+    this.getList(1);
     // this.$nextTick(() => {
     //   this.$refs.scrollerBottom.reset({ top: 0 });
     // });

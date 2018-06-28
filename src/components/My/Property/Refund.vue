@@ -62,6 +62,17 @@ export default {
         });
         return false;
       }
+
+      this.$http({
+        url: "/api/Financial/OrderRefund",
+        type: "post",
+        data: {
+          orderId: "00000000-0000-0000-0000-000000000000",
+          reason: "string"
+        },
+        success: data => {},
+        error: error => {}
+      });
       this.$router.push({
         path: "/My/Property/State",
         query: {

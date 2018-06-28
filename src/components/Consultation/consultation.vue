@@ -26,7 +26,7 @@
             <scroller lock-x height="-185px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
             <div class="box search_list">
                 <div class="list_me" v-for="(item,index) in listArr" @click="toPathDetails(item)">
-                    <div class="tx"><img :src="item.HeadUrl" alt=""></div>
+                    <div class="tx"><img :src="$HTTPURL+item.HeadUrl" alt=""></div>
                     <div class="box_wz">
                         <div class="list_ts">
                             <h3>{{item.Name}} <span>{{item.Praise}}%五星好评</span></h3>

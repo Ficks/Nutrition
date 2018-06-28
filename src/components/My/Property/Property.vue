@@ -28,7 +28,7 @@
                             {{item.date | dateTimeGsh}}
                             <div class="btns right">
                                 <span class="sr" v-if="item.price>0">收入</span>
-                                <span class="tk" @click="refund(item)" v-if="item.price<0">退款</span>
+                                <span class="tk" @click="refund(item)" v-if="item.price<0 && searchVal.currencyId==2">退款</span>
                                 <span class="zc" v-if="item.price<0">支出</span>
                             </div>
                         </div>
@@ -39,7 +39,7 @@
             </div>
         </scroller>
 
-        <div class="submit_btn" v-if="$route.path=='/My/Property'"><router-link to="/My/Property/PutForward">余额提现</router-link></div>
+        <div class="submit_btn" @click="priceTx" v-if="$route.path=='/My/Property'">余额提现</div>
         
         <div class="view" v-if="$route.path!='/My/Property'">
             <router-view></router-view>
@@ -76,10 +76,10 @@ export default {
       this.getList(1);
     },
     setData(data) {
+      console.log("data");
       console.log(data);
       if (data.length > 0) {
         for (let i = 0; i < data.length; i++) {
-          console.log(data[i]);
           this.listArr.push(data[i]);
         }
       } else {
@@ -124,7 +124,6 @@ export default {
           currencyId: ""
         },
         success: data => {
-          console.log(data);
           for (let i = 0; i < data.Data.length; i++) {
             if (data.Data[i].currencyid == 2) {
               this.yeData.xj = data.Data[i].balance;
@@ -134,6 +133,19 @@ export default {
           }
         },
         error: error => {}
+      });
+    },
+    priceTx() {
+      if (this.yeData.xj == 0) {
+        this.$vux.toast.show({
+          type: "warn",
+          text: "没有余额可以提现哦",
+          width: "12em"
+        });
+        return;
+      }
+      this.$route.push({
+        path: "/My/Property/PutForward"
       });
     }
   },

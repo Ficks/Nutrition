@@ -30,16 +30,15 @@ export default {
   },
   methods: {
     getList() {
-      var _this = this;
       this.$http({
         url: "/api/HealthyArchive/GetNutrientStandard",
         type: "get",
-        success: function(data) {
+        success: data => {
           //成功的处理
           if (data.Code == 9005) {
-            _this.userInfo = false;
+            this.userInfo = false;
           } else {
-            _this.setData(data.Data);
+            this.setData(data.Data);
           }
         },
         error: function() {

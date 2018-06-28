@@ -283,11 +283,9 @@ export default {
       if (this.read) {
         return;
       }
-      console.log(key, val);
       if (val.indexOf("</span>") >= 0) {
         val = "否";
       }
-      console.log(val);
       this.form[this.menuKey].value = key;
       this.form[this.menuKey].name = val;
     },
@@ -300,10 +298,19 @@ export default {
       this.show = true;
     },
     removeGm() {
-      this.gmsw.splice(this.removeIndex, 1);
-      this.$vux.toast.show({
-        text: "删除成功",
-        type: "success"
+      this.$http({
+        url: "/api/HealthyDiet/DeleteAllergyFood",
+        type: "post",
+        data: JSON.stringify({ id: this.gmsw[this.removeIndex].id }),
+        success: data => {
+          console.log(data);
+          this.gmsw.splice(this.removeIndex, 1);
+          this.$vux.toast.show({
+            text: "删除成功",
+            type: "success"
+          });
+        },
+        error: error => {}
       });
     },
     addJbs(item) {
@@ -388,7 +395,7 @@ export default {
     // var d = this.$store.getters.getLogin;
     var id = "";
     // 判断是否只读
-    if (this.$route.query.id != "") {
+    if (this.$route.query.id) {
       url = "/api/HealthyArchive/GetPersonalHealthyArchiveByUserId";
       id = this.$route.query.id;
       this.read = true;

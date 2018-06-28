@@ -39,6 +39,15 @@ export default {
   },
   methods: {
     submit() {
+      this.$http({
+        url: "/api/Financial/CashRequest",
+        type: "post",
+        success: data => {
+          console.log(data);
+        },
+        error: error => {}
+      });
+
       //state 0 是退款 1是提现
       this.$router.push({
         path: "/My/Property/State",

@@ -12,9 +12,9 @@
                   <li v-for="(item,index) in arr" @click="setList(index)"><div>{{item.title}}<span>{{item.value || "请选择"}}{{item.value>0?item.dw:""}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></span></div></li>
               </ul>
           </div>
-          <div class="box" v-if="kcal!==''">
+          <div class="box" v-if="kcal!=0">
             <p>计算后预计每日所需能量</p>
-            <h1>{{kcal}}</h1>
+            <h1>{{kcal}}kcal</h1>
           </div>
         </div>
       </scroller>
@@ -45,16 +45,26 @@
       <div class="afxm"  :style="{bottom:arr[3].show?0:-200+'px'}">
           <h3>选择{{arr[3].title}}</h3>
           <ul>
-            <li @click="setValue('男',3)">男</li>
-            <li @click="setValue('女',3)">女</li>
+            <li @click="setValue('1',3,'男')">男</li>
+            <li @click="setValue('2',3,'女')">女</li>
           </ul>
       </div>
       <div class="afxm"  :style="{bottom:arr[4].show?0:-200+'px'}">
           <h3>选择{{arr[4].title}}</h3>
           <ul>
-            <li @click="setValue('轻度',4)">轻度</li>
-            <li @click="setValue('中度',4)">中度</li>
-            <li @click="setValue('重度',4)">重度</li>
+            <li @click="setValue('1',4,'轻度')">轻度</li>
+            <li @click="setValue('2',4,'中度')">中度</li>
+            <li @click="setValue('3',4,'重度')">重度</li>
+          </ul>
+      </div>
+      <div class="afxm"  :style="{bottom:arr[5].show?0:-400+'px'}">
+          <h3>选择{{arr[5].title}}</h3>
+          <ul>
+            <li @click="setValue('0',5,'否')"><span style="color:red">否</span></li>
+            <li @click="setValue('1',5,'早孕期')">早孕期</li>
+            <li @click="setValue('2',5,'中孕期')">中孕期</li>
+            <li @click="setValue('3',5,'晚孕期')">晚孕期</li>
+            <li @click="setValue('4',5,'哺育期')">哺育期</li>
           </ul>
       </div>
     </div>
@@ -74,29 +84,40 @@ export default {
         {
           title: "身高",
           value: 0,
+          val: true,
           dw: "cm",
           show: false
         },
         {
           title: "体重",
           value: 0,
+          val: true,
           dw: "kg",
           show: false
         },
         {
           title: "年龄",
           value: 0,
+          val: true,
           dw: "岁",
           show: false
         },
         {
           title: "性别",
           value: "请选择",
+          val: "",
           show: false
         },
         {
           title: "劳力水平",
           value: "",
+          val: "",
+          show: false
+        },
+        {
+          title: "孕妇选项",
+          value: "",
+          val: "",
           show: false
         }
       ]
@@ -105,7 +126,42 @@ export default {
   methods: {
     search() {
       // 查询所需要的kcal
-      this.kcal = "1000kcal";
+      for (let i = 0; i < this.arr.length; i++) {
+        if (this.arr[i].val == "") {
+          this.$vux.toast.show({
+            type: "warn",
+            text: "请完成选项后查询",
+            width: "11em"
+          });
+          return;
+        }
+      }
+
+      var d = {
+        Height: this.arr[0].value,
+        Weight: this.arr[1].value,
+        Age: this.arr[2].value,
+        Gender: this.arr[3].val,
+        LaborLevel: this.arr[4].val,
+        PregPeriod: this.arr[5].val
+      };
+
+      this.$http({
+        url: "/api/HealthyArchive/CalKcalNeed",
+        type: "post",
+        data: JSON.stringify(d),
+        success: data => {
+          if (data.Data == 0) {
+            this.$vux.toast.show({
+              type: "warn",
+              text: "抱歉，没查询到信息",
+              width: "12em"
+            });
+          }
+          this.kcal = data.Data;
+        },
+        error: error => {}
+      });
     },
     setList(index) {
       this.arr[index].show = true;
@@ -118,9 +174,10 @@ export default {
       }
       this.zoom = false;
     },
-    setValue(val, i) {
+    setValue(val, i, v) {
       // 设置值
-      this.arr[i].value = val;
+      this.arr[i].val = val;
+      this.arr[i].value = v;
       this.arr[i].show = false;
       this.zoom = false;
     }

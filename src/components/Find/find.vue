@@ -34,6 +34,7 @@ export default {
         pageNum: 0,
         pageSize: 10,
         onFetching: false,
+        module: 1,
         uptext: "滑动查看更多"
       },
       listArr: []
@@ -41,10 +42,6 @@ export default {
   },
   methods: {
     getList(time) {
-      if (this.searchVal.uptext == "没有更多数据了") {
-        return;
-      }
-      var _this = this;
       if (this.searchVal.onFetching) {
         // do nothing
       } else {
@@ -55,8 +52,9 @@ export default {
             url: "/api/NewsInfo/GetNewsList",
             type: "get",
             data: this.searchVal,
-            success(data) {
-              _this.setData(data.Data);
+            success: data => {
+              console.log(data);
+              this.setData(data.Data);
             },
             error() {}
           });

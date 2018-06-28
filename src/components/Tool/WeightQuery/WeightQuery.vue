@@ -63,13 +63,6 @@
             <range v-model="arr[1].value"  :min="0" :max="600"></range>
           </div>
       </div>
-      <div class="afxm"  :style="{bottom:arr[2].show?0:-200+'px'}">
-          <h3>选择{{arr[2].title}}</h3>
-          <ul>
-            <li @click="setValue('是',2)">是</li>
-            <li @click="setValue('否',2)">否</li>
-          </ul>
-      </div>
     </div>
 </template>
 <script>
@@ -83,12 +76,6 @@ export default {
     return {
       zoom: false,
       bmi: "",
-      //   bmitps: [
-      //     "1BMI偏高了，亲需要加强锻炼哦~",
-      //     "2BMI偏高了，亲需要加强锻炼哦~",
-      //     "3BMI偏高了，亲需要加强锻炼哦~",
-      //     "4BMI偏高了，亲需要加强锻炼哦~"
-      //   ],
       arr: [
         {
           title: "身高",
@@ -100,11 +87,6 @@ export default {
           title: "体重",
           value: 0,
           dw: "kg",
-          show: false
-        },
-        {
-          title: "是否成年",
-          value: "",
           show: false
         }
       ]
@@ -125,8 +107,34 @@ export default {
   },
   methods: {
     search() {
-      // 查询所需要的kcal
-      this.bmi = "29.4";
+      var d = {
+        Height: this.arr[0].value,
+        Weight: this.arr[1].value
+      };
+
+      if (d.Height < 1 || d.Weight < 1) {
+        this.$vux.toast.show({
+          type: "warn",
+          text: "请完善选项",
+          width: "11em"
+        });
+
+        return;
+      }
+      this.$http({
+        url: "/api/HealthyArchive/CalBMI",
+        type: "post",
+        data: JSON.stringify(d),
+        success: data => {
+          //成功的处理
+          this.bmi = data.Data;
+          if (data.Data < 1) {
+          }
+        },
+        error: function() {
+          //错误处理
+        }
+      });
     },
     setList(index) {
       this.arr[index].show = true;
@@ -137,12 +145,6 @@ export default {
       for (let i = 0; i < this.arr.length; i++) {
         this.arr[i].show = false;
       }
-      this.zoom = false;
-    },
-    setValue(val, i) {
-      // 设置值
-      this.arr[i].value = val;
-      this.arr[i].show = false;
       this.zoom = false;
     }
   },

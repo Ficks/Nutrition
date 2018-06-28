@@ -11,7 +11,7 @@
               <div class="info">
                 <div class="top">
                   <div class="img">
-                    <img :src="details.HeadImg" alt="">
+                    <img :src="$HTTPURL+details.HeadImg" alt="">
                   </div>
                   <div class="wz">
                     <h1>{{details.Name}}</h1>
@@ -47,10 +47,10 @@
                 <div class="pj_box" v-for="(item,index) in listArr">
                   <div class="pj_list">
                     <div class="pj_xq">
-                      <div class="xt">{{index+1}}楼<span>{{item.accord}}</span></div>
-                      <div class="xt date">{{item.date}}</div>
+                      <div class="xt">{{index+1}}楼 <span>{{item.Score | haoping}}</span></div>
+                      <div class="xt date">{{item.CreateDate | mouthTimeGsh}}</div>
                     </div>
-                      <p>{{item.text}}</p>
+                      <p>{{item.Content}}</p>
                   </div>
                 </div>
               </div>
@@ -63,7 +63,7 @@
         <actionsheet v-model="payment.value" :menus="payment.menu" @on-click-menu="paymentFn" show-cancel></actionsheet>
 
         <div class="fixbom submit" @click="payment.value=true">
-            图文咨询（50元/次）
+            图文咨询（{{details.Price}}元/次）
             <p>单次咨询为12小时</p>
         </div>
     </div>
@@ -75,6 +75,21 @@ export default {
     LoadMore,
     Actionsheet,
     Loading
+  },
+  filters: {
+    haoping(item) {
+      if (item == 1) {
+        return "一星差评";
+      } else if (item == 2) {
+        return "两星差评";
+      } else if (item == 3) {
+        return "三星中评";
+      } else if (item == 4) {
+        return "四星好评";
+      } else if (item == 5) {
+        return "五星好评";
+      }
+    }
   },
   data() {
     return {
@@ -107,23 +122,7 @@ export default {
         education:
           "进行膳食调查和评价、人体营养状况测定和评价营养咨询和教育、膳食指导和评估、食品营养评价社区营养管理和营养干预、"
       },
-      listArr: [
-        {
-          accord: "很满意",
-          date: "5月15日",
-          text: "陈医生的解答很有耐心，非常好的平台！感谢！"
-        },
-        {
-          accord: "很满意",
-          date: "5月15日",
-          text: "陈医生的解答很有耐心，非常好的平台！感谢！"
-        },
-        {
-          accord: "很满意",
-          date: "5月15日",
-          text: "陈医生的解答很有耐心，非常好的平台！感谢！"
-        }
-      ]
+      listArr: []
     };
   },
   methods: {
@@ -144,7 +143,7 @@ export default {
             name: this.details.name
           }
         });
-      } else {
+      } else if (key == "integral") {
         // 积分支付
         this.$router.push({
           path: "/Consultation/State",
@@ -181,9 +180,7 @@ export default {
               pageSize: this.searchVal.pageSize
             },
             success: data => {
-              console.log("--------1-----------------");
-              console.log(data);
-              this.setData(data.Data);
+              this.setData(data.Data.Data);
             },
             error: function() {
               //错误处理
@@ -193,7 +190,7 @@ export default {
       }
     },
     setData(data) {
-      if (data.Data.length > 0) {
+      if (data.length > 0) {
         for (let i = 0; i < data.length; i++) {
           this.listArr.push(data[i]);
         }
@@ -217,6 +214,10 @@ export default {
         console.log("-------------------------");
         console.log(data);
         this.details = data.Data;
+        this.payment.menu.price = `<span style='color:#8dc13b'>微信支付 (${
+          this.details.Price
+        }元)</span>`;
+        this.payment.menu.integral = `积分支付 (${this.details.integral})`;
       },
       error: function() {
         //错误处理

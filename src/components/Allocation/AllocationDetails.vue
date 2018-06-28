@@ -50,6 +50,8 @@ export default {
         t = 9;
       } else if (this.$route.path == "/My/Partner") {
         t = 10;
+      } else if (this.$route.path == "/Tool/DietaryReference") {
+        t = 11;
       }
 
       this.$http({
@@ -58,6 +60,7 @@ export default {
         data: { type: t },
         success: data => {
           //成功的处理
+          console.log(data);
           this.details = data.Data;
         },
         error: function() {
