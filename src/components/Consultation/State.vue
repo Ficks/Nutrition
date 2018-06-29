@@ -12,7 +12,7 @@
                 </div>
                 <h1>支付成功</h1>
                 <div class="submit_btn bg" @click="toChat">去咨询营养师</div>
-                <div class="submit_btn"><router-link to="/Consultation/ConsultationDetails">完成</router-link></div>
+                <div class="submit_btn" @click="$router.back(-1)">完成</div>
             </div>
             <!-- 支付失败 -->
             <div class="scroller_box state_box" v-else>
@@ -21,8 +21,8 @@
                 </div>
                 <h1>支付失败</h1>
                 <p>支付失败，请重新支付或返回~</p>
-                <div class="submit_btn bg"><router-link to="/Consultation/ConsultationDetails">重新支付</router-link></div>
-                <div class="submit_btn"><router-link to="/Consultation/ConsultationDetails">返回</router-link></div>
+                <div class="submit_btn bg">重新支付</div>
+                <div class="submit_btn" @click="$router.back(-1)">返回</div>
             </div>
         </scroller>
     </div>
@@ -89,16 +89,12 @@ export default {
       border-color: #8dc13b;
       background: #8dc13b;
 
-      a {
-        color: #fff;
-      }
+      color: #fff;
     }
     border-radius: 20px;
     overflow: hidden;
-    a {
-      display: block;
-      color: #242d4d;
-    }
+    display: block;
+    color: #242d4d;
   }
 }
 </style>

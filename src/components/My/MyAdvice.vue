@@ -14,7 +14,7 @@
         <div class="box_wr">
             <scroller lock-x height="-95px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
             <div class="box search_list">
-                <div class="list_me" v-for="(item,index) in listArr" @click="toPathDetails(item)">
+                <div class="list_me" v-for="(item,index) in listArr" @click.stop="toPathDetails(item)">
                     <div class="tx"><img :src="item.HeadUrl" alt=""></div>
                     <div class="box_wz">
                         <div class="list_ts">
@@ -23,7 +23,12 @@
                             </h3>
                         </div>
                         <div class="list_ts">
-                            <p>{{item.Company}}</p>
+                            <p>{{item.Company}}
+                              <span @click="refund(true)" v-if="item.Status==0">重新下单</span>
+                              <span @click.stop="refund(item)" v-if="item.Status===1">退款</span>
+                              <span @click="refund(true)" v-if="item.Status===3">重新下单</span>
+                              <span @click.stop="refund(true)" v-if="item.Status===4">已退款</span>
+                            </p>
                         </div>
                         <div class="list_ts">
                             <p>擅长：{{item.GoodAt}}</p>
@@ -60,6 +65,22 @@ export default {
     };
   },
   methods: {
+    refund(item) {
+      // 退款
+      console.log(item);
+      if (item === true) return;
+      if (item.Status !== 1) {
+        // 0 等待支付 1支付成功 2支付失败 3退款中 4已退款
+        return;
+      }
+
+      this.$router.push({
+        path: "/My/Property/Refund",
+        query: {
+          id: item.OrderId
+        }
+      });
+    },
     openAlt(isTrue) {
       if (isTrue) {
         this.navBottom = 0;
@@ -107,7 +128,7 @@ export default {
       this.searchVal.onFetching = false;
     },
     toPathDetails(item) {
-      if (item.IsEnd == 0) {
+      if (item.IsEnd == 1) {
         //   营养师详情
         this.$router.push({
           path: "/Consultation/ConsultationDetails",
@@ -115,12 +136,20 @@ export default {
             id: item.DietitianId
           }
         });
-      } else {
+      } else if (item.IsEnd == 0) {
         //   聊天
         this.$router.push({
           path: "/Consultation/Chat",
           query: {
             name: item.name
+          }
+        });
+
+        this.$router.push({
+          path: "/Consultation/Chat",
+          query: {
+            name: item.name,
+            DietitianId: item.DietitianId
           }
         });
       }
@@ -273,6 +302,25 @@ export default {
         text-overflow: ellipsis;
         white-space: nowrap;
         margin: 2px 0;
+
+        span {
+          background: #f00;
+          float: right;
+          display: block;
+          width: 150/2px;
+          height: 44/2px;
+          line-height: 44/2px;
+          border-radius: 5px;
+          color: #fff;
+          text-align: center;
+          font-size: 13px;
+          font-weight: 500;
+          margin-right: 8px;
+
+          &.jiesu {
+            background: #949494;
+          }
+        }
       }
       .left {
         float: left;

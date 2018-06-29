@@ -28,7 +28,7 @@
                             {{item.date | dateTimeGsh}}
                             <div class="btns right">
                                 <span class="sr" v-if="item.price>0">收入</span>
-                                <span class="tk" @click="refund(item)" v-if="item.price<0 && searchVal.currencyId==2">退款</span>
+                                <!-- <span class="tk" @click="refund(item)" v-if="item.price<0 && searchVal.currencyId==2">退款</span> -->
                                 <span class="zc" v-if="item.price<0">支出</span>
                             </div>
                         </div>
@@ -110,10 +110,13 @@ export default {
         }, time || 800);
       }
     },
-    refund() {
+    refund(item) {
       // 退款
       this.$router.push({
-        path: "/My/Property/Refund"
+        path: "/My/Property/Refund",
+        query: {
+          id: item.id
+        }
       });
     },
     getYe() {
@@ -144,8 +147,11 @@ export default {
         });
         return;
       }
-      this.$route.push({
-        path: "/My/Property/PutForward"
+      this.$router.push({
+        path: "/My/Property/PutForward",
+        query: {
+          ye: this.yeData.xj
+        }
       });
     }
   },

@@ -54,30 +54,42 @@ export default {
     submit() {
       //state 0 是退款 1是提现
 
-      if (this.d.value === "" || this.d.text === "") {
+      if (this.d.value === "") {
         this.$vux.toast.show({
-          text: "请选择不满意理由并描述！",
-          type: "text",
-          width: "15em"
+          text: "请选择不满意理由",
+          type: "warn",
+          width: "12em"
         });
         return false;
       }
 
+      var d = {
+        orderId: this.$route.query.id,
+        reason: this.d.valName + "-" + this.d.text
+      };
+      d = JSON.stringify(d);
       this.$http({
         url: "/api/Financial/OrderRefund",
         type: "post",
-        data: {
-          orderId: "00000000-0000-0000-0000-000000000000",
-          reason: "string"
+        data: d,
+        success: data => {
+          console.log(data);
+          if (data.Code == 20000) {
+            this.$router.push({
+              path: "/My/Property/State",
+              query: {
+                state: 0
+              }
+            });
+          } else {
+            this.$vux.toast.show({
+              type: "warn",
+              text: data.Message
+            });
+            return;
+          }
         },
-        success: data => {},
         error: error => {}
-      });
-      this.$router.push({
-        path: "/My/Property/State",
-        query: {
-          state: 0
-        }
       });
     }
   },

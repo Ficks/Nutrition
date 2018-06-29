@@ -70,6 +70,7 @@
 </template>
 <script>
 import { LoadMore, Actionsheet, Loading } from "vux";
+import { setTimeout } from "timers";
 export default {
   components: {
     LoadMore,
@@ -145,12 +146,37 @@ export default {
         });
       } else if (key == "integral") {
         // 积分支付
-        this.$router.push({
-          path: "/Consultation/State",
-          query: {
-            mode: 1,
-            success: 0
-          }
+        this.$http({
+          url: "/api/WeChat/JFPay",
+          type: "post",
+          data: JSON.stringify({
+            DietitianId: this.details.Id
+          }),
+          success: data => {
+            if (data.Code === 20000) {
+              console.log(data);
+              this.$router.push({
+                path: "/Consultation/State",
+                query: {
+                  mode: 0,
+                  success: 1
+                }
+              });
+            } else {
+              this.$router.push({
+                path: "/Consultation/State",
+                query: {
+                  mode: 1,
+                  success: 0
+                }
+              });
+              this.$vux.toast.show({
+                type: "error",
+                text: data.Message
+              });
+            }
+          },
+          error: error => {}
         });
       }
     },
@@ -213,11 +239,23 @@ export default {
       success: data => {
         console.log("-------------------------");
         console.log(data);
+        if (data.Code !== 20000) {
+          this.$vux.toast.show({
+            text: data.Error + "<br>3秒后返回上一页",
+            width: "11em",
+            isShowMask: true,
+            type: "warn"
+          });
+          setTimeout(() => {
+            this.$router.back(-1);
+          }, 3000);
+          return;
+        }
         this.details = data.Data;
         this.payment.menu.price = `<span style='color:#8dc13b'>微信支付 (${
           this.details.Price
         }元)</span>`;
-        this.payment.menu.integral = `积分支付 (${this.details.integral})`;
+        this.payment.menu.integral = `积分支付 (${this.details.JFPrice})`;
       },
       error: function() {
         //错误处理

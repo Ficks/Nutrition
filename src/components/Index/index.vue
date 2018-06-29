@@ -321,6 +321,9 @@ export default {
         url: "/api/HealthyDiet/GetRecommendMenu",
         type: "get",
         success: data => {
+          if (!data.Data) {
+            return;
+          }
           this.recommendData = data.Data.Value;
           this.KeyId = data.Data.Key;
         },

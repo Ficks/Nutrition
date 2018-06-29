@@ -7,7 +7,7 @@
         <div class="balance">
             <ul>
                 <li>
-                    <h2>100.00</h2>
+                    <h2>{{$route.query.ye || ''}}</h2>
                     <p>余额(元)</p>
                 </li>
             </ul>
@@ -16,11 +16,11 @@
             <div class="scroller_box xxxx">
                 <ul>
                     <li>
-                        <p>2018-04-16 18:22:00</p>
+                        <p>{{startTime}}</p>
                         <span>提现时间</span>
                     </li>
                     <li>
-                        <p>2018-04-16 18:22:00</p>
+                        <p>{{endTime}}</p>
                         <span>预计到账时间</span>
                     </li>
                 </ul>
@@ -35,7 +35,10 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      startTime: "",
+      endTime: ""
+    };
   },
   methods: {
     submit() {
@@ -59,6 +62,12 @@ export default {
   },
   mounted() {
     console.log("当前页面API：" + this.$route.path);
+    var myDate = new Date();
+    var h = myDate.getHours(); //获取当前小时数(0-23)
+    var m = myDate.getMinutes(); //获取当前分钟数(0-59)
+    var s = myDate.getSeconds(); //获取当前秒数(0-59)
+    var jin = this.$getDate(0);
+    this.startTime = `${jin} ${h}:${m}:${s}`;
   }
 };
 </script>

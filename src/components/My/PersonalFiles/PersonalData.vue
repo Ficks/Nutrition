@@ -14,11 +14,14 @@
                   <li @click="theMshow('age')">年龄<div class="right">{{form.age==''?"请选择":form.age+'岁'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="theMshow('height')">身高<div class="right">{{form.height==''?"请选择":form.height+'cm'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="theMshow('weight')">体重<div class="right">{{form.weight==''?"请选择":form.weight+'kg'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li>开户行<input type="text" class="yhzh" v-model="form.bank" placeholder="请输入开户行"></li>
+                  <li>开户人<input type="text" class="yhzh" v-model="form.account" placeholder="请输入开户人"></li>
+                  <li>银行账号<input type="text" class="yhzh" v-model="form.banaccount" placeholder="请输入银行账号"></li>
                   <li @click="actionsheetFn('mz')">民族<div class="right">{{form.mz.name==''?"请选择":form.mz.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('zy')">职业<div class="right">{{form.zy.name==''?"请选择":form.zy.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('hyzk')">婚姻状况<div class="right">{{form.hyzk.name==''?"请选择":form.hyzk.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('whcd')">文化程度<div class="right">{{form.whcd.name==''?"请选择":form.whcd.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
-                  <li @click="actionsheetFn('jtsr')">家庭收入<div class="right">{{form.jtsr.name==''?"请选择":form.jtsr.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="actionsheetFn('jtsr')">家庭收入<div class="right">{{form.jtsr.name==''?"请选择":form.jtsr.name+"W"}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                 </ul>
                 <ul>
                   <li @click="jbsFn">疾病史<div class="right">{{form.jbs.name==null?"请选择":form.jbs.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
@@ -115,6 +118,9 @@ export default {
         age: 0,
         height: 0,
         weight: 0,
+        bank: "",
+        account: "",
+        banaccount: "",
         mz: {
           value: "",
           name: ""
@@ -202,22 +208,22 @@ export default {
           "6": "100万以上"
         },
         yfxx: {
-          "0": '<span style="color:#f00">否</span>',
-          "1": "早孕期",
-          "2": "中孕期",
-          "3": "晚孕期",
-          "4": "哺乳期"
+          "1": '<span style="color:#f00">否</span>',
+          "2": "早孕期",
+          "3": "中孕期",
+          "4": "晚孕期",
+          "5": "哺乳期"
         },
         ysxh: {
-          "0": "素菜",
-          "1": "海鲜",
-          "2": "牛羊猪肉",
-          "3": "野味"
+          "1": "素菜",
+          "2": "海鲜",
+          "3": "牛羊猪肉",
+          "4": "野味"
         },
         llsp: {
-          "0": "轻度",
-          "1": "中度",
-          "2": "重度"
+          "1": "轻度",
+          "2": "中度",
+          "3": "重度"
         }
       },
       gmsw: [
@@ -323,7 +329,6 @@ export default {
     },
     submit() {
       // 提交数据;
-      console.log(this.form);
       var d = JSON.stringify({
         id: this.form.id,
         name: this.form.name,
@@ -331,6 +336,14 @@ export default {
         age: this.form.age,
         height: this.form.height,
         weight: this.form.weight,
+        bank: this.form.bank,
+        account: this.form.account,
+        banaccount: this.form.banaccount,
+        nation: this.form.mz.name, //民族
+        occupation: this.form.zy.name, //职业
+        marriage: this.form.hyzk.name, //婚姻
+        education: this.form.whcd.name, //教育
+        familyincome: this.form.jtsr.name, //收入
         jbsid: this.form.jbs.value,
         ysxhid: this.form.ysxh.value,
         llspid: this.form.llsp.value
@@ -379,6 +392,14 @@ export default {
       this.form.sex.value = data.Data.sexvalue;
       this.form.height = data.Data.height;
       this.form.weight = data.Data.weight;
+      this.form.bank = data.Data.bank;
+      this.form.account = data.Data.account;
+      this.form.banaccount = data.Data.banaccount;
+      this.form.mz.name = data.Data.nation;
+      this.form.zy.name = data.Data.occupation;
+      this.form.hyzk.name = data.Data.marriage;
+      this.form.whcd.name = data.Data.education;
+      this.form.jtsr.name = data.Data.familyincome;
       this.form.jbs.value = data.Data.jbsid;
       this.form.jbs.name = data.Data.jbsname;
       this.form.yfxx.value = data.Data.hyzt;
@@ -407,6 +428,7 @@ export default {
       type: "get",
       data: { id: id },
       success: data => {
+        console.log(data);
         //成功的处理
         this.setData(data);
       },
@@ -418,6 +440,16 @@ export default {
 };
 </script>
 <style scoped lang="less">
+.yhzh {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: none;
+  padding-left: 50px;
+  text-align: right;
+  color: #aeaeae;
+}
 .container {
   height: 100%;
   .name_cor {
