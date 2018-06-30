@@ -6,7 +6,7 @@
       </div>
     <scroller lock-x height="-45px" @on-scroll-bottom="getList" ref="scrollerBottom">
       <div class="scroller_box bsxz">
-         <div class="list_w" v-for="(item,index) in listArr">
+         <div class="list_w" v-for="(item,index) in listArr" @click="chat(item)">
            <div class="tx"><img :src="item.HeadUrl" alt=""></div>
            <div class="wz">
              <h2>{{item.NickName}}</h2>
@@ -14,7 +14,7 @@
              <p>{{item.EndDate | mouthTimeGsh}}</p>
            </div>
            <div class="btns">
-             <div class="btn_m xxx" @click="chat(item)" v-show="item.msg">新消息</div>
+             <div class="btn_m xxx" v-show="item.msg">新消息</div>
              <div class="btn_m" @click="userInfo(item)" :style="{'margin-top':item.msg?'8px':'20px'}">用户资料</div>
              <!-- <div class="btn_m end" :style="{'margin-top':item.msg?'8px':'20px'}">已结束</div> -->
            </div>
@@ -53,6 +53,7 @@ export default {
       });
     },
     chat(item) {
+      console.log(item);
       this.$router.push({
         path: "/Dietitian/Chat",
         query: {

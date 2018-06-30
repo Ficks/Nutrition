@@ -159,7 +159,9 @@ export default {
                 path: "/Consultation/State",
                 query: {
                   mode: 0,
-                  success: 1
+                  success: 1,
+                  name: this.details.Name,
+                  id: this.details.UserId
                 }
               });
             } else {
@@ -167,7 +169,9 @@ export default {
                 path: "/Consultation/State",
                 query: {
                   mode: 1,
-                  success: 0
+                  success: 0,
+                  name: this.details.Name,
+                  id: this.details.UserId
                 }
               });
               this.$vux.toast.show({
@@ -237,8 +241,6 @@ export default {
       type: "get",
       data: { DietitianId: this.$route.query.id },
       success: data => {
-        console.log("-------------------------");
-        console.log(data);
         if (data.Code !== 20000) {
           this.$vux.toast.show({
             text: data.Error + "<br>3秒后返回上一页",

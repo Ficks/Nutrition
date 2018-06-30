@@ -182,7 +182,7 @@ export default {
     this.$nextTick(() => {
       setTimeout(() => {
         el.scrollTop = el.scrollHeight;
-      });
+      }, 50);
     });
   }
 };

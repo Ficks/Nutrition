@@ -5,6 +5,7 @@ import Vuex from 'vuex'
 import App from './App'
 import router from './router'
 import Settings from '@/config/settings.js'
+import 'signalr';
 import Axios from 'axios'
 import store from '@/vuex/store'
 import filters from '@/filters/filters'

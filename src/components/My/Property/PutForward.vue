@@ -20,7 +20,7 @@
                         <span>提现时间</span>
                     </li>
                     <li>
-                        <p>{{endTime}}</p>
+                        <p>请在 <span style="color:#f00">两小时</span> 之后查收退款</p>
                         <span>预计到账时间</span>
                     </li>
                 </ul>

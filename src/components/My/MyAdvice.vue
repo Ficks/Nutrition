@@ -15,11 +15,11 @@
             <scroller lock-x height="-95px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
             <div class="box search_list">
                 <div class="list_me" v-for="(item,index) in listArr" @click.stop="toPathDetails(item)">
-                    <div class="tx"><img :src="item.HeadUrl" alt=""></div>
+                    <div class="tx"><img :src="$HTTPURL+item.HeadUrl" alt=""></div>
                     <div class="box_wz">
                         <div class="list_ts">
                             <h3>{{item.Name}}
-                                <span :class="{jiesu:item.IsEnd==0}">{{item.IsEnd==0?"已结束":"咨询中"}}</span>
+                                <span :class="{jiesu:item.IsEnd==1}">{{item.IsEnd==0?"咨询中":"已结束"}}</span>
                             </h3>
                         </div>
                         <div class="list_ts">
@@ -138,18 +138,13 @@ export default {
         });
       } else if (item.IsEnd == 0) {
         //   聊天
-        this.$router.push({
-          path: "/Consultation/Chat",
-          query: {
-            name: item.name
-          }
-        });
+        console.log(item);
 
         this.$router.push({
           path: "/Consultation/Chat",
           query: {
-            name: item.name,
-            DietitianId: item.DietitianId
+            name: item.Name,
+            id: item.UserId
           }
         });
       }

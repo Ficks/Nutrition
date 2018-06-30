@@ -84,12 +84,18 @@ import UserInfo from '@/components/Dietitian/UserInfo.vue';
 // 添加运动
 import AddMotion from '@/components/AddMotion/AddMotion.vue';
 
+import chatDemo from '@/components/chat/demo.vue'
+
 
 
 Vue.use(Router)
 
 export default new Router({
   routes: [{
+    path:'/demo',
+    name:"chat",
+    component:chatDemo
+  },{
       path: '/',
       name: '首页',
       component: Index

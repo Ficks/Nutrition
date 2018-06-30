@@ -18,9 +18,9 @@
             </ul>
         </div>
         <div class="text_jl" id="outh">{{chatText}}</div>
-        <div class="ltk">
+        <div class="ltk" :style="{height:chatText===''?'45px':outHeight+20+'px','padding':chatText===''?'0 12px':'10px 12px'}">
           <div class="rel">
-            <div class="input" :style="{height:outHeight+'px','padding-right':chatText===''?'30px':'60px'}"><textarea v-model="chatText"></textarea></div>
+            <div class="input" :style="{height:chatText===''?'30px':outHeight+'px','padding-right':chatText===''?'30px':'60px'}"><textarea v-model="chatText"></textarea></div>
             <div class="btn_fm">
               <span @click="msgNew" v-show="chatText!==''">发送</span>
               <i  v-show="chatText==''" class="iconfont icon-tupian"></i>
@@ -43,7 +43,11 @@
 <script>
 import { LoadMore, Toast } from "vux";
 import { setTimeout } from "timers";
+import { mapGetters } from "vuex";
 export default {
+  computed: {
+    ...mapGetters(["getLogin"])
+  },
   components: {
     LoadMore,
     Toast
@@ -77,48 +81,6 @@ export default {
           src: "/static/images/tx.jpg",
           type: "text",
           text: "我怎么可以吃才可以长胖？"
-        },
-        {
-          name: "lok666",
-          src: "/static/images/tx.jpg",
-          type: "img",
-          img: "/static/images/ys.jpg"
-        },
-        {
-          name: this.$route.query.name,
-          src: "/static/images/ystx.jpg",
-          type: "text",
-          text: "请问有什么可以帮助你的？"
-        },
-        {
-          name: "lok666",
-          src: "/static/images/tx.jpg",
-          type: "text",
-          text: "我怎么可以吃才可以长胖？"
-        },
-        {
-          name: "lok666",
-          src: "/static/images/tx.jpg",
-          type: "img",
-          img: "/static/images/ys.jpg"
-        },
-        {
-          name: this.$route.query.name,
-          src: "/static/images/ystx.jpg",
-          type: "text",
-          text: "请问有什么可以帮助你的？"
-        },
-        {
-          name: "lok666",
-          src: "/static/images/tx.jpg",
-          type: "text",
-          text: "我怎么可以吃才可以长胖？"
-        },
-        {
-          name: "lok666",
-          src: "/static/images/tx.jpg",
-          type: "img",
-          img: "/static/images/ys.jpg"
         }
       ]
     };
@@ -132,6 +94,7 @@ export default {
     msgNew() {
       // 发送消息
       if (this.chatText !== "") {
+        this.sendMessage();
         this.listArr.push({
           name: "lok666",
           src: "/static/images/tx.jpg",
@@ -141,7 +104,6 @@ export default {
         this.chatText = "";
 
         var els = document.getElementsByClassName("container")[0];
-        console.log(els.scrollHeight);
         setTimeout(() => {
           els.scrollTop = els.scrollHeight;
         });
@@ -175,9 +137,59 @@ export default {
         }, 2000);
       }
     },
-    hd() {}
+    hd() {},
+    // 即时通信
+    connectServer() {
+      var $this = this;
+      var conn = $.hubConnection("http://www.xyys.ltd");
+      $this.proxy = conn.createHubProxy("chatHub");
+      $this.receiveSystemMsg(); //注册接收系统消息
+      $this.receiveMessageHistory(); //注册接收历史消息
+      conn
+        .start()
+        .done(data => {
+          $this.connect(); //调用服务端connect方法
+        })
+        .fail(data => {});
+    },
+    receiveSystemMsg() {
+      //接收服务端消息，
+      var $this = this;
+      // $this.proxy.on("receiveSystemMsg", data => {
+      //   console.log(data);
+      // });
+      $this.proxy.on("receiveSystemMsg", (data, msg) => {
+        console.log(data);
+      });
+    },
+    receiveMessageHistory() {
+      //接收历史消息，
+      var $this = this;
+      $this.proxy.on("receiveMessageHistory", data => {
+        console.log(data);
+      });
+    },
+    sendMessage() {
+      //发送消息，这个方法由按钮事件触发
+      var $this = this;
+      $this.proxy.invoke("sendMessage", this.chatText).done(msg => {
+        console.log(msg);
+      });
+    },
+    connect() {
+      //连接
+      var $this = this;
+      var userId = this.getLogin.userid,
+        token = this.getLogin.Token,
+        toId = this.$route.query.id;
+      // $this.proxy
+      //   .invoke("connect", { userId: userId, token: token, toId: toId })
+      //   .done(msg => {});
+      $this.proxy.invoke("connect", userId, token, toId).done(msg => {});
+    }
   },
   mounted() {
+    this.connectServer();
     this.outH = document.getElementById("outh");
     this.outHeight = this.outH.offsetHeight;
     console.log("当前页面API：" + this.$route.path);
@@ -197,7 +209,7 @@ export default {
     this.$nextTick(() => {
       setTimeout(() => {
         el.scrollTop = el.scrollHeight;
-      });
+      }, 50);
     });
   }
 };
@@ -305,10 +317,9 @@ export default {
     left: 0;
     .rel {
       position: relative;
-      height: auto;
       overflow: hidden;
       width: 100%;
-      height: 45px;
+      height: 100%;
     }
     .input {
       position: absolute;
@@ -316,9 +327,9 @@ export default {
       top: 8px;
       float: left;
       width: 100%;
-      height: 22px;
       box-sizing: border-box;
       padding-right: 60px;
+      height: 30px;
       textarea {
         background: #fff;
         height: 56/2px;

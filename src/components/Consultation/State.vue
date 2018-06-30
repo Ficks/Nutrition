@@ -39,7 +39,8 @@ export default {
       this.$router.push({
         path: "/Consultation/Chat",
         query: {
-          name: this.$route.query.name
+          name: this.$route.query.name,
+          id: this.$route.query.id
         }
       });
     }
