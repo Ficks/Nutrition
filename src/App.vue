@@ -13,7 +13,6 @@ export default {
     return {};
   },
   mounted() {
-    var _this = this;
     // $.ajax({
     //   url: "http://www.xyys.ltd/api/WeChat/MoniWeChatLogin",
     //   type: "get",

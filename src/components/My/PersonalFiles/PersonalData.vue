@@ -328,6 +328,21 @@ export default {
       this.jbsTrue = false;
     },
     submit() {
+      var arr = [this.form.bank, this.form.account, this.form.banaccount];
+      var kLen = 0;
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] == "") {
+          kLen++;
+        }
+      }
+      if (kLen !== 0 && kLen !== 3) {
+        this.$vux.toast.show({
+          text: "请填写：开户行 开户人 银行账号",
+          type: "warn",
+          width: "11em"
+        });
+        return;
+      }
       // 提交数据;
       var d = JSON.stringify({
         id: this.form.id,
@@ -336,9 +351,12 @@ export default {
         age: this.form.age,
         height: this.form.height,
         weight: this.form.weight,
-        bank: this.form.bank,
-        account: this.form.account,
-        banaccount: this.form.banaccount,
+        // bank: this.form.bank,
+        // account: this.form.account,
+        // banaccount: this.form.banaccount,
+        bankaccount: `${this.form.bank}-${this.form.account}-${
+          this.form.banaccount
+        }`,
         nation: this.form.mz.name, //民族
         occupation: this.form.zy.name, //职业
         marriage: this.form.hyzk.name, //婚姻
@@ -349,7 +367,6 @@ export default {
         llspid: this.form.llsp.value
       });
 
-      console.log(d);
       this.$http({
         url: "/api/HealthyArchive/UpdatePersonalHealthyArchive",
         type: "post",
@@ -385,6 +402,7 @@ export default {
       }
     },
     setData(data) {
+      console.log(data);
       this.form.id = data.Data.id;
       this.form.name = data.Data.name;
       this.form.age = data.Data.age;
@@ -409,6 +427,10 @@ export default {
       this.form.llsp.value = data.Data.llspid;
       this.form.llsp.name = data.Data.llspname;
       this.gmsw = data.Data.alleryarr;
+      var arr = data.Data.bankaccount.split("-");
+      this.form.bank = arr[0];
+      this.form.account = arr[1];
+      this.form.banaccount = arr[2];
     }
   },
   mounted() {

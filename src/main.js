@@ -36,11 +36,28 @@ for (let key in filters) {
 }
 // 服务器地址
 Vue.prototype.$HTTPURL = Settings.server + '/';
+
+function getUrlCs(name) {
+  var href = location.href;
+  if (href.indexOf('?') < -1) return;
+  var query = href.substr(href.indexOf('?') + 1)
+  query = query.split('&');
+  let data = {};
+  for (let i = 0; i < query.length; i++) {
+    let key = query[i].substr(0, query[i].indexOf('='));
+    let value = query[i].substr(query[i].indexOf('=') + 1);
+    data[key] = value;
+  }
+
+  return data;
+}
 router.beforeEach((to, from, next) => {
   var userid = store.state.userid;
   var Token = store.state.Token;
 
   if (userid == "") { //没有token或者要去的path不是login就清除userinfo和token，并跳转到登录页面
+    var UrlData = getUrlCs();
+    console.log("正在登陆中")
     $.ajax({
       url: Settings.server + "/api/WeChat/MoniWeChatLogin",
       type: "get",
@@ -87,7 +104,6 @@ router.beforeEach((to, from, next) => {
       }
     });
   } else { //如果满足条件就什么都不做，
-    console.log("我已经登录")
     next();
   }
 });

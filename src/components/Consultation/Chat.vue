@@ -18,12 +18,13 @@
             </ul>
         </div>
         <div class="text_jl" id="outh">{{chatText}}</div>
-        <div class="ltk" :style="{height:chatText===''?'45px':outHeight+20+'px','padding':chatText===''?'0 12px':'10px 12px'}">
+        <div class="ltk" :style="{height:chatText===''?'45px':outHeight+20+'px'}">
           <div class="rel">
-            <div class="input" :style="{height:chatText===''?'30px':outHeight+'px','padding-right':chatText===''?'30px':'60px'}"><textarea v-model="chatText"></textarea></div>
+            <div class="input" :style="{height:chatText==='' || outHeight<30?'30px':outHeight+'px','padding-right':chatText===''?'30px':'60px'}"><textarea v-model="chatText"></textarea></div>
             <div class="btn_fm">
               <span @click="msgNew" v-show="chatText!==''">发送</span>
               <i  v-show="chatText==''" class="iconfont icon-tupian"></i>
+              <input class="upload_img"  v-show="chatText==''" type="file" @change="addImg"> 
             </div>
           </div>
         </div>
@@ -44,6 +45,7 @@
 import { LoadMore, Toast } from "vux";
 import { setTimeout } from "timers";
 import { mapGetters } from "vuex";
+import settings from "@/config/settings.js";
 export default {
   computed: {
     ...mapGetters(["getLogin"])
@@ -91,6 +93,49 @@ export default {
     }
   },
   methods: {
+    addImg(event) {
+      // 发送图片
+      let reader = new FileReader();
+      let img1 = event.target.files[0];
+      let type = img1.type; //文件的类型，判断是否是图片
+      let size = img1.size; //文件的大小，判断图片的大小
+      if (type == "" || this.data.imgData.accept.indexOf(type) == -1) {
+        this.$vux.toast.show({
+          type: "warn",
+          text: "图片格式只支持：gif、jpg、png、jpeg"
+        });
+        return false;
+      }
+      if (size > 10485760) {
+        this.$vux.toast.show({
+          type: "warn",
+          text: "请选择10M以内的图片！"
+        });
+        return false;
+      }
+      var uri = "";
+      let form = new FormData();
+      form.append("file", img1, img1.name);
+      this.$Axios
+        .post(settings.server + "/api/User/UploadImg", form, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            userid: this.getLogin.userid,
+            Token: this.getLogin.Token
+          }
+        })
+        .then(response => {
+          this.data.picurl = response.data.Data;
+          this.data.imgUrl = this.server + response.data.Data;
+          console.log(this.data.imgUrl);
+        })
+        .catch(error => {
+          this.$vux.toast.show({
+            type: "error",
+            text: "上传出错"
+          });
+        });
+    },
     msgNew() {
       // 发送消息
       if (this.chatText !== "") {
@@ -211,6 +256,9 @@ export default {
         el.scrollTop = el.scrollHeight;
       }, 50);
     });
+
+    // 让隐藏的width和textarear相同
+    $("#outh").width($(".rel .input textarea").width());
   }
 };
 </script>
@@ -252,6 +300,7 @@ export default {
         max-width: 100%;
       }
       .text {
+        word-wrap: break-word;
         font-size: 15px;
       }
 
@@ -329,7 +378,7 @@ export default {
       width: 100%;
       box-sizing: border-box;
       padding-right: 60px;
-      height: 30px;
+      min-height: 30px !important;
       textarea {
         background: #fff;
         height: 56/2px;
@@ -429,6 +478,16 @@ export default {
         }
       }
     }
+  }
+
+  .upload_img {
+    position: absolute;
+    right: 0;
+    top: 10px;
+    width: 22px;
+    height: 22px;
+    z-index: 999;
+    opacity: 0;
   }
 }
 </style>

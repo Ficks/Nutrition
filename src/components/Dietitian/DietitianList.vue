@@ -15,7 +15,7 @@
            </div>
            <div class="btns">
              <div class="btn_m xxx" v-show="item.msg">新消息</div>
-             <div class="btn_m" @click="userInfo(item)" :style="{'margin-top':item.msg?'8px':'20px'}">用户资料</div>
+             <div class="btn_m" @click.stop="userInfo(item)" :style="{'margin-top':item.msg?'8px':'20px'}">用户资料</div>
              <!-- <div class="btn_m end" :style="{'margin-top':item.msg?'8px':'20px'}">已结束</div> -->
            </div>
          </div>
@@ -74,7 +74,6 @@ export default {
             type: "get",
             data: this.searchVal,
             success: data => {
-              console.log(data);
               this.setData(data.Data.Data);
             },
             error: error => {}
@@ -83,6 +82,7 @@ export default {
       }
     },
     setData(data) {
+      console.log(data);
       if (data.length > 0) {
         for (let i = 0; i < data.length; i++) {
           this.listArr.push(data[i]);
