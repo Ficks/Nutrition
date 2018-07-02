@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+      <div class="fixbo" :class="{fixboactive:zoomShow}"></div>
       <div class="header">
         <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
         <div class="title">{{title}}</div>
@@ -18,7 +19,7 @@
             </ul>
         </div>
         <div class="text_jl" id="outh">{{chatText}}</div>
-        <div class="ltk" :style="{height:chatText===''?'45px':outHeight+20+'px'}">
+        <div class="ltk" :style="{height:chatText===''?'45px':outHeight+16+'px'}">
           <div class="rel">
             <div class="input" :style="{height:chatText==='' || outHeight<30?'30px':outHeight+'px','padding-right':chatText===''?'30px':'60px'}"><textarea v-model="chatText"></textarea></div>
             <div class="btn_fm">
@@ -57,6 +58,7 @@ export default {
   },
   data() {
     return {
+      zoomShow: true,
       history: 1,
       end: false,
       chatText: "",
@@ -76,20 +78,20 @@ export default {
         src: "/static/images/tx.jpg"
       },
       listArr: [
-        {
-          id: "fbd13b8f-51d8-47d7-b52d-a90600e9d398",
-          name: "哈哈哈",
-          src: "/static/images/ystx.jpg",
-          type: "text",
-          text: "请问有什么可以帮助你的？"
-        },
-        {
-          id: "5eb1d623-e862-415a-aeaf-a90c01553147",
-          name: "lok666",
-          src: "/static/images/tx.jpg",
-          type: "text",
-          text: "我怎么可以吃才可以长胖？"
-        }
+        // {
+        //   id: "fbd13b8f-51d8-47d7-b52d-a90600e9d398",
+        //   name: "哈哈哈",
+        //   src: "/static/images/ystx.jpg",
+        //   type: "text",
+        //   text: "请问有什么可以帮助你的？"
+        // },
+        // {
+        //   id: "5eb1d623-e862-415a-aeaf-a90c01553147",
+        //   name: "lok666",
+        //   src: "/static/images/tx.jpg",
+        //   type: "text",
+        //   text: "我怎么可以吃才可以长胖？"
+        // }
       ]
     };
   },
@@ -183,38 +185,48 @@ export default {
           this.he.src = userInfo.ToUserPortrait;
           isT = false;
         }
+        this.$vux.loading.hide();
+        this.zoomShow = false;
       });
     },
     receiveRecentMsg() {
       //接收近期消息，
       this.proxy.on("receiveRecentMsg", data => {
+        this.$vux.loading.show();
+        this.zoomShow = true;
         data = JSON.parse(data);
         for (let i = 0; i < data.length; i++) {
           var d = JSON.parse(data[i].Message);
           this.listArr.unshift(d);
         }
+        this.$nextTick(() => {
+          var els = document.getElementById("chat_box");
+          setTimeout(() => {
+            els.scrollTop = els.scrollHeight - this.scrollTop;
+          }, 100);
+          this.loading = false;
+          this.$vux.loading.hide();
+          this.zoomShow = false;
+        });
       });
     },
     receiveMessageHistory() {
       //接收历史消息，
       this.proxy.on("receiveMessageHistory", data => {
-        console.log("历史消息");
-        console.log(data);
-
-        return;
-        console.log("好啦啦啦");
-        console.log(data);
         if (data.length == 0) {
           return;
         }
         this.history++;
+        data = JSON.parse(data);
         for (let i = 0; i < data.length; i++) {
-          this.listArr.unshift(data[i]);
+          var d = JSON.parse(data[i].Message);
+          this.listArr.unshift(d);
         }
         this.$nextTick(() => {
+          var els = document.getElementById("chat_box");
           setTimeout(() => {
             els.scrollTop = els.scrollHeight - this.scrollTop;
-          }, 50);
+          }, 100);
           this.loading = false;
         });
       });
@@ -252,8 +264,6 @@ export default {
 
       var els = document.getElementById("chat_box");
       setTimeout(() => {
-        console.log(els.scrollTop);
-        console.log(els.scrollHeight);
         els.scrollTop = els.scrollHeight;
       }, 100);
     },
@@ -266,6 +276,7 @@ export default {
     }
   },
   mounted() {
+    this.$vux.loading.show();
     this.connectServer();
     this.outH = document.getElementById("outh");
     this.outHeight = this.outH.offsetHeight;
@@ -284,7 +295,7 @@ export default {
     this.$nextTick(() => {
       setTimeout(() => {
         el.scrollTop = el.scrollHeight;
-      }, 50);
+      }, 100);
     });
 
     // 让隐藏的width和textarear相同
@@ -293,6 +304,20 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.fixbo {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  left: 0;
+  top: 0;
+  z-index: -99;
+  transition: all 0.3s;
+}
+.fixboactive {
+  z-index: 99;
+  opacity: 1;
+}
 .container {
   height: 100%;
   background: #f3f3f3;
@@ -518,6 +543,7 @@ export default {
     height: 22px;
     z-index: 999;
     opacity: 0;
+    padding: 0;
   }
 }
 </style>

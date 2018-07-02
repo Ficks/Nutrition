@@ -57,7 +57,8 @@ export default {
       this.$router.push({
         path: "/Dietitian/Chat",
         query: {
-          name: item.name
+          name: item.NickName,
+          id: item.UserId
         }
       });
     },
@@ -82,7 +83,6 @@ export default {
       }
     },
     setData(data) {
-      console.log(data);
       if (data.length > 0) {
         for (let i = 0; i < data.length; i++) {
           this.listArr.push(data[i]);

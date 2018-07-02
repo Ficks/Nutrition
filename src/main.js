@@ -63,7 +63,7 @@ router.beforeEach((to, from, next) => {
       type: "get",
       data: {
         referid: "2",
-        openid: "5",
+        openid: "3",
         nickname: "4",
         headurl: "5"
       },

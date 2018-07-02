@@ -92,10 +92,10 @@ Vue.use(Router)
 
 export default new Router({
   routes: [{
-    path:'/demo',
-    name:"chat",
-    component:chatDemo
-  },{
+      path: '/demo',
+      name: "chat",
+      component: chatDemo
+    }, {
       path: '/',
       name: '首页',
       component: Index
@@ -364,7 +364,8 @@ export default new Router({
     {
       path: '/Dietitian/Chat',
       name: "聊天",
-      component: DietitianChat
+      // component: DietitianChat
+      component: Chat
     },
     {
       path: '/Dietitian/UserInfo',
