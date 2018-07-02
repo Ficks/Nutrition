@@ -7,12 +7,12 @@
         <div class="scroller_box chat" id="chat_box">
             <load-more tip="loading" v-show="loading"></load-more>
             <ul>
-                <li v-for="(item,index) in listArr" :class="{he:item.name==he.name,my:item.name==my.name}">
+                <li v-for="(item,index) in listArr" :class="{he:item.id==he.id,my:item.id==my.id}">
                     <div class="tx"><img :src="item.src" alt=""></div>
                     <div class="box">
                         <div class="text" v-if="item.type=='text'">{{item.text}}</div>
                         <!-- <textarea v-if="item.type=='text'" v-model="item.text"></textarea> -->
-                        <div class="img" v-else><img :src="item.img" alt=""></div>
+                        <div class="img" v-else><img :src="item.text" alt=""></div>
                     </div>
                 </li>
             </ul>
@@ -22,7 +22,7 @@
           <div class="rel">
             <div class="input" :style="{height:chatText==='' || outHeight<30?'30px':outHeight+'px','padding-right':chatText===''?'30px':'60px'}"><textarea v-model="chatText"></textarea></div>
             <div class="btn_fm">
-              <span @click="msgNew" v-show="chatText!==''">发送</span>
+              <span @click="sendMessage" v-show="chatText!==''">发送</span>
               <i  v-show="chatText==''" class="iconfont icon-tupian"></i>
               <input class="upload_img"  v-show="chatText==''" type="file" @change="addImg"> 
             </div>
@@ -46,6 +46,7 @@ import { LoadMore, Toast } from "vux";
 import { setTimeout } from "timers";
 import { mapGetters } from "vuex";
 import settings from "@/config/settings.js";
+import { userInfo } from "os";
 export default {
   computed: {
     ...mapGetters(["getLogin"])
@@ -56,6 +57,7 @@ export default {
   },
   data() {
     return {
+      history: 1,
       end: false,
       chatText: "",
       outHeight: 44,
@@ -64,21 +66,25 @@ export default {
       scrollTop: 0,
       title: this.$route.query.name,
       he: {
+        id: "fbd13b8f-51d8-47d7-b52d-a90600e9d398",
         name: this.$route.query.name,
         src: "/static/images/ystx.jpg"
       },
       my: {
+        id: "5eb1d623-e862-415a-aeaf-a90c01553147",
         name: "lok666",
         src: "/static/images/tx.jpg"
       },
       listArr: [
         {
-          name: this.$route.query.name,
+          id: "fbd13b8f-51d8-47d7-b52d-a90600e9d398",
+          name: "哈哈哈",
           src: "/static/images/ystx.jpg",
           type: "text",
           text: "请问有什么可以帮助你的？"
         },
         {
+          id: "5eb1d623-e862-415a-aeaf-a90c01553147",
           name: "lok666",
           src: "/static/images/tx.jpg",
           type: "text",
@@ -99,7 +105,8 @@ export default {
       let img1 = event.target.files[0];
       let type = img1.type; //文件的类型，判断是否是图片
       let size = img1.size; //文件的大小，判断图片的大小
-      if (type == "" || this.data.imgData.accept.indexOf(type) == -1) {
+      var accept = "image/gif, image/jpeg, image/png, image/jpg";
+      if (type == "" || accept.indexOf(type) == -1) {
         this.$vux.toast.show({
           type: "warn",
           text: "图片格式只支持：gif、jpg、png、jpeg"
@@ -113,11 +120,10 @@ export default {
         });
         return false;
       }
-      var uri = "";
       let form = new FormData();
       form.append("file", img1, img1.name);
       this.$Axios
-        .post(settings.server + "/api/User/UploadImg", form, {
+        .post(settings.server + "/api/User/UploadChatImg", form, {
           headers: {
             "Content-Type": "multipart/form-data",
             userid: this.getLogin.userid,
@@ -125,9 +131,9 @@ export default {
           }
         })
         .then(response => {
-          this.data.picurl = response.data.Data;
-          this.data.imgUrl = this.server + response.data.Data;
-          console.log(this.data.imgUrl);
+          console.log("上传成功");
+          console.log(response);
+          this.sendMessage("img", settings.server + response.data.Data);
         })
         .catch(error => {
           this.$vux.toast.show({
@@ -136,29 +142,6 @@ export default {
           });
         });
     },
-    msgNew() {
-      // 发送消息
-      if (this.chatText !== "") {
-        this.sendMessage();
-        this.listArr.push({
-          name: "lok666",
-          src: "/static/images/tx.jpg",
-          type: "text",
-          text: this.chatText
-        });
-        this.chatText = "";
-
-        var els = document.getElementsByClassName("container")[0];
-        setTimeout(() => {
-          els.scrollTop = els.scrollHeight;
-        });
-      } else {
-        this.$vux.toast.show({
-          text: "不能发送空消息",
-          type: "text"
-        });
-      }
-    },
     getList() {
       if (this.loading) {
       } else {
@@ -166,30 +149,21 @@ export default {
         this.scrollTop = els.scrollHeight;
         this.loading = true;
         setTimeout(() => {
-          this.listArr.unshift({
-            name: "lok666",
-            src: "/static/images/tx.jpg",
-            type: "img",
-            img: "/static/images/ys.jpg"
-          });
-
-          this.$nextTick(() => {
-            setTimeout(() => {
-              els.scrollTop = els.scrollHeight - this.scrollTop;
-            });
-            this.loading = false;
-          });
-        }, 2000);
+          this.getHistoryMessage();
+        }, 800);
       }
     },
     hd() {},
     // 即时通信
     connectServer() {
       var $this = this;
-      var conn = $.hubConnection("http://www.xyys.ltd");
+      var conn = $.hubConnection(settings.server);
       $this.proxy = conn.createHubProxy("chatHub");
       $this.receiveSystemMsg(); //注册接收系统消息
+      $this.receiveUserMsg(); //接收消息
       $this.receiveMessageHistory(); //注册接收历史消息
+      $this.receiveRecentMsg(); //注册近期消息
+      this.getHistoryMessage();
       conn
         .start()
         .done(data => {
@@ -198,28 +172,91 @@ export default {
         .fail(data => {});
     },
     receiveSystemMsg() {
+      var isT = true;
       //接收服务端消息，
       var $this = this;
-      // $this.proxy.on("receiveSystemMsg", data => {
-      //   console.log(data);
-      // });
-      $this.proxy.on("receiveSystemMsg", (data, msg) => {
+      $this.proxy.on("receiveSystemMsg", (data, userInfo) => {
+        if (userInfo && isT) {
+          var userInfo = JSON.parse(userInfo);
+          this.my.id = userInfo.UserId;
+          this.my.name = userInfo.RealName;
+          this.my.src = userInfo.UserPortrait;
+          this.he.id = userInfo.ToId;
+          this.he.name = userInfo.ToName;
+          this.he.src = userInfo.ToUserPortrait;
+          isT = false;
+        }
+      });
+    },
+    receiveRecentMsg() {
+      //接收近期消息，
+      this.proxy.on("receiveRecentMsg", data => {
         console.log(data);
       });
     },
     receiveMessageHistory() {
       //接收历史消息，
+      console.log("好啦啦啦");
       var $this = this;
       $this.proxy.on("receiveMessageHistory", data => {
+        console.log("好啦啦啦");
         console.log(data);
+        console.log(data);
+        console.log(data);
+        if (data.length == 0) {
+          return;
+        }
+        $this.history++;
+        for (let i = 0; i < data.length; i++) {
+          $this.listArr.unshift(data[i]);
+        }
+        $this.$nextTick(() => {
+          setTimeout(() => {
+            els.scrollTop = els.scrollHeight - $this.scrollTop;
+          }, 50);
+          $this.loading = false;
+        });
       });
     },
-    sendMessage() {
+    getHistoryMessage() {
+      // 事件获取历史消息，逻辑在上面
+      this.proxy.invoke("requestMessageHistory", 1).done(msg => {});
+    },
+    receiveUserMsg() {
+      //接收消息，
+      var $this = this;
+      $this.proxy.on("receiveUserMsg", data => {
+        data = JSON.parse(data);
+        $this.listArr.push(data);
+      });
+    },
+    sendMessage(imgType, imgUrl) {
+      imgType = imgType == "img" ? imgType : null;
+      // 发送消息
+      var d = {
+        id: this.my.id,
+        name: this.my.name,
+        src: this.my.src,
+        type: imgType || "text",
+        text: imgUrl || this.chatText
+      };
+      console.log(d);
+      d = JSON.stringify(d);
       //发送消息，这个方法由按钮事件触发
       var $this = this;
-      $this.proxy.invoke("sendMessage", this.chatText).done(msg => {
-        console.log(msg);
+      $this.proxy.invoke("sendMessage", d).done(msg => {
+        $this.listArr.push(JSON.parse(d));
+        if (!imgType) {
+          $this.chatText = "";
+        }
       });
+
+      var els = document.getElementById("chat_box");
+      setTimeout(() => {
+        console.log(els.scrollTop);
+        console.log(els.scrollHeight);
+        els.scrollTop = els.scrollHeight;
+      }, 100);
     },
     connect() {
       //连接
@@ -227,9 +264,6 @@ export default {
       var userId = this.getLogin.userid,
         token = this.getLogin.Token,
         toId = this.$route.query.id;
-      // $this.proxy
-      //   .invoke("connect", { userId: userId, token: token, toId: toId })
-      //   .done(msg => {});
       $this.proxy.invoke("connect", userId, token, toId).done(msg => {});
     }
   },
@@ -237,8 +271,6 @@ export default {
     this.connectServer();
     this.outH = document.getElementById("outh");
     this.outHeight = this.outH.offsetHeight;
-    console.log("当前页面API：" + this.$route.path);
-    console.log("聊天数据：", this.listArr);
 
     // 3秒后结束当前聊天
     // setTimeout(() => {

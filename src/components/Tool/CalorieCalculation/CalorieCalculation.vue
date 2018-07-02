@@ -192,6 +192,7 @@ export default {
 }
 .list {
   ul {
+    width: 100%;
     li {
       height: 50px;
       line-height: 50px;
@@ -200,11 +201,18 @@ export default {
       border-bottom: 1px solid #e3e3e3;
       div {
         padding: 0 15px;
+        width: 100%;
+        box-sizing: border-box;
+        position: relative;
       }
       span {
         float: right;
         font-size: 13px;
         color: #aeaeae;
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 15px;
       }
 
       &:active {

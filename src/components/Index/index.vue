@@ -369,6 +369,7 @@ export default {
 <style scoped lang="less">
 .top.top_on {
   height: 50px;
+  padding: 0 !important;
 }
 .top.top_er {
   box-sizing: border-box;

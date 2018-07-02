@@ -171,11 +171,16 @@ export default {
       border-bottom: 1px solid #e3e3e3;
       div {
         padding: 0 15px;
+        box-sizing: border-box;
+        position: relative;
       }
       span {
         float: right;
         font-size: 13px;
         color: #aeaeae;
+        position: absolute;
+        top: 0;
+        right: 15px;
       }
 
       &:active {
