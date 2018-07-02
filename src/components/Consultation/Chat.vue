@@ -156,26 +156,23 @@ export default {
     hd() {},
     // 即时通信
     connectServer() {
-      var $this = this;
       var conn = $.hubConnection(settings.server);
-      $this.proxy = conn.createHubProxy("chatHub");
-      $this.receiveSystemMsg(); //注册接收系统消息
-      $this.receiveUserMsg(); //接收消息
-      $this.receiveMessageHistory(); //注册接收历史消息
-      $this.receiveRecentMsg(); //注册近期消息
-      this.getHistoryMessage();
+      this.proxy = conn.createHubProxy("chatHub");
+      this.receiveSystemMsg(); //注册接收系统消息
+      this.receiveMessageHistory(); //注册接收历史消息
+      this.receiveRecentMsg(); //注册近期消息
+      this.receiveUserMsg(); //接收消息
       conn
         .start()
         .done(data => {
-          $this.connect(); //调用服务端connect方法
+          this.connect(); //调用服务端connect方法
         })
         .fail(data => {});
     },
     receiveSystemMsg() {
       var isT = true;
       //接收服务端消息，
-      var $this = this;
-      $this.proxy.on("receiveSystemMsg", (data, userInfo) => {
+      this.proxy.on("receiveSystemMsg", (data, userInfo) => {
         if (userInfo && isT) {
           var userInfo = JSON.parse(userInfo);
           this.my.id = userInfo.UserId;
@@ -191,30 +188,34 @@ export default {
     receiveRecentMsg() {
       //接收近期消息，
       this.proxy.on("receiveRecentMsg", data => {
-        console.log(data);
+        data = JSON.parse(data);
+        for (let i = 0; i < data.length; i++) {
+          var d = JSON.parse(data[i].Message);
+          this.listArr.unshift(d);
+        }
       });
     },
     receiveMessageHistory() {
       //接收历史消息，
-      console.log("好啦啦啦");
-      var $this = this;
-      $this.proxy.on("receiveMessageHistory", data => {
+      this.proxy.on("receiveMessageHistory", data => {
+        console.log("历史消息");
+        console.log(data);
+
+        return;
         console.log("好啦啦啦");
-        console.log(data);
-        console.log(data);
         console.log(data);
         if (data.length == 0) {
           return;
         }
-        $this.history++;
+        this.history++;
         for (let i = 0; i < data.length; i++) {
-          $this.listArr.unshift(data[i]);
+          this.listArr.unshift(data[i]);
         }
-        $this.$nextTick(() => {
+        this.$nextTick(() => {
           setTimeout(() => {
-            els.scrollTop = els.scrollHeight - $this.scrollTop;
+            els.scrollTop = els.scrollHeight - this.scrollTop;
           }, 50);
-          $this.loading = false;
+          this.loading = false;
         });
       });
     },
@@ -224,10 +225,9 @@ export default {
     },
     receiveUserMsg() {
       //接收消息，
-      var $this = this;
-      $this.proxy.on("receiveUserMsg", data => {
+      this.proxy.on("receiveUserMsg", data => {
         data = JSON.parse(data);
-        $this.listArr.push(data);
+        this.listArr.push(data);
       });
     },
     sendMessage(imgType, imgUrl) {
@@ -243,11 +243,10 @@ export default {
       console.log(d);
       d = JSON.stringify(d);
       //发送消息，这个方法由按钮事件触发
-      var $this = this;
-      $this.proxy.invoke("sendMessage", d).done(msg => {
-        $this.listArr.push(JSON.parse(d));
+      this.proxy.invoke("sendMessage", d).done(msg => {
+        this.listArr.push(JSON.parse(d));
         if (!imgType) {
-          $this.chatText = "";
+          this.chatText = "";
         }
       });
 
@@ -260,11 +259,10 @@ export default {
     },
     connect() {
       //连接
-      var $this = this;
       var userId = this.getLogin.userid,
         token = this.getLogin.Token,
         toId = this.$route.query.id;
-      $this.proxy.invoke("connect", userId, token, toId).done(msg => {});
+      this.proxy.invoke("connect", userId, token, toId).done(msg => {});
     }
   },
   mounted() {
