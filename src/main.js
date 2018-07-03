@@ -72,8 +72,8 @@ router.beforeEach((to, from, next) => {
     //     console.log("请求后台授权成功：");
     //     console.log(data);
     //     if (data.code !== 20000) {
-    //       this.$vux.toast.show({
-    //         type: 'error',
+    //       Vue.$vux.toast.show({
+    //         type: 'warn',
     //         text: data.error
     //       })
     //       return;
@@ -114,7 +114,7 @@ router.beforeEach((to, from, next) => {
     //   }
     // })
 
-    // 上面的是正式服务器
+    // ----------------------
 
     $.ajax({
       url: Settings.server + "/api/WeChat/MoniWeChatLogin",
