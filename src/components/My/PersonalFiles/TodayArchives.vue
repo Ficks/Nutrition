@@ -19,7 +19,7 @@
                   <div class="center">
                       <div class="kdc">
                           <div :class="{over:item.bfb>100}" class="jdt" :style="{width:item.bfb+'%'}">
-                            <template v-if="item.bfb<100">{{item.spedVal+item.unit}}</template>
+                            <template v-if="item.bfb<100">{{item.bfb>25?item.spedVal+item.unit:''}}</template>
                             <template v-else>{{item.bfbc}}</template>
                           </div>
                       </div>

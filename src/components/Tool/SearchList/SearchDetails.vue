@@ -14,7 +14,7 @@
                   </div>
                   <div class="wz">
                       <h1>{{details.title}}</h1>
-                      <p>{{details.kcal}}</p>
+                      <p>{{details.kcal}}kcal</p>
                   </div>
               </div>
               <div class="desc">
@@ -30,7 +30,7 @@
           </div>
           <h2 class="title_hb">
               所含营养素
-              <span>每100g</span>
+              <span>每{{details.ming}}g</span>
           </h2>
           <div class="box_list">
               <ul>
@@ -60,7 +60,7 @@
       <div class="nav_bom_zoom" @click="openBom(false)" v-show="detailsFix===0"></div>
       <div class="details_fix" :style="{bottom:detailsFix+'px'}">
         <div class="top">
-          {{date}}
+          <div @click="setDate">{{date}}</div>
           <span @click="openBom(false)">取消</span>
         </div>
         <div class="twbm">
@@ -85,16 +85,19 @@
 
         <div class="submit_btn" @click="addJrys">完成</div>
       </div>
+      <actionsheet v-model="mealtimes.show" :menus="mealtimes.menus" @on-click-menu="submitAdd" show-cancel></actionsheet>
     </div>
 </template>
 <script>
-import { Rater, Range, Toast } from "vux";
+import { Rater, Range, Toast, Datetime, Actionsheet } from "vux";
 
 export default {
   components: {
     Rater,
     Range,
-    Toast
+    Toast,
+    Datetime,
+    Actionsheet
   },
   data() {
     return {
@@ -103,17 +106,38 @@ export default {
       detailsFix: -500,
       grams: 100,
       date: "",
-      details: {}
+      details: {},
+      postData: {},
+      mealtimes: {
+        show: false,
+        menus: [
+          {
+            label: "<span style='color:red'>请选择餐次</span>",
+            type: "info"
+          },
+          {
+            label: "早餐",
+            value: 1
+          },
+          {
+            label: "中餐",
+            value: 2
+          },
+          {
+            label: "晚餐",
+            value: 3
+          },
+          {
+            label: "加餐",
+            value: 4
+          }
+        ]
+      }
     };
   },
   methods: {
     getDetails() {
-      var _this = this;
       var api = this.$route.query.path;
-
-      console.log("当前页面API：" + this.$route.path);
-      console.log("详情页面数据：", this.details);
-      console.log("这个页面可以变成添加过敏食物的页面");
       if (api === "/Tool/Recipes") {
         this.title = "食谱大全";
       } else if (api === "/Tool/MaterialRetrieval") {
@@ -129,9 +153,9 @@ export default {
         url: "/api/HealthyDiet/GetDishesDetail",
         type: "get",
         data: { id: this.$route.query.id },
-        success: function(data) {
+        success: data => {
           //成功的处理
-          _this.setData(data.Data);
+          this.setData(data.Data);
         },
         error: function() {
           //错误处理
@@ -159,37 +183,61 @@ export default {
     },
     // 加入饮食
     addJrys() {
-      var _this = this;
-      var d = { id: this.details.id };
+      this.postData = { id: this.details.id };
       if (this.title != "过敏食物添加") {
-        d.grams = this.grams;
+        this.postData.grams = this.grams;
+      } else {
+        this.submitAdd();
+        return;
       }
-      this.detailsFix = -500;
+
+      this.postData.type = this.$route.query.typevalue;
+      if (this.$route.query.typevalue == "") {
+        this.mealtimes.show = true;
+      } else {
+        this.submitAdd();
+      }
+    },
+    submitAdd(val) {
+      if (val == "cancel") return;
+      if (val > 0) {
+        this.postData.type = val;
+      }
       this.$http({
         url: this.api,
         type: "post",
-        data: JSON.stringify(d),
-        success: function(data) {
-          console.log(data);
+        data: JSON.stringify(this.postData),
+        success: data => {
           //成功的处理
-          _this.$vux.toast.show({
+          this.$vux.toast.show({
             text: data.Message,
             width: "10em"
           });
+          this.detailsFix = -500;
         },
         error: function() {
           //错误处理
         }
       });
+    },
+    // 设置日期
+    setDate() {
+      // 设置日期
+      this.$vux.datetime.show({
+        value: this.date, // 其他参数同 props
+        startDate: this.$getDate(-15),
+        endDate: this.$getDate(0),
+        onConfirm: value => {
+          this.date = value;
+        },
+        onHide() {},
+        onShow() {}
+      });
     }
   },
   mounted() {
     this.getDetails();
-    var date = new Date();
-    var year = date.getFullYear();
-    var mouth = date.getMonth() + 1;
-    var r = date.getDate();
-    this.date = year + "-" + mouth + "-" + r;
+    this.date = this.$getDate(0);
   }
 };
 </script>
@@ -245,7 +293,7 @@ export default {
       padding-left: 30px;
       color: #ef7d1d;
       padding-right: 20px;
-      height: 90px;
+      height: 120px;
       padding-top: 17px;
     }
     p {

@@ -11,7 +11,7 @@
                 <div class="sclb__bd">
                     <a href="javascript:void(0);" @click="operationFn(item)" v-for="(item,index) in listArr">
                         <div v-if="item.src"  class="left">
-                            <img :src="item.src" alt="" class="weui-media-box__thumb">
+                            <img :src="$HTTPURL+item.src" alt="" class="weui-media-box__thumb">
                         </div>
                         <div class="right">
                             <h4>{{item.title}}</h4>
@@ -62,6 +62,15 @@ export default {
   },
   methods: {
     onDelete() {
+      this.$http({
+        url: "/api/NewsInfo/DoCollect",
+        type: "post",
+        data: JSON.stringify({ id: 1 }),
+        success: data => {
+          console.log(data);
+        },
+        error: data => {}
+      });
       //   删除
       this.$vux.loading.show({
         text: "Loading"
@@ -114,6 +123,7 @@ export default {
         this.searchVal.pageNum--;
       } else {
         for (let i = 0; i < data.length; i++) {
+          data[i].edit = false;
           this.listArr.push(data[i]);
         }
       }
@@ -139,7 +149,10 @@ export default {
       } else {
         // 进入详情
         this.$router.push({
-          path: item.link
+          path: "/Find/FindDetails",
+          query: {
+            id: item.id
+          }
         });
       }
     }

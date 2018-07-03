@@ -13,7 +13,7 @@
         <scroller lock-x height="-95px" ref="scrollerBottom">
             <div class="scroller_box list_mds">
                 <ul>
-                    <li @click="addJr(true,item)" v-for="(item,index) in list">{{item.name}} <span>{{item.kcal}}kacl({{item.min}}min)</span></li>
+                    <li @click="addJr(true,item)" v-for="(item,index) in list">{{item.name}} <span>运动强度：<em>{{item.iten}}</em></span></li>
                 </ul>
             </div>            
         </scroller>
@@ -21,7 +21,7 @@
         <div class="nav_bom_zoom" @click="addJr(false)" v-show="addBom===0"></div>
         <div class="details_fix" :style="{bottom:addBom+'px'}">
             <div class="top">
-            2018-05-22
+            {{$getDate(0)}}
             <span @click="addJr(false)">取消</span>
             </div>
             <div class="twbm">
@@ -30,11 +30,11 @@
             
             <div class="s">
                 <div class="z">
-                    <span>54.0kcal</span>
-                    {{addData.datakcal+`min`}}
+                    <span>运动强度：{{addData.iten}}</span>
+                    {{addData.min+`min`}}
                 </div>
                 <div class="kdc">
-                    <range v-model="addData.datakcal"  :min="1" :max="1000"></range>
+                    <range v-model="addData.min"  :min="1" :max="1000"></range>
                 </div>
             </div>
 
@@ -61,48 +61,11 @@ export default {
       loading: false,
       addBom: -500,
       addData: {
-        name: "",
-        kcal: "",
-        min: "",
-        datakcal: 0
+        id: "",
+        min: 0,
+        iten: ""
       },
-      listArr: [
-        {
-          name: "游泳",
-          kcal: 131,
-          min: 30
-        },
-        {
-          name: "足球",
-          kcal: 131,
-          min: 30
-        },
-        {
-          name: "篮球",
-          kcal: 131,
-          min: 30
-        },
-        {
-          name: "羽毛球",
-          kcal: 131,
-          min: 30
-        },
-        {
-          name: "乒乓球",
-          kcal: 131,
-          min: 30
-        },
-        {
-          name: "截拳道",
-          kcal: 131,
-          min: 30
-        },
-        {
-          name: "武术",
-          kcal: 131,
-          min: 30
-        }
-      ]
+      listArr: []
     };
   },
   computed: {
@@ -127,27 +90,48 @@ export default {
       } else {
         this.addBom = -500;
       }
-
+      this.addData.min = 0;
       if (item) {
-        this.addData.name = item.name;
-        this.addData.kcal = item.kcal;
-        this.addData.min = item.min;
+        this.addData.id = item.id;
+        this.addData.iten = item.iten;
       }
     },
     // 加入运动
     addJrys() {
-      this.addBom = -500;
-      this.$vux.toast.show({
-        text: "添加成功",
-        type: "success"
+      this.$http({
+        url: "/api/HealthyArchive/AddTodaySports",
+        type: "post",
+        data: JSON.stringify(this.addData),
+        success: data => {
+          console.log(data);
+          if (data.Code === 2000) {
+            this.$vux.toast.show({
+              text: data.Message,
+              type: "success"
+            });
+          } else {
+            this.$vux.toast.show({
+              type: "warn",
+              text: data.Message,
+              width: "50%"
+            });
+          }
+        },
+        error: function(data) {
+          console.log(data);
+        }
       });
+      this.addBom = -500;
     },
     getList() {
       this.$http({
         url: "/api/HealthyArchive/GetSportsItemList",
         type: "get",
         data: this.search,
-        success: function(data) {},
+        success: data => {
+          console.log(data);
+          this.listArr = data.Data.Data;
+        },
         error: function(data) {
           console.log(data);
         }
@@ -181,6 +165,11 @@ export default {
           float: right;
           font-size: 28/2px;
           color: #a4a4a4;
+        }
+        em {
+          width: 30px;
+          display: inline-block;
+          font-style: normal;
         }
       }
     }

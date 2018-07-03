@@ -309,7 +309,6 @@ export default {
         type: "post",
         data: JSON.stringify({ id: this.gmsw[this.removeIndex].id }),
         success: data => {
-          console.log(data);
           this.gmsw.splice(this.removeIndex, 1);
           this.$vux.toast.show({
             text: "删除成功",
@@ -371,21 +370,19 @@ export default {
         url: "/api/HealthyArchive/UpdatePersonalHealthyArchive",
         type: "post",
         data: d,
-        success: function(data) {
+        success: data => {
           //成功的处理
-          console.log("-----------------");
-          console.log(data);
+          this.$vux.toast.show({
+            text: data.Message,
+            type: "success"
+          });
+          this.$router.push({
+            path: "/My"
+          });
         },
         error: function() {
           //错误处理
         }
-      });
-      this.$vux.toast.show({
-        text: "保存成功",
-        type: "success"
-      });
-      this.$router.push({
-        path: "/My"
       });
     },
     setYfName(index) {
@@ -402,7 +399,6 @@ export default {
       }
     },
     setData(data) {
-      console.log(data);
       this.form.id = data.Data.id;
       this.form.name = data.Data.name;
       this.form.age = data.Data.age;
@@ -427,10 +423,13 @@ export default {
       this.form.llsp.value = data.Data.llspid;
       this.form.llsp.name = data.Data.llspname;
       this.gmsw = data.Data.alleryarr;
-      var arr = data.Data.bankaccount.split("-");
-      this.form.bank = arr[0];
-      this.form.account = arr[1];
-      this.form.banaccount = arr[2];
+      var arr = [];
+      if (data.Data.bankaccount) {
+        arr = data.Data.bankaccount.split("-");
+      }
+      this.form.bank = arr[0] || "";
+      this.form.account = arr[1] || "";
+      this.form.banaccount = arr[2] || "";
     }
   },
   mounted() {
@@ -450,7 +449,6 @@ export default {
       type: "get",
       data: { id: id },
       success: data => {
-        console.log(data);
         //成功的处理
         this.setData(data);
       },

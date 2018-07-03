@@ -9,6 +9,8 @@ import 'signalr';
 import Axios from 'axios'
 import store from '@/vuex/store'
 import filters from '@/filters/filters'
+import { DatetimePlugin } from 'vux'
+Vue.use(DatetimePlugin)
 import {
   ConfirmPlugin
 } from 'vux'
@@ -56,14 +58,70 @@ router.beforeEach((to, from, next) => {
   var Token = store.state.Token;
 
   if (userid == "") { //没有token或者要去的path不是login就清除userinfo和token，并跳转到登录页面
+    console.log("获取参数传给后台：");
     var UrlData = getUrlCs();
-    console.log("正在登陆中")
+    console.log(UrlData)
+    // $.ajax({
+    //   url: Settings.server + "/api/WeChat/WeChatLogin",
+    //   type: "get",
+    //   data: {
+    //     referid: UrlData.referid,
+    //     code: UrlData.code
+    //   },
+    //   success: function (data) {
+    //     console.log("请求后台授权成功：");
+    //     console.log(data);
+    //     if (data.code !== 20000) {
+    //       this.$vux.toast.show({
+    //         type: 'error',
+    //         text: data.error
+    //       })
+    //       return;
+    //     }
+    //     //成功的处理
+    //     var d = {
+    //       userid: data.Data.userid,
+    //       Token: data.Token,
+    //       headurl: data.Data.headurl,
+    //       username: data.Data.nickname
+    //     };
+    //     store.state.userid = d.userid;
+    //     store.state.Token = d.Token;
+    //     store.state.headurl = d.headurl;
+    //     store.state.username = d.username;
+
+    //     Vue.prototype.$http = function (fd) {
+    //       return $.ajax({
+    //         url: Settings.server + fd.url,
+    //         headers: {
+    //           "userid": d.userid,
+    //           "Token": d.Token,
+    //           "Content-Type": "application/json;charset=UTF-8"
+    //         },
+    //         type: fd.type,
+    //         data: fd.data || {},
+    //         success: function (data) {
+    //           //成功的处理
+    //           fd.success(data);
+    //         },
+    //         error: function () {
+    //           //错误处理
+    //           fd.error(data) || "";
+    //         }
+    //       });
+    //     }
+    //     next();
+    //   }
+    // })
+
+    // 上面的是正式服务器
+
     $.ajax({
       url: Settings.server + "/api/WeChat/MoniWeChatLogin",
       type: "get",
       data: {
         referid: "2",
-        openid: "3",
+        openid: "okXzt0jXqVFnR4cY7YjBxvzB0W00",
         nickname: "4",
         headurl: "5"
       },
@@ -114,6 +172,8 @@ Vue.prototype.$getDate = function (AddDayCount) {
   var y = dd.getFullYear();
   var m = dd.getMonth() + 1; //获取当前月份的日期
   var d = dd.getDate();
+  m = m >= 10 ? m : '0' + m;
+  d = d >= 10 ? d : '0' + d;
   return y + "-" + m + "-" + d;
 }
 

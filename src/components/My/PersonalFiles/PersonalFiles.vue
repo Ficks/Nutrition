@@ -18,7 +18,6 @@
                   <div class="left">{{item.name}}</div>
                   <div class="center">
                       <div class="kdc">
-                        
                           <div :class="{over:item.bfb>90}" class="jdt" :style="{width:item.bfb+'%'}">
                             {{item.bfbc}}
                           </div>

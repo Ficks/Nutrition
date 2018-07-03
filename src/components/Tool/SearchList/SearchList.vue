@@ -74,7 +74,8 @@ export default {
         query: {
           path: this.$route.path,
           id: item.id,
-          src: item.src
+          src: item.src,
+          typevalue: this.$route.query.typevalue || ""
         }
       });
     },

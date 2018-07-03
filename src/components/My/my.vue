@@ -7,10 +7,10 @@
         </div>
         <div class="top_box">
           <div class="imgs">
-            <img src="/static/images/tx.jpg" alt="">
+            <img :src="getLogin.headurl" alt="">
           </div>
           <div class="wz">
-            <h1>{{details.name}}</h1>
+            <h1>{{getLogin.username}}</h1>
             <p>{{details.sexname+' '+details.age}}</p>
           </div>
         </div>
@@ -37,13 +37,21 @@
 </template>
 <script>
 import Menu from "../Common/Menu.vue";
+import { mapGetters } from "vuex";
 export default {
   components: {
     Menu
   },
+  computed: {
+    ...mapGetters(["getLogin"])
+  },
   data() {
     return {
-      details: {}
+      details: {
+        name: "",
+        sexname: "",
+        age: ""
+      }
     };
   },
   methods: {
