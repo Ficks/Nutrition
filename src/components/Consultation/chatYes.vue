@@ -11,7 +11,7 @@
                     <i class="iconfont icon-chenggong"></i>
                 </div>
                 <h1>评价成功</h1>
-                <div class="submit_btn"><router-link :to="{path:'/Consultation/ConsultationDetails',query:{back:'/Consultation'}}">完成</router-link></div>
+                <div class="submit_btn"><router-link to="/Consultation">完成</router-link></div>
             </div>
         </scroller>
     </div>

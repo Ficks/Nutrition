@@ -1,7 +1,7 @@
 <template>
     <div class="container">
       <div class="header">
-        <div class="left" @click="$router.push({path:'/Consultation/ConsultationDetails',query:{back:'/Consultation'}})"><i class="iconfont icon-fanhui"></i>返回</div>
+        <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
         <div class="title">{{$route.name}}</div>
       </div>
         <scroller lock-x height="-45px" ref="scrollerBottom">
@@ -39,15 +39,16 @@ export default {
       },
       show: false,
       menus: {
-        "0": "非常不满意",
-        "1": "不满意",
-        "2": "满意",
-        "3": "非常满意"
+        "1": "非常不满意",
+        "2": "不满意",
+        "3": "满意",
+        "4": "非常满意"
       }
     };
   },
   methods: {
     reason(key, val) {
+      if (key == "cancel") return;
       this.d.value = key;
       this.d.valName = val;
     },
@@ -56,12 +57,34 @@ export default {
       if (this.d.value === "") {
         this.$vux.toast.show({
           text: "请选择咨询满意度",
-          type: "text"
+          type: "warn",
+          width: "11em"
         });
         return false;
       }
-      this.$router.push({
-        path: "/Consultation/ChatYes"
+
+      this.$http({
+        url: "/api/Consultation/DietitianEvaluate",
+        type: "get",
+        data: {
+          orderid: this.$route.query.id,
+          score: this.d.value,
+          content: this.d.text
+        },
+        success: data => {
+          if (data.Code !== 20000) {
+            this.$vux.toast.show({
+              type: "warn",
+              text: data.Error || data.Message,
+              width: "13em"
+            });
+            return;
+          }
+          this.$router.push({
+            path: "/Consultation/ChatYes"
+          });
+        },
+        error: data => {}
       });
     }
   },

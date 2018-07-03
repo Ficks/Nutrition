@@ -9,6 +9,7 @@
 
             <div class="right"><router-link to="/Dynamic/Release"><i class="iconfont icon-xiangji"></i></router-link></div>
         </div>
+        <p v-if="listArr.length==0" class="tip">目前没有动态哦</p>
         <div class="swiper_wr" @click="toPathDetails" v-if="listArr.length>0">
          <swiper ref="swiper" :aspect-ratio="1/1" height="190px" @on-index-change="onSwiperItemIndexChange" v-model="swiperItemIndex" :show-dots="false">
               <swiper-item  class="swiper-demo-img" v-for="(item, index) in listArr" :key="index">
@@ -22,8 +23,7 @@
               </swiper-item>
           </swiper>
         </div>
-
-        <div class="gnbtn">
+        <div class="gnbtn" v-if="listArr.length>0">
             <span><i  @click="noLove"  class="iconfont icon-shanchu"></i></span>
             <span><i @click="love" class="iconfont icon-shoucang1"></i></span>
           </div>
@@ -55,6 +55,9 @@ export default {
   },
   methods: {
     setData(data) {
+      if (!data) {
+        return;
+      }
       if (data.length > 0) {
         for (let i = 0; i < data.length; i++) {
           this.listArr.push(data[i]);
@@ -145,6 +148,11 @@ export default {
   padding-bottom: 80px;
   overflow: auto;
   background: #e3e3e3;
+  .tip {
+    text-align: center;
+    padding: 20px 0;
+    color: #aaa;
+  }
   .header {
     z-index: 999;
     position: fixed;

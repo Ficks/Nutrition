@@ -11,7 +11,7 @@
               <div class="info">
                 <div class="top">
                   <div class="img">
-                    <img :src="$HTTPURL+details.HeadImg" alt="">
+                    <img :src="details.HeadImg" alt="">
                   </div>
                   <div class="wz">
                     <h1>{{details.Name}}</h1>
@@ -70,7 +70,7 @@
 </template>
 <script>
 import { LoadMore, Actionsheet, Loading } from "vux";
-import { setTimeout } from "timers";
+import { setTimeout, setInterval } from "timers";
 export default {
   components: {
     LoadMore,
@@ -134,14 +134,31 @@ export default {
       this.payment.menu.integral = `积分支付 (${this.details.integral})`;
     },
     paymentFn(key) {
+      // 向服务端发送支付请求
       if (key == "price") {
-        // 微信支付
-        this.$router.push({
-          path: "/Consultation/State",
-          query: {
-            mode: 0, //支付方式
-            success: 1, //是否成功
-            name: this.details.name
+        console.log("发起微信支付");
+        this.$http({
+          url: "/api/WeChat/GetWCPayRequestParams",
+          type: "post",
+          data: JSON.stringify({ DietitianId: this.$route.query.id }),
+          success: data => {
+            console.log("调用了微信支付接口");
+            console.log(data);
+            // 调用微信支付
+            if (data.Code !== 20000) {
+              this.$vux.toast.show({
+                type: "warn",
+                text: data.Error || data.Message
+              });
+              return;
+            }
+
+            data = JSON.parse(data.Data);
+            this.WeChatZf(data);
+          },
+          error: data => {
+            console.log("微信支付错误");
+            console.log(data);
           }
         });
       } else if (key == "integral") {
@@ -154,7 +171,6 @@ export default {
           }),
           success: data => {
             if (data.Code === 20000) {
-              console.log(data);
               this.$router.push({
                 path: "/Consultation/State",
                 query: {
@@ -183,6 +199,69 @@ export default {
           error: error => {}
         });
       }
+    },
+    WeChatZf(data) {
+      var _this = this;
+      WeixinJSBridge.invoke(
+        "getBrandWCPayRequest",
+        {
+          appId: data.appId, //公众号名称，由商户传入
+          timeStamp: data.timeStamp, //时间戳，自1970年以来的秒数
+          nonceStr: data.nonceStr, //随机串
+          package: data.package,
+          signType: data.signType, //微信签名方式：
+          paySign: data.paySign //微信签名
+        },
+        function(res) {
+          if (res.err_msg == "get_brand_wcpay_request:ok") {
+            // 判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+            _this.$vux.toast.show({
+              type: "success",
+              text: "支付成功"
+            });
+            _this.timeAjax(data);
+          } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+            _this.$vux.toast.show({
+              type: "warn",
+              text: "您取消了支付"
+            });
+          } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+            _this.$vux.toast.show({
+              type: "warn",
+              text: "支付失败，请重新支付"
+            });
+          }
+        }
+      );
+    },
+    timeAjax(dataJson) {
+      // 轮询订单结果
+      this.$http({
+        url: "/api/WeChat/QueryOrder",
+        type: "get",
+        data: { ordercode: dataJson.ordercode },
+        success: data => {
+          if (data.Code === 20000) {
+            this.$router.push({
+              path: "/Consultation/State",
+              query: {
+                mode: 0,
+                success: 1,
+                name: this.details.Name,
+                id: this.details.UserId
+              }
+            });
+          } else if (data.Code === 9000) {
+            this.$vux.toast.show({
+              type: "warn",
+              text: "支付失败：9000"
+            });
+          } else if (data.Code === 9004) {
+            this.timeAjax(dataJson);
+          }
+        },
+        error: data => {}
+      });
     },
     back() {
       if (this.$route.query.back) {

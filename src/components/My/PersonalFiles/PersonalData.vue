@@ -226,26 +226,7 @@ export default {
           "3": "重度"
         }
       },
-      gmsw: [
-        {
-          name: "蔬菜"
-        },
-        {
-          name: "白菜"
-        },
-        {
-          name: "包菜"
-        },
-        {
-          name: "小菜"
-        },
-        {
-          name: "素菜"
-        },
-        {
-          name: "肥肉"
-        }
-      ]
+      gmsw: []
     };
   },
   methods: {
@@ -286,7 +267,7 @@ export default {
       this.zoom = true;
     },
     reason(key, val) {
-      if (this.read) {
+      if (this.read || key == "cancel") {
         return;
       }
       if (val.indexOf("</span>") >= 0) {

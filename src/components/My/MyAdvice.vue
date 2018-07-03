@@ -15,7 +15,7 @@
             <scroller lock-x height="-95px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
             <div class="box search_list">
                 <div class="list_me" v-for="(item,index) in listArr" @click.stop="toPathDetails(item)">
-                    <div class="tx"><img :src="$HTTPURL+item.HeadUrl" alt=""></div>
+                    <div class="tx"><img :src="item.HeadUrl" alt=""></div>
                     <div class="box_wz">
                         <div class="list_ts">
                             <h3>{{item.Name}}
@@ -31,7 +31,9 @@
                             </p>
                         </div>
                         <div class="list_ts">
-                            <p>擅长：{{item.GoodAt}}</p>
+                            <p>擅长：{{item.GoodAt}}
+                              <span @click.stop="toPinLun(item)" v-if="item.IsEnd==0">评论</span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -65,6 +67,15 @@ export default {
     };
   },
   methods: {
+    toPinLun(item) {
+      // 去评论
+      this.$router.push({
+        path: "/Consultation/ChatRefund",
+        query: {
+          id: item.OrderId
+        }
+      });
+    },
     refund(item) {
       // 退款
       console.log(item);

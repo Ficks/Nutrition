@@ -152,7 +152,7 @@
         <ul>
           <li v-for="(item,index) in nutCon" @click="toDetails(item)">
               <div class="img">
-                <img :src="$HTTPURL+item.HeadUrl" alt="">
+                <img :src="item.HeadUrl" alt="">
               </div>
               <h3>{{item.Name}}</h3>
               <h4>{{item.Company}}</h4>
@@ -193,77 +193,7 @@ export default {
       isTNB: false,
       KeyId: "",
       // 早中晚餐推荐
-      recommendData: [
-        // 早餐
-        [
-          [
-            {
-              name: "早餐",
-              kcal: "114kcal/1.0"
-            },
-            {
-              name: "酸奶",
-              kcal: "75kcal/1.0瓶"
-            },
-            {
-              name: "煮鸡蛋",
-              kcal: "11kcal/1.0个"
-            }
-          ],
-          [
-            {
-              name: "加餐",
-              kcal: "114kcal/1.0"
-            }
-          ]
-        ],
-        // 中餐
-        [
-          [
-            {
-              name: "中餐",
-              kcal: "114kcal/1.0"
-            },
-            {
-              name: "酸奶",
-              kcal: "75kcal/1.0瓶"
-            },
-            {
-              name: "煮鸡蛋",
-              kcal: "11kcal/1.0个"
-            }
-          ],
-          [
-            {
-              name: "加餐",
-              kcal: "114kcal/1.0"
-            }
-          ]
-        ],
-        // 晚餐
-        [
-          [
-            {
-              name: "晚餐",
-              kcal: "114kcal/1.0"
-            },
-            {
-              name: "酸奶",
-              kcal: "75kcal/1.0瓶"
-            },
-            {
-              name: "煮鸡蛋",
-              kcal: "11kcal/1.0个"
-            }
-          ],
-          [
-            {
-              name: "加餐",
-              kcal: "114kcal/1.0"
-            }
-          ]
-        ]
-      ],
+      recommendData: [],
       // 营养咨询
       nutCon: []
     };
@@ -325,7 +255,11 @@ export default {
             return;
           }
           this.recommendData = data.Data.Value;
+          console.log("查看如果是糖尿病用户的数据");
           this.KeyId = data.Data.Key;
+          this.$nextTick(() => {
+            this.$refs.scrollerBottom.reset();
+          });
         },
         error: error => {}
       });
@@ -346,6 +280,9 @@ export default {
           console.log("data");
           console.log(data);
           this.nutCon = data.Data.Data;
+          this.$nextTick(() => {
+            this.$refs.scrollerBottom.reset();
+          });
         },
         error: function() {
           //错误处理
@@ -355,7 +292,10 @@ export default {
     toDetails(item) {
       // 跳转到营养师详情
       this.$router.push({
-        path: item.link
+        path: "/Consultation/ConsultationDetails",
+        query: {
+          id: item.DietitianId
+        }
       });
     }
   },
@@ -404,7 +344,8 @@ export default {
 }
 .scroller_box {
   height: 100%;
-  padding-bottom: 80px;
+  padding-bottom: 80px !important;
+  box-sizing: border-box;
 }
 .container {
   box-sizing: border-box;

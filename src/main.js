@@ -9,7 +9,9 @@ import 'signalr';
 import Axios from 'axios'
 import store from '@/vuex/store'
 import filters from '@/filters/filters'
-import { DatetimePlugin } from 'vux'
+import {
+  DatetimePlugin
+} from 'vux'
 Vue.use(DatetimePlugin)
 import {
   ConfirmPlugin
@@ -61,6 +63,8 @@ router.beforeEach((to, from, next) => {
     console.log("获取参数传给后台：");
     var UrlData = getUrlCs();
     console.log(UrlData)
+
+
     // $.ajax({
     //   url: Settings.server + "/api/WeChat/WeChatLogin",
     //   type: "get",
@@ -71,7 +75,7 @@ router.beforeEach((to, from, next) => {
     //   success: function (data) {
     //     console.log("请求后台授权成功：");
     //     console.log(data);
-    //     if (data.code !== 20000) {
+    //     if (data.Code !== 20000) {
     //       Vue.$vux.toast.show({
     //         type: 'warn',
     //         text: data.error
@@ -113,6 +117,7 @@ router.beforeEach((to, from, next) => {
     //     next();
     //   }
     // })
+    // return;
 
     // ----------------------
 

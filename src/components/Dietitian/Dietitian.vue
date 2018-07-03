@@ -53,15 +53,15 @@ export default {
         });
         return false;
       }
-      var uPattern = /^[a-zA-Z0-9_-]{4,16}$/;
-      if (!uPattern.test(this.password)) {
-        this.$vux.toast.show({
-          text: "请输入4到16位（字母，数字，下划线，减号）",
-          type: "warn",
-          width: "12em"
-        });
-        return false;
-      }
+      // var uPattern = /^[a-zA-Z0-9_-]{4,16}$/;
+      // if (!uPattern.test(this.password)) {
+      //   this.$vux.toast.show({
+      //     text: "请输入4到16位（字母，数字，下划线，减号）",
+      //     type: "warn",
+      //     width: "12em"
+      //   });
+      //   return false;
+      // }
 
       this.$http({
         url: "/api/Consultation/DietitianLogin",
