@@ -62,37 +62,52 @@ export default {
   },
   methods: {
     onDelete() {
-      this.$http({
-        url: "/api/NewsInfo/DoCollect",
-        type: "post",
-        data: JSON.stringify({ id: 1 }),
-        success: data => {
-          console.log(data);
-        },
-        error: data => {}
-      });
+      var str = "";
+      for (let i = 0; i < this.listArr.length; i++) {
+        if (this.listArr[i].edit) {
+          str += `'${this.listArr[i].id}',`;
+        }
+      }
+      console.log(str);
+      if (str == "") {
+        this.$vux.toast.show({
+          type: "warn",
+          text: "请先选择删除列"
+        });
+        return;
+      }
       //   删除
       this.$vux.loading.show({
         text: "Loading"
       });
-      var removeArr = [];
-      for (let i = 0; i < this.listArr.length; i++) {
-        if (this.listArr[i].edit) {
-          removeArr.push(i);
-        }
-      }
-      // 给下标排序然后再删除
-      removeArr.sort((a, b) => {
-        return b - a;
-      });
-      for (let i = 0; i < removeArr.length; i++) {
-        this.listArr.splice(removeArr[i], 1);
-      }
-      this.operation = false;
-      this.$vux.loading.hide();
-      this.$vux.toast.show({
-        text: "删除成功",
-        type: "success"
+      str = str.substr(0, str.length - 1);
+      this.$http({
+        url: "/api/NewsInfo/DoCancelFavorBatch",
+        type: "post",
+        data: JSON.stringify({ idArr: str }),
+        success: data => {
+          console.log(data);
+          var removeArr = [];
+          for (let i = 0; i < this.listArr.length; i++) {
+            if (this.listArr[i].edit) {
+              removeArr.push(i);
+            }
+          }
+          // 给下标排序然后再删除
+          removeArr.sort((a, b) => {
+            return b - a;
+          });
+          for (let i = 0; i < removeArr.length; i++) {
+            this.listArr.splice(removeArr[i], 1);
+          }
+          this.operation = false;
+          this.$vux.loading.hide();
+          this.$vux.toast.show({
+            text: "删除成功",
+            type: "success"
+          });
+        },
+        error: data => {}
       });
     },
     getList(time) {

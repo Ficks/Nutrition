@@ -26,7 +26,10 @@
               描述
           </h2>
           <div class="describe">
-              <p><i class="iconfont icon-jieyibiaozhi1"></i>{{details.describe}}</p>
+              <div class="divp">
+                <i class="iconfont icon-jieyibiaozhi1"></i>
+                <p class="right" v-html="details.describe"></p>
+              </div>
           </div>
           <h2 class="title_hb">
               所含营养素
@@ -286,6 +289,8 @@ export default {
     height: auto;
     overflow: hidden;
     padding: 20px 0;
+    .divp {
+    }
     i {
       font-size: 50px;
       display: block;
@@ -293,14 +298,15 @@ export default {
       padding-left: 30px;
       color: #ef7d1d;
       padding-right: 20px;
-      height: 120px;
-      padding-top: 17px;
+      height: 100%;
+      padding-top: 10px;
     }
     p {
       padding-right: 50px;
       color: #666666;
       font-size: 16px;
       line-height: 26px;
+      padding-left: 30px;
     }
   }
 

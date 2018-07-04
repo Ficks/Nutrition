@@ -33,158 +33,18 @@ export default {
   },
   data() {
     return {
-      listArr: [
-        {
-          title: "膳食营养评估题目示例？",
-          score: 0, //本题获得分数
-          abcd: "", //本题所选
-          arr: [
-            {
-              title: "选项A",
-              fraction: 10
-            },
-            {
-              title: "选项B",
-              fraction: 20
-            },
-            {
-              title: "选项C",
-              fraction: 30
-            },
-            {
-              title: "选项D",
-              fraction: 40
-            }
-          ]
-        },
-        {
-          title: "膳食营养评估题目示例？",
-          score: 0, //本题获得分数
-          abcd: "", //本题所选
-          arr: [
-            {
-              title: "选项A",
-              fraction: 10
-            },
-            {
-              title: "选项B",
-              fraction: 20
-            },
-            {
-              title: "选项C",
-              fraction: 30
-            },
-            {
-              title: "选项D",
-              fraction: 40
-            }
-          ]
-        },
-        {
-          title: "膳食营养评估题目示例？",
-          score: 0, //本题获得分数
-          abcd: "", //本题所选
-          arr: [
-            {
-              title: "选项A",
-              fraction: 10
-            },
-            {
-              title: "选项B",
-              fraction: 20
-            },
-            {
-              title: "选项C",
-              fraction: 30
-            },
-            {
-              title: "选项D",
-              fraction: 40
-            }
-          ]
-        },
-        {
-          title: "膳食营养评估题目示例？",
-          score: 0, //本题获得分数
-          abcd: "", //本题所选
-          arr: [
-            {
-              title: "选项A",
-              fraction: 10
-            },
-            {
-              title: "选项B",
-              fraction: 20
-            },
-            {
-              title: "选项C",
-              fraction: 30
-            },
-            {
-              title: "选项D",
-              fraction: 40
-            }
-          ]
-        },
-        {
-          title: "膳食营养评估题目示例？",
-          score: 0, //本题获得分数
-          abcd: "", //本题所选
-          arr: [
-            {
-              title: "选项A",
-              fraction: 10
-            },
-            {
-              title: "选项B",
-              fraction: 20
-            },
-            {
-              title: "选项C",
-              fraction: 30
-            },
-            {
-              title: "选项D",
-              fraction: 40
-            }
-          ]
-        },
-        {
-          title: "膳食营养评估题目示例？",
-          score: 0, //本题获得分数
-          abcd: "", //本题所选
-          arr: [
-            {
-              title: "选项A",
-              fraction: 10
-            },
-            {
-              title: "选项B",
-              fraction: 20
-            },
-            {
-              title: "选项C",
-              fraction: 30
-            },
-            {
-              title: "选项D",
-              fraction: 40
-            }
-          ]
-        }
-      ],
+      listArr: [],
       score: 0
     };
   },
   methods: {
     getList() {
-      var _this = this;
       this.$http({
         url: "/api/Questionnaire/GetQuestionsAndOptions",
         type: "get",
         data: { id: this.$route.query.id },
-        success(data) {
-          _this.setData(data.Data);
+        success: data => {
+          this.setData(data.Data);
         },
         error() {}
       });
@@ -196,12 +56,11 @@ export default {
       this.listArr = data;
     },
     onchanges(i, j) {
-      console.log(this.listArr[i].arr[j].fraction);
       this.listArr[i].abcd = j;
       this.listArr[i].score = this.listArr[i].arr[j].fraction;
     },
     submit() {
-      var _this = this;
+      console.log(this.listArr.length);
       for (let i = 0; i < this.listArr.length; i++) {
         if (this.listArr[i].abcd == "") {
           this.$vux.toast.show({
@@ -215,13 +74,12 @@ export default {
       this.$http({
         url: "/api/Questionnaire/SubmitQuestionnaireAndGainScore",
         type: "post",
-        data: { id: this.$route.query.id },
-        success(data) {
-          console.log(data);
-          _this.$router.push({
-            path: _this.$route.matched[0].path + "/AssessmentResult",
+        data: JSON.stringify({ id: this.$route.query.id, Score: this.score }),
+        success: data => {
+          this.$router.push({
+            path: this.$route.matched[0].path + "/AssessmentResult",
             query: {
-              score: _this.score
+              score: this.score
             }
           });
         },

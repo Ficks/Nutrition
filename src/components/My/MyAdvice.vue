@@ -7,7 +7,7 @@
       </div>
         <div class="search">
             <div class="input">
-              <input type="text" v-model="searchVal.value" placeholder="搜索营养师姓名">
+              <input type="text" v-model="searchVal.name" placeholder="搜索营养师姓名">
               <i class="iconfont icon-sousuo" @click="getList"></i>
             </div>
         </div>
@@ -57,7 +57,7 @@ export default {
     return {
       navBottom: -300,
       searchVal: {
-        value: "",
+        name: "",
         onFetching: false,
         uptext: "滑动查看更多",
         pageNum: 0,

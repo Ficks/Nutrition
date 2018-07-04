@@ -19,7 +19,7 @@
               <h2><span>以下为评论</span></h2>
               <ul>
                   <li v-for="(item,index) in listArr">
-                      <div class="top">{{item.lou}} <span>{{item.date | dateTimeGsh}}</span></div>
+                      <div class="top">{{index+1}}楼 <span>{{item.date | dateTimeGsh}}</span></div>
                       <p>{{item.p}}</p>
                   </li>
               </ul>

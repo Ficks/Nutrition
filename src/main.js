@@ -169,6 +169,8 @@ router.beforeEach((to, from, next) => {
   } else { //如果满足条件就什么都不做，
     next();
   }
+
+  shareFx();
 });
 
 Vue.prototype.$getDate = function (AddDayCount) {
@@ -192,3 +194,73 @@ new Vue({
   },
   template: '<App/>'
 })
+
+
+function shareFx() {
+  //本页面url 
+  var url = location.href;
+  //分享页面url
+  var shareLink = window.location.href;
+  console.log(url);
+  console.log(99999)
+  $.ajax({
+    type: "get",
+    url: "/api/wechat/GetShareParam?url=" + url, //发送请求获得配置参数
+    dataType: "json",
+    async: false,
+    success: function (data) {
+      console.log(data);
+      shareLink = data.Data.link;
+      wx.config({
+        debug: false,
+        appId: data.Data.appId, //appid
+        timestamp: data.Data.timestamp, //时间戳
+        nonceStr: data.Data.noncestr, //随机串
+        signature: data.Data.signature, //签名
+        jsApiList: ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage']
+      });
+      wx.ready(function () {
+        var link = window.location.href;
+        var protocol = window.location.protocol;
+        var host = window.location.host;
+        //分享朋友圈
+        wx.onMenuShareTimeline({
+          title: '自定义分享标题-小易饮食',
+          link: shareLink,
+          //imgUrl: protocol + '//' + host + '/resources/images/icon.jpg',
+          trigger: function (res) {
+            //alert('点击了分享'); 
+          },
+          success: function (res) {
+            //alert('shared success'); 
+          },
+          cancel: function (res) {
+            //alert('shared cancle'); 
+          },
+          fail: function (res) {
+            //alert(JSON.stringify(res)); 
+          }
+        }); //分享给好友 
+        wx.onMenuShareAppMessage({
+          title: '自定义分享标题-小易饮食',
+          desc: '带给你健康每一天-小易饮食！',
+          link: shareLink, //imgUrl: protocol + '//' + host + '/resources/images/icon.jpg',
+          type: 'link',
+          dataUrl: '',
+          success: function () {
+            //alert('shared success'); 
+          },
+          cancel: function () {
+            //alert('shared cancle');
+          }
+        });
+        wx.error(function (res) {
+          alert(res.errMsg);
+        });
+      });
+    },
+    error: function (xhr, status, error) { //alert(status); //alert(xhr.responseText);
+      console.log(xhr);
+    }
+  })
+}

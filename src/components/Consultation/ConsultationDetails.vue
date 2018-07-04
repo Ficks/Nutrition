@@ -181,18 +181,20 @@ export default {
                 }
               });
             } else {
-              this.$router.push({
-                path: "/Consultation/State",
-                query: {
-                  mode: 1,
-                  success: 0,
-                  name: this.details.Name,
-                  id: this.details.UserId
-                }
-              });
+              // 不跳转到失败页面了直接提示
+              // this.$router.push({
+              //   path: "/Consultation/State",
+              //   query: {
+              //     mode: 1,
+              //     success: 0,
+              //     name: this.details.Name,
+              //     id: this.details.UserId
+              //   }
+              // });
+              console.log(data);
               this.$vux.toast.show({
-                type: "error",
-                text: data.Message
+                type: "warn",
+                text: data.Error || data.Message
               });
             }
           },
