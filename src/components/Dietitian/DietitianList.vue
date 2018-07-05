@@ -14,8 +14,9 @@
              <p>{{item.EndDate | mouthTimeGsh}}</p>
            </div>
            <div class="btns">
-             <div class="btn_m xxx" v-show="item.msg">新消息</div>
-             <div class="btn_m" @click.stop="userInfo(item)" :style="{'margin-top':item.msg?'8px':'20px'}">用户资料</div>
+             <div class="btn_m xxx" v-show="item.IsEnd===0">正在咨询</div>
+             <div class="btn_m xxx" v-show="item.IsEnd===1" style="background:red">已经结束</div>
+             <div class="btn_m" @click.stop="userInfo(item)">用户资料</div>
              <!-- <div class="btn_m end" :style="{'margin-top':item.msg?'8px':'20px'}">已结束</div> -->
            </div>
          </div>
@@ -53,7 +54,13 @@ export default {
       });
     },
     chat(item) {
-      console.log(item);
+      if (item.IsEnd === 1) {
+        this.$vux.toast.show({
+          type: "warn",
+          text: "咨询已结束"
+        });
+        return;
+      }
       this.$router.push({
         path: "/Dietitian/Chat",
         query: {
@@ -75,6 +82,13 @@ export default {
             type: "get",
             data: this.searchVal,
             success: data => {
+              if (data.Code !== 20000) {
+                this.$vux.toast.show({
+                  type: "warn",
+                  text: data.Error || data.Message
+                });
+                return;
+              }
               this.setData(data.Data.Data);
             },
             error: error => {}
@@ -98,7 +112,6 @@ export default {
     }
   },
   mounted() {
-    console.log("当前页面API：", +this.$route.path);
     console.log("列表数据", this.listArr);
     this.getList(1);
   }

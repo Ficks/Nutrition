@@ -14,9 +14,9 @@
                   <li @click="theMshow('age')">年龄<div class="right">{{form.age==''?"请选择":form.age+'岁'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="theMshow('height')">身高<div class="right">{{form.height==''?"请选择":form.height+'cm'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="theMshow('weight')">体重<div class="right">{{form.weight==''?"请选择":form.weight+'kg'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
-                  <li>开户行<input type="text" class="yhzh" v-model="form.bank" placeholder="请输入开户行"></li>
-                  <li>开户人<input type="text" class="yhzh" v-model="form.account" placeholder="请输入开户人"></li>
-                  <li>银行账号<input type="text" class="yhzh" v-model="form.banaccount" placeholder="请输入银行账号"></li>
+                  <li>开户行<input :readonly="read" type="text" class="yhzh" v-model="form.bank" placeholder="请输入开户行"></li>
+                  <li>开户人<input :readonly="read" type="text" class="yhzh" v-model="form.account" placeholder="请输入开户人"></li>
+                  <li>银行账号<input :readonly="read" type="text" class="yhzh" v-model="form.banaccount" placeholder="请输入银行账号"></li>
                   <li @click="actionsheetFn('mz')">民族<div class="right">{{form.mz.name==''?"请选择":form.mz.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('zy')">职业<div class="right">{{form.zy.name==''?"请选择":form.zy.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('hyzk')">婚姻状况<div class="right">{{form.hyzk.name==''?"请选择":form.hyzk.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
@@ -24,11 +24,11 @@
                   <li @click="actionsheetFn('jtsr')">家庭收入<div class="right">{{form.jtsr.name==''?"请选择":form.jtsr.name+"W"}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                 </ul>
                 <ul>
-                  <li @click="jbsFn">疾病史<div class="right">{{form.jbs.name==null?"请选择":form.jbs.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="jbsFn">疾病史<div class="right">{{form.jbs.name==null || form.jbs.name==''?read?"无":"请选择":form.jbs.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('yfxx')">孕妇选项<div class="right">{{form.yfxx.name==''?"请选择":form.yfxx.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('ysxh')">饮食喜好<div class="right">{{form.ysxh.name==''?"请选择":form.ysxh.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('llsp')">劳力水平<div class="right">{{form.llsp.name==''?"请选择":form.llsp.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
-                  <li @click="gmswFn">过敏食物<div class="right">去添加<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li v-if="read!=true" @click="gmswFn">过敏食物<div class="right">去添加<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                 </ul>
                 <div class="gmsw">
                     <h3>过敏食物</h3>

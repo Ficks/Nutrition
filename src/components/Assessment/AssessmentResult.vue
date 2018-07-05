@@ -10,26 +10,38 @@
             <div class="top"><i class="iconfont icon-danxuankuang-xuanzhong"></i></div>
             <div class="title">本次测评得分</div>
             <div class="score">{{score}}</div>
-            <div class="p">评语内容文本评语内容文本评语内容文本</div>
+            <div class="p">{{text}}</div>
 
             <div class="bom">
                 <div class="p">成功完成测评，积分+1</div>
-                <div class="submit_btn">分享给好友</div>
+                <div class="submit_btn" @click="share">分享给好友</div>
                 <div class="submit_btn back" @click="$router.history.go(-2)">返回</div>
             </div>
         </div>
+
+        <div class="fenx" @click="isFx=false"  v-show="isFx">
+        <div class="img"><img src="/static/images/fx.png" alt=""></div>
+        <p>请点击右上角 <br>将它发送给指定朋友<br>或分享到朋友圈</p>
+      </div>
+      <div class="nav_bom_zoom" @click="isFx=false"  v-show="isFx"></div>
     </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      score: 0
+      score: 0,
+      text: "",
+      isFx: false
     };
   },
   methods: {
     getScore() {
       this.score = this.$route.query.score;
+      this.text = this.$route.query.text;
+    },
+    share() {
+      this.isFx = true;
     }
   },
   mounted() {
@@ -76,6 +88,34 @@ export default {
     .back {
       background: #d1d1d1;
     }
+  }
+
+  .fenx {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+
+    .img {
+      width: 100%;
+      height: auto;
+      overflow: hidden;
+      img {
+        width: 25%;
+        float: right;
+        padding-right: 20px;
+      }
+    }
+    p {
+      text-align: center;
+      color: #fff;
+    }
+  }
+  .nav_bom_zoom {
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.8);
   }
 }
 </style>

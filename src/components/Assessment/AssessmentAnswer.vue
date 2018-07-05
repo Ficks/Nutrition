@@ -56,11 +56,17 @@ export default {
       this.listArr = data;
     },
     onchanges(i, j) {
-      this.listArr[i].abcd = j;
-      this.listArr[i].score = this.listArr[i].arr[j].fraction;
+      var item = this.listArr[i];
+      var jtem = item.arr[j];
+      item.abcd = j;
+      item.score = jtem.fraction;
+      item.htjx = {
+        questionid: item.id,
+        optionid: jtem.id,
+        score: jtem.fraction
+      };
     },
     submit() {
-      console.log(this.listArr.length);
       for (let i = 0; i < this.listArr.length; i++) {
         if (this.listArr[i].abcd == "") {
           this.$vux.toast.show({
@@ -71,17 +77,37 @@ export default {
         }
         this.score += this.listArr[i].score;
       }
+
+      var arr = [];
+      for (let i = 0; i < this.listArr.length; i++) {
+        arr.push(this.listArr[i].htjx);
+      }
+      var d = {
+        id: this.$route.query.id,
+        optionlist: arr
+      };
+
+      console.log(d);
       this.$http({
-        url: "/api/Questionnaire/SubmitQuestionnaireAndGainScore",
+        url: "/api/Questionnaire/SubmitQuestionnaire",
         type: "post",
-        data: JSON.stringify({ id: this.$route.query.id, Score: this.score }),
+        data: JSON.stringify(d),
         success: data => {
-          this.$router.push({
-            path: this.$route.matched[0].path + "/AssessmentResult",
-            query: {
-              score: this.score
-            }
-          });
+          console.log(data);
+          if (data.Code === 20000) {
+            this.$router.push({
+              path: this.$route.matched[0].path + "/AssessmentResult",
+              query: {
+                score: data.Data.Score,
+                text: data.Data.Description
+              }
+            });
+          } else {
+            this.$vux.toast.show({
+              type: "warn",
+              text: data.Error || data.Message
+            });
+          }
         },
         error() {}
       });

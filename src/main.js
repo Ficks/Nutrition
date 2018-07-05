@@ -41,6 +41,7 @@ for (let key in filters) {
 // 服务器地址
 Vue.prototype.$HTTPURL = Settings.server + '/';
 var UrlData = getUrlCs();
+
 function getUrlCs(name) {
   var href = location.href;
   if (href.indexOf('?') < -1) return;
@@ -62,13 +63,14 @@ router.beforeEach((to, from, next) => {
     var userData = sessionStorage.getItem('userData');
     if (userData) {
       // 已经登录的
+      console.log('------------我已经登陆了不在请求登陆接口-----')
       userData = JSON.parse(userData);
       ajaxConfig(userData);
       next();
       shareFx();
     } else {
       // 第一次登录
-      loginUp(1, next)
+      loginUp(Settings.isWechat, next)
     }
   } else { //如果满足条件就什么都不做，
     next();
@@ -102,13 +104,16 @@ new Vue({
 // 登录  正式还是测试
 function loginUp(n, next) {
   var upData = {};
+  var url = ""
   // 登录
   if (n) {
+    url = "/api/WeChat/WeChatLogin";
     upData = {
       referid: UrlData.referid,
       code: UrlData.code
     };
   } else {
+    url = "/api/WeChat/MoniWeChatLogin"
     upData = {
       referid: "2",
       openid: "okXzt0jXqVFnR4cY7YjBxvzB0W00",
@@ -116,10 +121,10 @@ function loginUp(n, next) {
       headurl: "5"
     }
   }
-  console.log(Settings.server + "/api/WeChat/MoniWeChatLogin")
-  console.log(upData)
+  console.log("请求微信登陆")
+  console.log(Settings.server + url);
   $.ajax({
-    url: Settings.server + "/api/WeChat/MoniWeChatLogin",
+    url: Settings.server + url,
     type: "get",
     data: upData,
     success: function (data) {
@@ -176,23 +181,27 @@ function ajaxConfig(d) {
         //成功的处理
         fd.success(data);
       },
-      error: function () {
+      error: function (data) {
         //错误处理
         fd.error(data) || "";
       }
     });
   }
 }
+
 function shareFx() {
-  //本页面url 
+  if (!Settings.isWechat) return;
+  //本页面url
   var url = location.href;
   //分享页面url
   var shareLink = location.href;
-  var upUrl = Settings.server + "/api/wechat/GetShareParam?url=" + url;
+  var upUrl = Settings.server + "/api/wechat/GetShareParam";
   console.log("分享链接")
-  console.log(upUrl)
   $.ajax({
     type: "get",
+    data: {
+      url: url
+    },
     headers: {
       "userid": store.state.userid,
       "Token": store.state.Token,
@@ -216,7 +225,7 @@ function shareFx() {
         var host = window.location.host;
         //分享朋友圈
         wx.onMenuShareTimeline({
-          title: '自定义分享标题-小易饮食',
+          title: '小易饮食',
           link: shareLink,
           //imgUrl: protocol + '//' + host + '/resources/images/icon.jpg',
           trigger: function (res) {
@@ -233,7 +242,7 @@ function shareFx() {
           }
         }); //分享给好友 
         wx.onMenuShareAppMessage({
-          title: '自定义分享标题-小易饮食',
+          title: '小易饮食',
           desc: '带给你健康每一天-小易饮食！',
           link: shareLink, //imgUrl: protocol + '//' + host + '/resources/images/icon.jpg',
           type: 'link',
@@ -246,7 +255,7 @@ function shareFx() {
           }
         });
         wx.error(function (res) {
-          alert(res.errMsg);
+          // alert(res.errMsg);
         });
       });
     },
@@ -255,5 +264,3 @@ function shareFx() {
     }
   })
 }
-
-
