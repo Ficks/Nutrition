@@ -68,7 +68,7 @@ export default {
     },
     submit() {
       for (let i = 0; i < this.listArr.length; i++) {
-        if (this.listArr[i].abcd == "") {
+        if (this.listArr[i].abcd === "") {
           this.$vux.toast.show({
             text: "请完成所有选项",
             type: "warn"
