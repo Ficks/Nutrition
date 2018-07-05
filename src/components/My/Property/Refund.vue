@@ -11,10 +11,10 @@
                     <span>{{d.value==''?'请选择':d.valName}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></span>
                 </div>
                 <div class="wz">
-                    输入退款描述
+                    输入文字描述
                 </div>
                 <div class="textarea_box">
-                    <textarea v-model="d.text" placeholder="请在此输入退款原因描述..."></textarea>
+                    <textarea v-model="d.text" placeholder="请在此输入输入文字描述..."></textarea>
                 </div>
                 <div class="submit_btn" @click="submit">提交评价</div>
             </div>
