@@ -98,7 +98,7 @@ export default {
       searchVal: {
         pageNum: 0,
         pageSize: 10,
-        len: 300,
+        len: 0,
         uptext: "滑动获取更多评论"
       },
       payment: {
@@ -109,20 +109,7 @@ export default {
           integral: ""
         }
       },
-      details: {
-        src: "/static/images/ystx.jpg",
-        name: "陈博士",
-        price: 50,
-        integral: 1000,
-        experience: "十年经验",
-        company: "中南大学医学院",
-        serviceNum: "10000",
-        fabulousNum: "10000",
-        technology:
-          "进行膳食调查和评价、人体营养状况测定和评价营养咨询和教育、膳食指导和评估、食品营养评价社  区营养管理和营养干预、",
-        education:
-          "进行膳食调查和评价、人体营养状况测定和评价营养咨询和教育、膳食指导和评估、食品营养评价社区营养管理和营养干预、"
-      },
+      details: {},
       listArr: []
     };
   },
@@ -291,6 +278,7 @@ export default {
               pageSize: this.searchVal.pageSize
             },
             success: data => {
+              this.searchVal.len = data.Data.ItemCount;
               this.setData(data.Data.Data);
             },
             error: function() {

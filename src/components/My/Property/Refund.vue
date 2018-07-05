@@ -11,7 +11,7 @@
                     <span>{{d.value==''?'请选择':d.valName}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></span>
                 </div>
                 <div class="wz">
-                    请输入文字描述
+                    输入退款描述
                 </div>
                 <div class="textarea_box">
                     <textarea v-model="d.text" placeholder="请在此输入退款原因描述..."></textarea>
