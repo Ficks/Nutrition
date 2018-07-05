@@ -40,7 +40,7 @@ for (let key in filters) {
 }
 // 服务器地址
 Vue.prototype.$HTTPURL = Settings.server + '/';
-
+var UrlData = getUrlCs();
 function getUrlCs(name) {
   var href = location.href;
   if (href.indexOf('?') < -1) return;
@@ -58,119 +58,22 @@ function getUrlCs(name) {
 router.beforeEach((to, from, next) => {
   var userid = store.state.userid;
   var Token = store.state.Token;
-
   if (userid == "") { //没有token或者要去的path不是login就清除userinfo和token，并跳转到登录页面
-    console.log("获取参数传给后台：");
-    var UrlData = getUrlCs();
-    console.log(UrlData)
-
-
-    // $.ajax({
-    //   url: Settings.server + "/api/WeChat/WeChatLogin",
-    //   type: "get",
-    //   data: {
-    //     referid: UrlData.referid,
-    //     code: UrlData.code
-    //   },
-    //   success: function (data) {
-    //     console.log("请求后台授权成功：");
-    //     console.log(data);
-    //     if (data.Code !== 20000) {
-    //       Vue.$vux.toast.show({
-    //         type: 'warn',
-    //         text: data.error
-    //       })
-    //       return;
-    //     }
-    //     //成功的处理
-    //     var d = {
-    //       userid: data.Data.userid,
-    //       Token: data.Token,
-    //       headurl: data.Data.headurl,
-    //       username: data.Data.nickname
-    //     };
-    //     store.state.userid = d.userid;
-    //     store.state.Token = d.Token;
-    //     store.state.headurl = d.headurl;
-    //     store.state.username = d.username;
-
-    //     Vue.prototype.$http = function (fd) {
-    //       return $.ajax({
-    //         url: Settings.server + fd.url,
-    //         headers: {
-    //           "userid": d.userid,
-    //           "Token": d.Token,
-    //           "Content-Type": "application/json;charset=UTF-8"
-    //         },
-    //         type: fd.type,
-    //         data: fd.data || {},
-    //         success: function (data) {
-    //           //成功的处理
-    //           fd.success(data);
-    //         },
-    //         error: function () {
-    //           //错误处理
-    //           fd.error(data) || "";
-    //         }
-    //       });
-    //     }
-    //     next();
-    //   }
-    // })
-    // return;
-
-    // ----------------------
-
-    $.ajax({
-      url: Settings.server + "/api/WeChat/MoniWeChatLogin",
-      type: "get",
-      data: {
-        referid: "2",
-        openid: "okXzt0jXqVFnR4cY7YjBxvzB0W00",
-        nickname: "4",
-        headurl: "5"
-      },
-      success: function (data) {
-        //成功的处理
-        var d = {
-          userid: data.Data.userid,
-          Token: data.Token
-        };
-        store.state.userid = d.userid;
-        store.state.Token = d.Token;
-
-        Vue.prototype.$http = function (fd) {
-          return $.ajax({
-            url: Settings.server + fd.url,
-            headers: {
-              "userid": d.userid,
-              "Token": d.Token,
-              "Content-Type": "application/json;charset=UTF-8"
-            },
-            type: fd.type,
-            data: fd.data || {},
-            success: function (data) {
-              //成功的处理
-              fd.success(data);
-            },
-            error: function () {
-              //错误处理
-              fd.error(data) || "";
-            }
-          });
-        }
-
-        next();
-      },
-      error: function () {
-        //错误处理
-      }
-    });
+    var userData = sessionStorage.getItem('userData');
+    if (userData) {
+      // 已经登录的
+      userData = JSON.parse(userData);
+      ajaxConfig(userData);
+      next();
+      shareFx();
+    } else {
+      // 第一次登录
+      loginUp(1, next)
+    }
   } else { //如果满足条件就什么都不做，
     next();
+    shareFx();
   }
-
-  shareFx();
 });
 
 Vue.prototype.$getDate = function (AddDayCount) {
@@ -196,20 +99,108 @@ new Vue({
 })
 
 
+// 登录  正式还是测试
+function loginUp(n, next) {
+  var upData = {};
+  // 登录
+  if (n) {
+    upData = {
+      referid: UrlData.referid,
+      code: UrlData.code
+    };
+  } else {
+    upData = {
+      referid: "2",
+      openid: "okXzt0jXqVFnR4cY7YjBxvzB0W00",
+      nickname: "4",
+      headurl: "5"
+    }
+  }
+  console.log(Settings.server + "/api/WeChat/MoniWeChatLogin")
+  console.log(upData)
+  $.ajax({
+    url: Settings.server + "/api/WeChat/MoniWeChatLogin",
+    type: "get",
+    data: upData,
+    success: function (data) {
+      console.log(data);
+      //成功的处理
+      loginFn(data, next)
+    },
+    error: function () {
+      //错误处理
+    }
+  });
+}
+
+// 登录之后的设置
+function loginFn(data, next) {
+  if (data.Code !== 20000) {
+    Vue.$vux.toast.show({
+      type: 'warn',
+      text: data.error
+    })
+    return;
+  }
+  //成功的处理
+  var d = {
+    userid: data.Data.userid,
+    Token: data.Token,
+    headurl: data.Data.headurl,
+    username: data.Data.nickname
+  };
+  ajaxConfig(d);
+  sessionStorage.setItem('userData', JSON.stringify(d))
+  next();
+  shareFx();
+}
+
+
+// 配置ajax
+function ajaxConfig(d) {
+  store.state.userid = d.userid;
+  store.state.Token = d.Token;
+  store.state.headurl = d.headurl;
+  store.state.username = d.username;
+  Vue.prototype.$http = function (fd) {
+    return $.ajax({
+      url: Settings.server + fd.url,
+      headers: {
+        "userid": d.userid,
+        "Token": d.Token,
+        "Content-Type": "application/json;charset=UTF-8"
+      },
+      type: fd.type,
+      data: fd.data || {},
+      success: function (data) {
+        //成功的处理
+        fd.success(data);
+      },
+      error: function () {
+        //错误处理
+        fd.error(data) || "";
+      }
+    });
+  }
+}
 function shareFx() {
   //本页面url 
   var url = location.href;
   //分享页面url
-  var shareLink = window.location.href;
-  console.log(url);
-  console.log(99999)
+  var shareLink = location.href;
+  var upUrl = Settings.server + "/api/wechat/GetShareParam?url=" + url;
+  console.log("分享链接")
+  console.log(upUrl)
   $.ajax({
     type: "get",
-    url: "/api/wechat/GetShareParam?url=" + url, //发送请求获得配置参数
-    dataType: "json",
-    async: false,
+    headers: {
+      "userid": store.state.userid,
+      "Token": store.state.Token,
+      "Content-Type": "application/json;charset=UTF-8"
+    },
+    url: upUrl, //发送请求获得配置参数
     success: function (data) {
-      console.log(data);
+      console.log(data.Data)
       shareLink = data.Data.link;
       wx.config({
         debug: false,
@@ -264,3 +255,5 @@ function shareFx() {
     }
   })
 }
+
+
