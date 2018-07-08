@@ -10,7 +10,7 @@
               <i class="iconfont icon-sousuo"></i>
               </div>
           </div>
-          <scroller lock-x height="-95px" ref="scrollerBottom">
+          <scroller lock-x height="-95px" ref="scrollerBottomTow">
               <div class="scroller_box list_mds">
                   <ul>
                       <li @click="addJb(item)" v-for="(item,index) in list">{{item.Name}}</li>
@@ -50,16 +50,20 @@ export default {
     // 加入疾病
     addJb(item) {
       this.$emit("addJbsBd", item);
+    },
+    reset() {
+      setTimeout(() => {
+        this.$refs.scrollerBottomTow.reset();
+      }, 100);
     }
   },
   mounted() {
-    var _this = this;
     this.$http({
       url: "/api/HealthyArchive/GetDiseaseList",
       type: "get",
-      success: function(data) {
+      success: data => {
         //成功的处理
-        _this.listArr = data.Data.Data;
+        this.listArr = data.Data.Data;
       },
       error: function() {
         //错误处理

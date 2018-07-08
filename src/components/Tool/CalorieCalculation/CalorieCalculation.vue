@@ -9,7 +9,10 @@
         <div class="scroller_box">
           <div class="list">
               <ul>
-                  <li v-for="(item,index) in arr" @click="setList(index)"><div>{{item.title}}<span>{{item.value || "请选择"}}{{item.value>0?item.dw:""}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></span></div></li>
+                  <li v-for="(item,index) in arr" @click="setList(index)">
+                    <div v-if="index!==2">{{item.title}}<span>{{item.value || item.yue || "请选择"}}{{item.value>0?item.dw:""}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></span></div>
+                    <div v-else>年龄<span>{{item.value===0?item.yue===0?"请选择":item.yue+'个月':item.value+"岁"}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></span></div>
+                  </li>
               </ul>
           </div>
           <div class="box" v-if="kcal!=0">
@@ -25,22 +28,26 @@
           <h3>选择{{arr[0].title}}</h3>
           <div class="vuels">{{arr[0].title}}：{{arr[0].value}} {{arr[0].dw}}</div>
           <div class="sle">
-            <range v-model="arr[0].value"  :min="0" :max="210"></range>
+            <range v-model="arr[0].value"  :min="50" :max="210"></range>
           </div>
       </div>
       <div class="afxm"  :style="{bottom:arr[1].show?0:-200+'px'}">
           <h3>选择{{arr[1].title}}</h3>
           <div class="vuels">{{arr[1].title}}：{{arr[1].value}} {{arr[1].dw}}</div>
           <div class="sle">
-            <range v-model="arr[1].value"  :min="0" :max="600"></range>
+            <range v-model="arr[1].value"  :min="0" :max="150"></range>
           </div>
       </div>
-      <div class="afxm"  :style="{bottom:arr[2].show?0:-200+'px'}">
+      <div class="afxm"  :style="{bottom:arr[2].show?0:-300+'px'}">
           <h3>选择{{arr[2].title}}</h3>
           <div class="vuels">{{arr[2].title}}：{{arr[2].value}} {{arr[2].dw}}</div>
           <div class="sle">
-            <range v-model="arr[2].value"  :min="0" :max="150"></range>
+            <range v-model="arr[2].value"  :min="0" :max="100"></range>
           </div>
+            <div class="vuels" v-show="arr[2].value===0">{{arr[2].yue}} 个月</div>
+            <div class="sle" v-show="arr[2].value===0">
+              <range v-model="arr[2].yue"  :min="0" :max="12"></range>
+            </div>
       </div>
       <div class="afxm"  :style="{bottom:arr[3].show?0:-200+'px'}">
           <h3>选择{{arr[3].title}}</h3>
@@ -98,6 +105,7 @@ export default {
         {
           title: "年龄",
           value: 0,
+          yue: 0,
           val: true,
           dw: "岁",
           show: false
@@ -126,7 +134,7 @@ export default {
   methods: {
     search() {
       // 查询所需要的kcal
-      for (let i = 0; i < this.arr.length; i++) {
+      for (let i = 0; i < this.arr.length - 1; i++) {
         if (this.arr[i].val == "") {
           this.$vux.toast.show({
             type: "warn",
@@ -145,7 +153,10 @@ export default {
         LaborLevel: this.arr[4].val,
         PregPeriod: this.arr[5].val
       };
-
+      if (this.arr[2].value === 0 && this.arr[2].yue !== 0) {
+        d.Age = this.arr[2].yue / 12;
+        console.log(d.Age);
+      }
       this.$http({
         url: "/api/HealthyArchive/CalKcalNeed",
         type: "post",

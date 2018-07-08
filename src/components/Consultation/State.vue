@@ -12,7 +12,7 @@
                 </div>
                 <h1>支付成功</h1>
                 <div class="submit_btn bg" @click="toChat">去咨询营养师</div>
-                <div class="submit_btn" @click="$router.back(-1)">完成</div>
+                <!-- <div class="submit_btn" @click="$router.back(-1)">完成</div> -->
             </div>
             <!-- 支付失败 -->
             <div class="scroller_box state_box" v-else>

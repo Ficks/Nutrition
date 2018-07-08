@@ -9,17 +9,18 @@
           <div class="scroller_box">
             <div class="details_dt">
               <div class="top">
-                <div class="imgs">
+                <!-- <div class="imgs">
                   <img v-if="details.portrait!=''" :src="details.portrait" alt="">
-                </div>
+                </div> -->
                 
-                <div class="wz">
-                  <h1>{{details.name}}</h1>
+                <div class="wz" style="padding-left:0">
+                  <!-- <h1>{{details.name}}</h1> -->
+                  <h1>匿名用户</h1>
                   <p>{{details.datedesc}}</p>
                 </div>
               </div>
               <div class="wz_box">
-                <img v-if="details.picurl!=''" :src="details.picurl" alt="">
+                <img v-if="details.picurl!=''" :src="$HTTPURL+details.picurl" alt="">
                 <p>{{details.text}}</p>
                 <p class="time">{{details.datedesc}}</p>
                 <div class="dz">

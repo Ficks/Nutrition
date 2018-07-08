@@ -115,7 +115,6 @@ export default {
       data: { id: id },
       success: data => {
         //成功的处理
-        console.log(data);
         this.setData(data.Data);
       },
       error: function() {

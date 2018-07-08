@@ -14,14 +14,12 @@
                   <li @click="theMshow('age')">年龄<div class="right">{{form.age==''?"请选择":form.age+'岁'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="theMshow('height')">身高<div class="right">{{form.height==''?"请选择":form.height+'cm'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="theMshow('weight')">体重<div class="right">{{form.weight==''?"请选择":form.weight+'kg'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
-                  <li>开户行<input :readonly="read" type="text" class="yhzh" v-model="form.bank" placeholder="请输入开户行"></li>
-                  <li>开户人<input :readonly="read" type="text" class="yhzh" v-model="form.account" placeholder="请输入开户人"></li>
-                  <li>银行账号<input :readonly="read" type="text" class="yhzh" v-model="form.banaccount" placeholder="请输入银行账号"></li>
                   <li @click="actionsheetFn('mz')">民族<div class="right">{{form.mz.name==''?"请选择":form.mz.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('zy')">职业<div class="right">{{form.zy.name==''?"请选择":form.zy.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('hyzk')">婚姻状况<div class="right">{{form.hyzk.name==''?"请选择":form.hyzk.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('whcd')">文化程度<div class="right">{{form.whcd.name==''?"请选择":form.whcd.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
-                  <li @click="actionsheetFn('jtsr')">家庭收入<div class="right">{{form.jtsr.name==''?"请选择":form.jtsr.name+"W"}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="actionsheetFn('jtsr')">家庭年收入<div class="right">{{form.jtsr.name==''?"请选择":form.jtsr.name+"W"}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  
                 </ul>
                 <ul>
                   <li @click="jbsFn">疾病史<div class="right">{{form.jbs.name==null || form.jbs.name==''?read?"无":"请选择":form.jbs.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
@@ -37,6 +35,11 @@
                         <li v-for="(item,index) in gmsw">{{item.name}} <i v-if="!read" @click="removeIndex=index;remove.value=true;" class="iconfont icon-shanchu"></i></li>
                     </ul>
                 </div>
+                <ul style="margin-top:20px;" v-if="!read">
+                  <li>开户行<input :readonly="read" type="text" class="yhzh" v-model="form.bank" placeholder="请输入开户行"></li>
+                  <li>开户人<input :readonly="read" type="text" class="yhzh" v-model="form.account" placeholder="请输入开户人"></li>
+                  <li>银行账号<input :readonly="read" type="text" class="yhzh" v-model="form.banaccount" placeholder="请输入银行账号"></li>
+                </ul>
                 <div class="submit_btn" v-if="!read" @click="submit">保存并返回</div>
               </div>
               </scroller>
@@ -57,7 +60,7 @@
             <h3>选择身高</h3>
             <div class="vuels">身高：{{form.height}} cm</div>
             <div class="sle">
-              <range v-model="form.height"  :min="0" :max="210"></range>
+              <range v-model="form.height"  :min="50" :max="210"></range>
             </div>
         </div>
 
@@ -71,7 +74,7 @@
 
       </div>
       <div class="child_view" v-show="jbsTrue">
-        <AddCase @addJbsBd="addJbs"></AddCase>
+        <AddCase @addJbsBd="addJbs" ref="childs"></AddCase>
       </div>
     </div>
 </template>
@@ -235,6 +238,8 @@ export default {
         return;
       }
       this.jbsTrue = true;
+
+      this.$refs.childs.reset();
     },
     gmswFn() {
       var _this = this;

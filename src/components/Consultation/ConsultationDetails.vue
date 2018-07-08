@@ -61,7 +61,7 @@
         </scroller>
         
         <actionsheet v-model="payment.value" :menus="payment.menu" @on-click-menu="paymentFn" show-cancel></actionsheet>
-
+        <actionsheet v-model="submitYes.value" :menus="submitYes.menu" @on-click-menu-jfzf="onJfzf" show-cancel></actionsheet>
         <div class="fixbom submit" @click="payment.value=true">
             图文咨询（{{details.Price}}元/次）
             <p>单次咨询为12小时</p>
@@ -101,6 +101,13 @@ export default {
         len: 0,
         uptext: "滑动获取更多评论"
       },
+      submitYes: {
+        value: false,
+        menu: {
+          "title.noop": "是否积分支付?",
+          jfzf: "<span>确定</span>"
+        }
+      },
       payment: {
         value: false,
         menu: {
@@ -114,6 +121,35 @@ export default {
     };
   },
   methods: {
+    onJfzf() {
+      this.$http({
+        url: "/api/WeChat/JFPay",
+        type: "post",
+        data: JSON.stringify({
+          DietitianId: this.details.Id
+        }),
+        success: data => {
+          if (data.Code === 20000) {
+            this.$router.push({
+              path: "/Consultation/State",
+              query: {
+                mode: 0,
+                success: 1,
+                name: this.details.Name,
+                id: this.details.UserId
+              }
+            });
+          } else {
+            console.log(data);
+            this.$vux.toast.show({
+              type: "warn",
+              text: data.Error || data.Message
+            });
+          }
+        },
+        error: error => {}
+      });
+    },
     init() {
       this.payment.menu.price = `<span style='color:#8dc13b'>微信支付 (${
         this.details.Price
@@ -150,43 +186,8 @@ export default {
         });
       } else if (key == "integral") {
         // 积分支付
-        this.$http({
-          url: "/api/WeChat/JFPay",
-          type: "post",
-          data: JSON.stringify({
-            DietitianId: this.details.Id
-          }),
-          success: data => {
-            if (data.Code === 20000) {
-              this.$router.push({
-                path: "/Consultation/State",
-                query: {
-                  mode: 0,
-                  success: 1,
-                  name: this.details.Name,
-                  id: this.details.UserId
-                }
-              });
-            } else {
-              // 不跳转到失败页面了直接提示
-              // this.$router.push({
-              //   path: "/Consultation/State",
-              //   query: {
-              //     mode: 1,
-              //     success: 0,
-              //     name: this.details.Name,
-              //     id: this.details.UserId
-              //   }
-              // });
-              console.log(data);
-              this.$vux.toast.show({
-                type: "warn",
-                text: data.Error || data.Message
-              });
-            }
-          },
-          error: error => {}
-        });
+
+        this.submitYes.value = true;
       }
     },
     WeChatZf(data) {

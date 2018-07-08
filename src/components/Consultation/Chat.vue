@@ -6,6 +6,7 @@
         <div class="title">{{title}}</div>
       </div>
         <div class="scroller_box chat" id="chat_box">
+          <p class="mz"><span>仅代表营养师意见，与平台无关</span></p>
             <load-more tip="loading" v-show="loading"></load-more>
             <ul>
                 <li v-for="(item,index) in listArr" :class="{he:item.id==he.id,my:item.id==my.id}">
@@ -334,6 +335,26 @@ export default {
     overflow: auto;
     padding: 11px 27/2px;
     box-sizing: border-box;
+    position: relative;
+
+    .mz {
+      position: fixed;
+      top: 55px;
+      left: 0;
+      z-index: 999;
+      text-align: center;
+      width: 100%;
+
+      span {
+        display: inline-block;
+        margin: 0 auto;
+        background: rgba(0, 0, 0, 0.3);
+        color: #fff;
+        font-size: 14px;
+        padding: 3px 10px;
+        border-radius: 5px;
+      }
+    }
 
     li {
       padding: 11px 0;

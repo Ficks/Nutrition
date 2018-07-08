@@ -53,14 +53,14 @@
           <h3>选择{{arr[0].title}}</h3>
           <div class="vuels">{{arr[0].title}}：{{arr[0].value}} {{arr[0].dw}}</div>
           <div class="sle">
-            <range v-model="arr[0].value"  :min="0" :max="210"></range>
+            <range v-model="arr[0].value"  :min="50" :max="210"></range>
           </div>
       </div>
       <div class="afxm"  :style="{bottom:arr[1].show?0:-200+'px'}">
           <h3>选择{{arr[1].title}}</h3>
           <div class="vuels">{{arr[1].title}}：{{arr[1].value}} {{arr[1].dw}}</div>
           <div class="sle">
-            <range v-model="arr[1].value"  :min="0" :max="600"></range>
+            <range v-model="arr[1].value"  :min="0" :max="150"></range>
           </div>
       </div>
     </div>
