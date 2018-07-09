@@ -88,6 +88,10 @@ export default {
       if (data.length > 0) {
         for (let i = 0; i < data.length; i++) {
           data[i].src = this.$HTTPURL + data[i].src;
+          data[i].desc =
+            data[i].desc.length > 50
+              ? data[i].desc.substr(0, 50) + "..."
+              : data[i].desc;
           this.listArr.push(data[i]);
         }
       } else {

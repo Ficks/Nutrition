@@ -44,10 +44,7 @@
           <div class="sle">
             <range v-model="arr[2].value"  :min="0" :max="100"></range>
           </div>
-            <div class="vuels" v-show="arr[2].value===0">{{arr[2].yue}} 个月</div>
-            <div class="sle" v-show="arr[2].value===0">
-              <range v-model="arr[2].yue"  :min="0" :max="12"></range>
-            </div>
+          <div class="btn" @click="yuefs.value=true">选择月份</div>
       </div>
       <div class="afxm"  :style="{bottom:arr[3].show?0:-200+'px'}">
           <h3>选择{{arr[3].title}}</h3>
@@ -74,17 +71,76 @@
             <li @click="setValue('4',5,'哺育期')">哺育期</li>
           </ul>
       </div>
+         <actionsheet v-model="yuefs.value" :menus="yuefs.menu" @on-click-menu="yuefsGm" show-cancel></actionsheet>
     </div>
 </template>
 <script>
-import { Popup, Rater, Range } from "vux";
+import { Popup, Rater, Range, Actionsheet } from "vux";
 export default {
   components: {
     Rater,
-    Range
+    Range,
+    Actionsheet
   },
   data() {
     return {
+      yuefs: {
+        value: false,
+        menu: [
+          {
+            label: "请选择月份",
+            type: "info"
+          },
+          {
+            label: "1个月",
+            value: "1"
+          },
+          {
+            label: "2个月",
+            value: "2"
+          },
+          {
+            label: "3个月",
+            value: "3"
+          },
+          {
+            label: "4个月",
+            value: "4"
+          },
+          {
+            label: "5个月",
+            value: "5"
+          },
+          {
+            label: "6个月",
+            value: "6"
+          },
+          {
+            label: "7个月",
+            value: "7"
+          },
+          {
+            label: "8个月",
+            value: "8"
+          },
+          {
+            label: "9个月",
+            value: "9"
+          },
+          {
+            label: "10个月",
+            value: "10"
+          },
+          {
+            label: "11个月",
+            value: "11"
+          },
+          {
+            label: "12个月",
+            value: "12"
+          }
+        ]
+      },
       zoom: false,
       kcal: "",
       arr: [
@@ -132,6 +188,13 @@ export default {
     };
   },
   methods: {
+    // 选择月份
+    yuefsGm(val) {
+      console.log(val);
+      this.arr[2].yue = val;
+      this.arr[2].show = false;
+      this.zoom = false;
+    },
     search() {
       // 查询所需要的kcal
       for (let i = 0; i < this.arr.length - 1; i++) {
@@ -241,7 +304,23 @@ export default {
   z-index: 999;
   background: #fff;
   transition: all 0.5s;
+  .btn {
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid #ddd;
+    margin: 0 auto;
+    border-radius: 5px;
+    line-height: 40px;
+    text-align: center;
+    margin-bottom: 20px;
+    background: #8dc13b;
+    color: #fff;
 
+    &:active {
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    }
+  }
   h3 {
     padding: 10px;
     font-size: 16px;

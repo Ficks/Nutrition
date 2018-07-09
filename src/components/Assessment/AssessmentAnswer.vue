@@ -93,8 +93,15 @@ export default {
         type: "post",
         data: JSON.stringify(d),
         success: data => {
+          console.log("----");
           console.log(data);
           if (data.Code === 20000) {
+            if (data.Data.GainJF != 0) {
+              this.$vux.toast.show({
+                type: "success",
+                text: "测评完成,积分+" + data.Data.GainJF
+              });
+            }
             this.$router.push({
               path: this.$route.matched[0].path + "/AssessmentResult",
               query: {

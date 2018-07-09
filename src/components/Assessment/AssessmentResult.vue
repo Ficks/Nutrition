@@ -13,7 +13,7 @@
             <div class="p">{{text}}</div>
 
             <div class="bom">
-                <div class="p">成功完成测评，积分+1</div>
+                <!-- <div class="p">成功完成测评，积分+1</div> -->
                 <div class="submit_btn" @click="share">分享给好友</div>
                 <div class="submit_btn back" @click="$router.history.go(-2)">返回</div>
             </div>

@@ -11,7 +11,7 @@
         </div>
         <p v-if="listArr.length==0" class="tip">目前没有动态哦</p>
         <div class="swiper_wr" @click="toPathDetails" v-if="listArr.length>0">
-         <swiper ref="swiper" :aspect-ratio="1/1" height="190px" @on-index-change="onSwiperItemIndexChange" v-model="swiperItemIndex" :show-dots="false">
+         <swiper ref="swiper" :duration="mtime" :aspect-ratio="1/1" height="190px" @on-index-change="onSwiperItemIndexChange" v-model="swiperItemIndex" :show-dots="false">
               <swiper-item  class="swiper-demo-img" v-for="(item, index) in listArr" :key="index">
                 <div class="box_getht">
                   <div class="imgs_m">
@@ -43,6 +43,7 @@ export default {
   computed: {},
   data() {
     return {
+      mtime: 300,
       swiperItemIndex: 0,
       listArr: [],
       searchVal: {
@@ -83,15 +84,17 @@ export default {
       });
     },
     onSwiperItemIndexChange(index) {
+      if (this.listArr[index].no) {
+        console.log(99999);
+        return;
+      }
       let box = document
         .getElementsByClassName("vux-swiper-item")
         [index].getElementsByClassName("box_getht")[0];
       this.$refs.swiper.xheight = box.offsetHeight + 20 + "px";
-      if (this.listArr.length >= 10) {
-        if (index > this.listArr.length - 3) {
-          // 请求加入列表
-          this.getList();
-        }
+      if (index > this.listArr.length - 3) {
+        // 请求加入列表
+        this.getList();
       }
     },
     toPathDetails() {
@@ -107,19 +110,58 @@ export default {
       this.$http({
         url: "/api/User/DoLike",
         type: "get",
-        data: { id: this.listArr[this.swiperItemIndex].id },
+        data: { id: this.listArr[this.swiperItemIndex].id, like: true },
         success: data => {
           //成功的处理
+          if (data.Code === 20000) {
+            this.$vux.toast.show({
+              type: "success",
+              text: data.Message
+            });
+          } else {
+            this.$vux.toast.show({
+              type: "warn",
+              text: data.Message
+            });
+          }
+          this.listArr[this.swiperItemIndex].no = false;
+          this.swiperItemIndex++;
         },
         error: function() {
           //错误处理
         }
       });
-      this.swiperItemIndex++;
     },
     noLove() {
       // 不喜欢跳过
-      this.swiperItemIndex++;
+      // this.$http({
+      //   url: "/api/User/DoLike",
+      //   type: "get",
+      //   data: { id: this.listArr[this.swiperItemIndex].id, like: false },
+      //   success: data => {
+      //     //成功的处理
+      //     if (data.Code === 20000) {
+      //       this.$vux.toast.show({
+      //         type: "success",
+      //         text: data.Message
+      //       });
+      //     } else {
+      //       this.$vux.toast.show({
+      //         type: "warn",
+      //         text: data.Message
+      //       });
+      //     }
+      //     this.swiperItemIndex++;
+      //   },
+      //   error: function() {
+      //     //错误处理
+      //   }
+      // });
+      // this.listArr.splice(this.swiperItemIndex, 1);
+      this.listArr[this.swiperItemIndex].no = true;
+      if (this.swiperItemIndex != this.listArr.length - 1) {
+        this.swiperItemIndex++;
+      }
     }
   },
   mounted() {

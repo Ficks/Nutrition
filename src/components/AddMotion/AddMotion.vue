@@ -104,7 +104,7 @@ export default {
         data: JSON.stringify(this.addData),
         success: data => {
           console.log(data);
-          if (data.Code === 2000) {
+          if (data.Code === 20000) {
             this.$vux.toast.show({
               text: data.Message,
               type: "success"

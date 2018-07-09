@@ -19,7 +19,14 @@
               <h2><span>以下为评论</span></h2>
               <ul>
                   <li v-for="(item,index) in listArr">
-                      <div class="top">{{index+1}}楼 <span>{{item.date | dateTimeGsh}}</span></div>
+                      <div class="top">
+                          <div class="imgs">
+                            <img :src="item.head" alt="">
+                          </div>
+                          <h3>
+                            {{item.name}}
+                          </h3>
+                         <span>{{item.date | dateTimeGsh}}</span></div>
                       <p>{{item.p}}</p>
                   </li>
               </ul>
@@ -54,29 +61,7 @@ export default {
   data() {
     return {
       details: {
-        title: "正常成人膳食指南 6项权威解答",
-        islikeone: false,
-        isfavorone: false,
-        date: "2018-05-14 17:14",
-        author: "admin",
-        text: ` <p>      一直以来人们都非常关注饮食对健康的影响，那么到底
-吃什么？怎么吃才能够有益机体健康呢？今天小福菌给大家
-带来2018膳食指南，告诉你吃什么最健康！</p>
-                <img src="/static/images/zx.jpg" alt="">
-                <p>
-                          通过对小鼠研究发现，每天摄入西红柿或能降低一半小
-鼠皮肤癌的发生，研究者揭示了进行营养干预如何改变个体
-患皮肤的风险。西红柿与癌症关联背后的理论或许是西红柿
-中的类胡萝卜素，这种化合物能够让西红柿着色，同时其还
-能够保护机体抵御紫外线带来的皮肤损伤。
-                </p>
-                <p>      研究还表明，当开发不同的预防性策略时我们的确需要
-考虑性别，在男性机体中能够发挥作用的物质有时候或许在
-女性机体中并没有什么作用，反之亦然。</p>
-                <p>
-                          大量摄入新鲜水果或和糖尿病发生率降低直接相关，同
-时还能够降低糖尿病患者并发症的发生率。
-                </p>`
+        date: "2018-05-14 17:14"
       },
       loading: false,
       searchVal: {
@@ -92,7 +77,6 @@ export default {
   },
   methods: {
     getList(time) {
-      var _this = this;
       if (this.loading) {
         // do nothing
       } else {
@@ -103,12 +87,10 @@ export default {
             url: "/api/NewsInfo/GetNewsInfoComments",
             type: "get",
             data: this.searchVal,
-            success: function(data) {
+            success: data => {
               //成功的处理
               console.log(data);
-              console.log(data);
-              console.log(data);
-              _this.setData(data.Data);
+              this.setData(data.Data);
             },
             error: function() {
               //错误处理
@@ -302,6 +284,21 @@ export default {
       }
     }
 
+    .top {
+      .imgs {
+        float: left;
+        width: 50px;
+
+        img {
+          border-radius: 50%;
+        }
+      }
+      h3 {
+        float: left;
+        line-height: 50px;
+        padding-left: 10px;
+      }
+    }
     ul {
       li {
         padding: 15px 0 30px;

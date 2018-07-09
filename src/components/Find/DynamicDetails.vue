@@ -110,8 +110,19 @@ export default {
         this.$http({
           url: "/api/User/DoLike",
           type: "get",
-          data: { id: this.$route.query.id },
+          data: { id: this.$route.query.id, like: true },
           success: data => {
+            if (data.Code === 20000) {
+              this.$vux.toast.show({
+                type: "success",
+                text: data.Message
+              });
+            } else {
+              this.$vux.toast.show({
+                type: "warn",
+                text: data.Message
+              });
+            }
             //成功的处理
             this.zan = 1;
             this.details.thumbsupcount++;
@@ -207,6 +218,7 @@ export default {
     .wz {
       float: left;
       padding-left: 10px;
+      padding-bottom: 10px;
 
       h1 {
         font-size: 15px;

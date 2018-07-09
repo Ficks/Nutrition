@@ -35,7 +35,7 @@ export default {
       } else {
         var arr = [];
         for (let i = 0; i < this.listArr.length; i++) {
-          if (this.listArr[i].name.indexOf(this.searchVal) !== -1) {
+          if (this.listArr[i].Name.indexOf(this.searchVal) !== -1) {
             arr.push(this.listArr[i]);
           }
         }
