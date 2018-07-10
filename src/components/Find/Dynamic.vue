@@ -1,69 +1,120 @@
 <template>
     <div class="container">
-
-        <!-- 底部导航 -->
-    <Menu :index="1"></Menu>
-        <div class="header">
+      <!-- 底部导航 -->
+      <Menu :index="1"></Menu>
+      <div class="header">
             <span><router-link to="/Find">资讯</router-link></span>
             <span class="active"><router-link to="/Dynamic">动态</router-link></span>
 
             <div class="right"><router-link to="/Dynamic/Release"><i class="iconfont icon-xiangji"></i></router-link></div>
         </div>
         <p v-if="listArr.length==0" class="tip">目前没有动态哦</p>
-        <div class="swiper_wr" @click="toPathDetails" v-if="listArr.length>0">
-         <swiper ref="swiper" :duration="mtime" :aspect-ratio="1/1" height="190px" @on-index-change="onSwiperItemIndexChange" v-model="swiperItemIndex" :show-dots="false">
-              <swiper-item  class="swiper-demo-img" v-for="(item, index) in listArr" :key="index">
-                <div class="box_getht">
-                  <div class="imgs_m">
-                    <img v-if="item.picurl!=''" :src="$HTTPURL+'/'+item.picurl">
-                  </div>
-                  <p>{{item.text}}</p>
-                  <div class="time">{{item.datedesc}}</div>
-                </div>
-              </swiper-item>
-          </swiper>
+        <!-- Swiper -->
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <!-- <div class="swiper-slide" v-for="(item,index) in listArr">
+            <div class="imgs">
+              <img v-if="item.picurl!=''" :src="$HTTPURL+'/'+item.picurl">
+            </div>
+            <p>{{item.text}}</p>
+            <div class="time">{{item.datedesc}}</div>
+          </div> -->
         </div>
-        <div class="gnbtn" v-if="listArr.length>0">
-            <span><i  @click="noLove"  class="iconfont icon-shanchu"></i></span>
-            <span><i @click="love" class="iconfont icon-shoucang1"></i></span>
-          </div>
+      </div>
+      <div class="gnbtn" v-if="listArr.length>0">
+          <span><i  @click="noLove"  class="iconfont icon-shanchu"></i></span>
+          <span><i @click="love" v-show="isLove" class="iconfont icon-dianzanshixin"></i></span>
+          <span><i @click="love" v-show="!isLove" class="iconfont icon-dianzankongxin1"></i></span>
+      </div>
     </div>
 </template>
 <script>
-import { Swiper, SwiperItem } from "vux";
-import { setTimeout, clearTimeout } from "timers";
 import Menu from "../Common/Menu.vue";
+import { setTimeout } from "timers";
 
 export default {
   components: {
-    Swiper,
-    SwiperItem,
     Menu
   },
-  computed: {},
   data() {
     return {
-      mtime: 300,
-      swiperItemIndex: 0,
+      isLove: false,
       listArr: [],
+      listArrBf: [],
+      swiperBom: true,
       searchVal: {
         pageNum: 0,
-        pageSize: 15,
+        pageSize: 10,
         onFetching: false,
         uptext: "滑动查看更多"
       }
     };
   },
   methods: {
+    newSwiper() {
+      this.swiperBom = new Swiper(".swiper-container", {
+        autoHeight: true,
+        on: {
+          click: () => {
+            this.toPathDetails();
+          },
+          slideChange: () => {
+            this.isLove = this.listArr[this.swiperBom.previousIndex].isLove;
+          },
+          slideNextTransitionStart: () => {
+            console.log(this.swiperBom.activeIndex);
+            if (this.swiperBom.activeIndex === this.listArr.length - 3) {
+              this.getList();
+            }
+            if (this.listArr[this.swiperBom.previousIndex].isLove !== true) {
+              this.$http({
+                url: "/api/User/DoLike",
+                type: "get",
+                data: {
+                  id: this.listArr[this.swiperBom.previousIndex].id,
+                  like: false
+                },
+                success: data => {
+                  //成功的处理
+                  setTimeout(() => {
+                    this.listArr.splice(this.swiperBom.previousIndex, 1);
+                    this.swiperBom.removeSlide(this.swiperBom.previousIndex);
+                  }, 300);
+                },
+                error: function() {
+                  //错误处理
+                }
+              });
+            }
+          }
+        }
+      });
+    },
+
     setData(data) {
       if (!data) {
         return;
       }
       if (data.length > 0) {
+        var strHtml = "";
+        var strImg = "";
         for (let i = 0; i < data.length; i++) {
           this.listArr.push(data[i]);
+          if (data[i].picurl !== "") {
+            strImg = `
+            <div class="imgs">
+              <img src="${this.$HTTPURL + "/" + data[i].picurl}">
+            </div>`;
+          }
+
+          strHtml += `<div class="swiper-slide">
+          ${strImg}
+            <p>${data[i].text}</p>
+            <div class="time">${data[i].datedesc}</div>
+          </div>`;
         }
-        console.log(this.listArr);
+
+        this.swiperBom.appendSlide(strHtml);
       } else {
         this.searchVal.pageNum--;
       }
@@ -83,25 +134,11 @@ export default {
         }
       });
     },
-    onSwiperItemIndexChange(index) {
-      if (this.listArr[index].no) {
-        console.log(99999);
-        return;
-      }
-      let box = document
-        .getElementsByClassName("vux-swiper-item")
-        [index].getElementsByClassName("box_getht")[0];
-      this.$refs.swiper.xheight = box.offsetHeight + 20 + "px";
-      if (index > this.listArr.length - 3) {
-        // 请求加入列表
-        this.getList();
-      }
-    },
     toPathDetails() {
       this.$router.push({
         path: "/Dynamic/DynamicDetails",
         query: {
-          id: this.listArr[this.swiperItemIndex].id
+          id: this.listArr[this.swiperBom.activeIndex].id
         }
       });
     },
@@ -110,7 +147,7 @@ export default {
       this.$http({
         url: "/api/User/DoLike",
         type: "get",
-        data: { id: this.listArr[this.swiperItemIndex].id, like: true },
+        data: { id: this.listArr[this.swiperBom.activeIndex].id, like: true },
         success: data => {
           //成功的处理
           if (data.Code === 20000) {
@@ -124,8 +161,12 @@ export default {
               text: data.Message
             });
           }
-          this.listArr[this.swiperItemIndex].no = false;
-          this.swiperItemIndex++;
+          this.isLove = true;
+          this.listArr[this.swiperBom.activeIndex].isLove = true;
+          if (this.swiperBom.activeIndex != this.listArr.length - 1) {
+            var to = this.swiperBom.activeIndex + 1;
+            this.swiperBom.slideTo(to);
+          }
         },
         error: function() {
           //错误处理
@@ -134,54 +175,39 @@ export default {
     },
     noLove() {
       // 不喜欢跳过
-      // this.$http({
-      //   url: "/api/User/DoLike",
-      //   type: "get",
-      //   data: { id: this.listArr[this.swiperItemIndex].id, like: false },
-      //   success: data => {
-      //     //成功的处理
-      //     if (data.Code === 20000) {
-      //       this.$vux.toast.show({
-      //         type: "success",
-      //         text: data.Message
-      //       });
-      //     } else {
-      //       this.$vux.toast.show({
-      //         type: "warn",
-      //         text: data.Message
-      //       });
-      //     }
-      //     this.swiperItemIndex++;
-      //   },
-      //   error: function() {
-      //     //错误处理
-      //   }
-      // });
-      // this.listArr.splice(this.swiperItemIndex, 1);
-      this.listArr[this.swiperItemIndex].no = true;
-      if (this.swiperItemIndex != this.listArr.length - 1) {
-        this.swiperItemIndex++;
+      if (this.swiperBom.activeIndex == this.listArr.length - 1) {
+        this.$http({
+          url: "/api/User/DoLike",
+          type: "get",
+          data: {
+            id: this.listArr[this.swiperBom.activeIndex].id,
+            like: false
+          },
+          success: data => {
+            //成功的处理
+            this.listArr.splice(this.swiperBom.activeIndex, 1);
+            this.swiperBom.removeSlide(this.swiperBom.activeIndex);
+            if (this.listArr.length == 0) {
+              $(".swiper-container").hide();
+            }
+          },
+          error: function() {
+            //错误处理
+          }
+        });
+        return;
       }
+      var to = this.swiperBom.activeIndex + 1;
+      this.swiperBom.slideTo(to);
     }
   },
   mounted() {
     this.getList();
-    // console.log("当前页面数据列表", this.listArr);
-    setTimeout(() => {
-      let box = document
-        .getElementsByClassName("vux-swiper-item")
-        [this.swiperItemIndex].getElementsByClassName("box_getht")[0];
-      this.$refs.swiper.xheight = box.offsetHeight + 20 + "px";
-    }, 100);
+    this.newSwiper();
+    console.log("----------------");
   }
 };
 </script>
-<style>
-.vux-swiper {
-  transition: all 0.5s;
-}
-</style>
-
 <style scoped lang="less">
 .container {
   box-sizing: border-box;
@@ -238,37 +264,6 @@ export default {
     }
   }
 
-  .swiper_wr {
-    width: 90%;
-    margin: 0 auto;
-    box-shadow: 3px 0 4px rgba(0, 0, 0, 0.35);
-    background: #fff;
-    border-radius: 5px;
-    padding: 22px;
-    box-sizing: border-box;
-    margin-top: 22px;
-    padding-bottom: 40px;
-
-    .imgs_m {
-      width: 100%;
-      text-align: center;
-      img {
-        max-width: 100%;
-      }
-    }
-
-    p {
-      color: #666;
-      font-size: 14px;
-      margin-top: 17px;
-      margin-bottom: 14px;
-    }
-    .time {
-      font-size: 12px;
-      color: #a8a8a8;
-    }
-  }
-
   .gnbtn {
     text-align: center;
     width: 100%;
@@ -288,6 +283,46 @@ export default {
       color: #ef7d1d;
       box-shadow: 3px 0 8px rgba(0, 0, 0, 0.25);
     }
+  }
+
+  .swiper-container {
+    width: 90%;
+    margin: 0 auto;
+    -webkit-box-shadow: 3px 0 4px rgba(0, 0, 0, 0.35);
+    box-shadow: 3px 0 4px rgba(0, 0, 0, 0.35);
+    background: #fff;
+    border-radius: 5px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-top: 22px;
+  }
+
+  .swiper-slide-active {
+    overflow: auto !important;
+  }
+}
+</style>
+
+<style lang="less">
+.swiper-slide {
+  padding: 22px;
+  box-sizing: border-box;
+
+  .imgs {
+    text-align: center;
+    img {
+      max-width: 100%;
+    }
+  }
+  p {
+    color: #666;
+    font-size: 14px;
+    margin-top: 17px;
+    margin-bottom: 14px;
+  }
+  .time {
+    font-size: 12px;
+    color: #a8a8a8;
   }
 }
 </style>

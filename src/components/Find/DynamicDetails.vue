@@ -117,15 +117,15 @@ export default {
                 type: "success",
                 text: data.Message
               });
+              //成功的处理
+              this.details.thumbsupcount++;
             } else {
               this.$vux.toast.show({
                 type: "warn",
                 text: data.Message
               });
             }
-            //成功的处理
             this.zan = 1;
-            this.details.thumbsupcount++;
           },
           error: function() {
             //错误处理

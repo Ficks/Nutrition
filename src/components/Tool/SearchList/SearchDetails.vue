@@ -211,11 +211,23 @@ export default {
         type: "post",
         data: JSON.stringify(this.postData),
         success: data => {
-          //成功的处理
-          this.$vux.toast.show({
-            text: data.Message,
-            width: "10em"
-          });
+          if (data.Code === 20000) {
+            //成功的处理
+            this.$vux.toast.show({
+              type: "success",
+              text: data.Message,
+              width: "10em"
+            });
+            this.$router.back(-1);
+          } else {
+            // 失败的处理
+            this.$vux.toast.show({
+              type: "warn",
+              text: data.Message,
+              width: "10em"
+            });
+          }
+
           this.detailsFix = -500;
         },
         error: function() {
