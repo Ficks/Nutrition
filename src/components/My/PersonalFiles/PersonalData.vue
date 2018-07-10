@@ -11,7 +11,8 @@
                 <ul>
                   <li>姓名<div class="input"><input :readonly="read" type="text" class="name_cor" placeholder="请输入姓名" v-model="form.name"></div></li>
                   <li @click="actionsheetFn('sex')">性别<div class="right">{{form.sex.name==''?"请选择":form.sex.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
-                  <li @click="theMshow('age')">年龄<div class="right">{{form.age==''?"请选择":form.age+'岁'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="theMshow('age')">年龄<div class="right">{{form.age===0?form.yue===0?"请选择":form.yue+"个月":form.age+'岁'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+
                   <li @click="theMshow('height')">身高<div class="right">{{form.height==''?"请选择":form.height+'cm'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="theMshow('weight')">体重<div class="right">{{form.weight==''?"请选择":form.weight+'kg'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('mz')">民族<div class="right">{{form.mz.name==''?"请选择":form.mz.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
@@ -49,7 +50,7 @@
 
         <div class="nav_bom_zoom" v-show="zoom" @click="closeAll"></div>
           <div class="afxm" :style="{bottom:formShow.age?0:-200+'px'}">
-            <h3>选择年龄</h3>
+            <h3>选择年龄 <span class="span_btn" v-show="form.age==0" @click="yuefs.value=true">选择月份</span> </h3>
             <div class="vuels">年龄：{{form.age}} 岁</div>
             <div class="sle">
               <range v-model="form.age"  :min="0" :max="110"></range>
@@ -71,6 +72,13 @@
               <range v-model="form.weight"  :min="0" :max="150"></range>
             </div>
         </div>
+        <div class="afxm"  :style="{bottom:yuefs.value?0:-800+'px'}">
+          <h3>选择月份</h3>
+          <ul class="textcenter">
+            <li @click="yuefsGm(item)" v-for="item in 11">{{item}}月份</li>
+            <li @click="yuefs.show=false" class="cancel">取消</li>
+          </ul>
+      </div>
 
       </div>
       <div class="child_view" v-show="jbsTrue">
@@ -92,6 +100,9 @@ export default {
   },
   data() {
     return {
+      yuefs: {
+        value: false
+      },
       read: false, //是否只读
       jbsTrue: false, //是否正在添加疾病
       removeIndex: -1,
@@ -119,6 +130,7 @@ export default {
           name: ""
         },
         age: 0,
+        yue: "",
         height: 0,
         weight: 0,
         bank: "",
@@ -233,6 +245,11 @@ export default {
     };
   },
   methods: {
+    // 选择月份
+    yuefsGm(val) {
+      this.form.yue = val;
+      this.zoom = this.formShow.age = this.yuefs.value = false;
+    },
     jbsFn() {
       if (this.read) {
         return;
@@ -329,7 +346,7 @@ export default {
         return;
       }
       // 提交数据;
-      var d = JSON.stringify({
+      var d = {
         id: this.form.id,
         name: this.form.name,
         sexvalue: this.form.sex.value,
@@ -350,7 +367,14 @@ export default {
         jbsid: this.form.jbs.value,
         ysxhid: this.form.ysxh.value,
         llspid: this.form.llsp.value
-      });
+      };
+
+      if (d.age === 0 && this.form.yue !== 0) {
+        d.Age = this.form.yue / 12;
+        console.log(d.Age);
+      }
+
+      d = JSON.stringify(d);
 
       this.$http({
         url: "/api/HealthyArchive/UpdatePersonalHealthyArchive",
@@ -387,7 +411,12 @@ export default {
     setData(data) {
       this.form.id = data.Data.id;
       this.form.name = data.Data.name;
-      this.form.age = data.Data.age;
+      if (data.Data.age < 1) {
+        this.form.age = 0;
+        this.form.yue = Math.round(data.Data.age * 12);
+      } else {
+        this.form.age = data.Data.age;
+      }
       this.form.sex.name = data.Data.sexname;
       this.form.sex.value = data.Data.sexvalue;
       this.form.height = data.Data.height;
@@ -624,6 +653,24 @@ export default {
   }
 
   .submit_btn {
+  }
+
+  .span_btn {
+    float: right;
+    background: #8dc13b;
+    color: #fff;
+    font-size: 14px;
+    padding: 3px 7px;
+    font-size: 12px;
+  }
+  .textcenter {
+    text-align: center;
+
+    .cancel {
+      border-top: 10px solid #eee;
+      box-sizing: content-box;
+      border-bottom: 0;
+    }
   }
 }
 </style>

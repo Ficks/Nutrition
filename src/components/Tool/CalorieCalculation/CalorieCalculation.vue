@@ -74,7 +74,7 @@
       <div class="afxm"  :style="{bottom:yuefs.value?0:-800+'px'}">
           <h3>选择月份</h3>
           <ul class="textcenter">
-            <li @click="yuefsGm(item)" v-for="item in 12">{{item}}月份</li>
+            <li @click="yuefsGm(item)" v-for="item in 11">{{item}}月份</li>
             <li @click="yuefs.show=false" class="cancel">取消</li>
           </ul>
       </div>
@@ -169,7 +169,6 @@ export default {
       };
       if (this.arr[2].value === 0 && this.arr[2].yue !== 0) {
         d.Age = this.arr[2].yue / 12;
-        console.log(d.Age);
       }
       this.$http({
         url: "/api/HealthyArchive/CalKcalNeed",

@@ -83,6 +83,11 @@ export default {
         //成功的处理
         console.log(data);
         this.details = data.Data;
+        if (this.details.age < 1) {
+          this.details.age = Math.round(this.details.age * 12) + "个月";
+        } else {
+          this.details.age += "岁";
+        }
       },
       error: function() {
         //错误处理
