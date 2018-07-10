@@ -52,7 +52,7 @@
             <h3>选择年龄</h3>
             <div class="vuels">年龄：{{form.age}} 岁</div>
             <div class="sle">
-              <range v-model="form.age"  :min="0" :max="150"></range>
+              <range v-model="form.age"  :min="0" :max="110"></range>
             </div>
         </div>
 

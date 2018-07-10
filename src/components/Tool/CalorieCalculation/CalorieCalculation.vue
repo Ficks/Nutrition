@@ -39,12 +39,12 @@
           </div>
       </div>
       <div class="afxm"  :style="{bottom:arr[2].show?0:-300+'px'}">
-          <h3>选择{{arr[2].title}}</h3>
+          <h3>选择{{arr[2].title}} <span class="span_btn" v-show="arr[2].value==0" @click="yuefs.value=true">选择月份</span> </h3>
           <div class="vuels">{{arr[2].title}}：{{arr[2].value}} {{arr[2].dw}}</div>
           <div class="sle">
-            <range v-model="arr[2].value"  :min="0" :max="100"></range>
+            <range v-model="arr[2].value"  :min="0" :max="110"></range>
           </div>
-          <div class="btn" @click="yuefs.value=true">选择月份</div>
+          <!-- <div class="btn" @click="yuefs.value=true">选择月份</div> -->
       </div>
       <div class="afxm"  :style="{bottom:arr[3].show?0:-200+'px'}">
           <h3>选择{{arr[3].title}}</h3>
@@ -71,7 +71,13 @@
             <li @click="setValue('4',5,'哺育期')">哺育期</li>
           </ul>
       </div>
-         <actionsheet v-model="yuefs.value" :menus="yuefs.menu" @on-click-menu="yuefsGm" show-cancel></actionsheet>
+      <div class="afxm"  :style="{bottom:yuefs.value?0:-800+'px'}">
+          <h3>选择月份</h3>
+          <ul class="textcenter">
+            <li @click="yuefsGm(item)" v-for="item in 12">{{item}}月份</li>
+            <li @click="yuefs.show=false" class="cancel">取消</li>
+          </ul>
+      </div>
     </div>
 </template>
 <script>
@@ -85,61 +91,7 @@ export default {
   data() {
     return {
       yuefs: {
-        value: false,
-        menu: [
-          {
-            label: "请选择月份",
-            type: "info"
-          },
-          {
-            label: "1个月",
-            value: "1"
-          },
-          {
-            label: "2个月",
-            value: "2"
-          },
-          {
-            label: "3个月",
-            value: "3"
-          },
-          {
-            label: "4个月",
-            value: "4"
-          },
-          {
-            label: "5个月",
-            value: "5"
-          },
-          {
-            label: "6个月",
-            value: "6"
-          },
-          {
-            label: "7个月",
-            value: "7"
-          },
-          {
-            label: "8个月",
-            value: "8"
-          },
-          {
-            label: "9个月",
-            value: "9"
-          },
-          {
-            label: "10个月",
-            value: "10"
-          },
-          {
-            label: "11个月",
-            value: "11"
-          },
-          {
-            label: "12个月",
-            value: "12"
-          }
-        ]
+        value: false
       },
       zoom: false,
       kcal: "",
@@ -190,10 +142,9 @@ export default {
   methods: {
     // 选择月份
     yuefsGm(val) {
-      console.log(val);
       this.arr[2].yue = val;
       this.arr[2].show = false;
-      this.zoom = false;
+      this.zoom = this.arr[2].show = this.yuefs.value = false;
     },
     search() {
       // 查询所需要的kcal
@@ -301,6 +252,8 @@ export default {
   bottom: 0;
   left: 0;
   width: 100%;
+  max-height: 100%;
+  overflow: auto;
   z-index: 999;
   background: #fff;
   transition: all 0.5s;
@@ -371,6 +324,23 @@ export default {
   bottom: 20px;
   left: 0;
   right: 0;
+}
+.span_btn {
+  float: right;
+  background: #8dc13b;
+  color: #fff;
+  font-size: 14px;
+  padding: 3px 7px;
+  font-size: 12px;
+}
+.textcenter {
+  text-align: center;
+
+  .cancel {
+    border-top: 10px solid #eee;
+    box-sizing: content-box;
+    border-bottom: 0;
+  }
 }
 </style>
 
