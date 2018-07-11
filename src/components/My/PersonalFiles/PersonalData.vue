@@ -23,7 +23,8 @@
                   
                 </ul>
                 <ul>
-                  <li @click="jbsFn">疾病史<div class="right">{{form.jbs.name==null || form.jbs.name==''?read?"无":"请选择":form.jbs.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <!-- <li @click="jbsFn">疾病史<div class="right">{{form.jbs.name==null || form.jbs.name==''?read?"无":"请选择":form.jbs.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li> -->
+                  <li @click="jbsFn">疾病史<div class="right">{{form.jbs.name?form.jbs.name:"无"}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('yfxx')">孕妇选项<div class="right">{{form.yfxx.name==''?"请选择":form.yfxx.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('ysxh')">饮食喜好<div class="right">{{form.ysxh.name==''?"请选择":form.ysxh.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('llsp')">劳力水平<div class="right">{{form.llsp.name==''?"请选择":form.llsp.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>

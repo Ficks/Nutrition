@@ -13,6 +13,7 @@
           <scroller lock-x height="-95px" ref="scrollerBottomTow">
               <div class="scroller_box list_mds">
                   <ul>
+                      <li @click="addJb('')" class="t">没有疾病</li>
                       <li @click="addJb(item)" v-for="(item,index) in list">{{item.Name}}</li>
                   </ul>
               </div>            
@@ -49,6 +50,7 @@ export default {
     },
     // 加入疾病
     addJb(item) {
+      console.log(item);
       this.$emit("addJbsBd", item);
     },
     reset() {
@@ -87,6 +89,10 @@ export default {
         border-bottom: 1px solid #efefef;
         font-size: 32/2px;
         color: #757575;
+      }
+      .t {
+        text-align: center;
+        color: #8dc13b;
       }
     }
   }
