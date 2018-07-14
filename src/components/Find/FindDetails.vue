@@ -26,7 +26,7 @@
                           <h3>
                             {{item.name}}
                           </h3>
-                         <span>{{item.date | dateTimeGsh}}</span></div>
+                         <span>{{item.date | timeGsh}}</span></div>
                       <p>{{item.p}}</p>
                   </li>
               </ul>
@@ -136,10 +136,12 @@ export default {
           },
           error() {}
         });
+        console.log(this.$getDate(0));
         this.listArr.push({
-          lou: "4楼",
+          head: this.$store.state.headurl,
+          name: this.$store.state.username,
           p: this.commentVal,
-          date: "5月22日"
+          date: this.$getDate(0)
         });
         this.commentVal = "";
         // 显示文字

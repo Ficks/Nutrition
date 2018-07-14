@@ -152,7 +152,7 @@ ul {
     margin: 15px 0;
     .left {
       float: left;
-      width: 20%;
+      width: 25%;
       font-size: 16px;
       color: #494949;
       overflow: hidden;
@@ -160,7 +160,7 @@ ul {
       white-space: nowrap;
     }
     .center {
-      width: 60%;
+      width: 50%;
       float: left;
       .kdc {
         width: 100%;
@@ -192,7 +192,7 @@ ul {
     }
     .right {
       text-align: right;
-      width: 20%;
+      width: 25%;
       float: right;
       overflow: hidden;
       text-overflow: ellipsis;

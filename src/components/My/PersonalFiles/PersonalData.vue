@@ -16,11 +16,6 @@
                   <li @click="theMshow('height')">身高<div class="right">{{form.height==''?"请选择":form.height+'cm'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="theMshow('weight')">体重<div class="right">{{form.weight==''?"请选择":form.weight+'kg'}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('mz')">民族<div class="right">{{form.mz.name==''?"请选择":form.mz.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
-                  <li @click="actionsheetFn('zy')">职业<div class="right">{{form.zy.name==''?"请选择":form.zy.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
-                  <li @click="actionsheetFn('hyzk')">婚姻状况<div class="right">{{form.hyzk.name==''?"请选择":form.hyzk.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
-                  <li @click="actionsheetFn('whcd')">文化程度<div class="right">{{form.whcd.name==''?"请选择":form.whcd.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
-                  <li @click="actionsheetFn('jtsr')">家庭年收入<div class="right">{{form.jtsr.name==''?"请选择":form.jtsr.name+"W"}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
-                  
                 </ul>
                 <ul>
                   <!-- <li @click="jbsFn">疾病史<div class="right">{{form.jbs.name==null || form.jbs.name==''?read?"无":"请选择":form.jbs.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li> -->
@@ -31,16 +26,24 @@
                   <li v-if="read!=true" @click="gmswFn">过敏食物<div class="right">去添加<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                 </ul>
                 <div class="gmsw">
-                    <h3>过敏食物</h3>
+                    <h3 class="tls">过敏食物</h3>
                     <p v-if="gmsw.length==0">暂无添加过敏食物</p>
                     <ul>
                         <li v-for="(item,index) in gmsw">{{item.name}} <i v-if="!read" @click="removeIndex=index;remove.value=true;" class="iconfont icon-shanchu"></i></li>
                     </ul>
                 </div>
-                <ul style="margin-top:20px;" v-if="!read">
+                <h2 class="tls">合伙人及退款</h2>
+                <ul v-if="!read">
                   <li>开户行<input :readonly="read" type="text" class="yhzh" v-model="form.bank" placeholder="请输入开户行"></li>
                   <li>开户人<input :readonly="read" type="text" class="yhzh" v-model="form.account" placeholder="请输入开户人"></li>
                   <li>银行账号<input :readonly="read" type="text" class="yhzh" v-model="form.banaccount" placeholder="请输入银行账号"></li>
+                </ul>
+                <h2 class="tls">选填项</h2>
+                <ul>
+                  <li @click="actionsheetFn('zy')">职业<div class="right">{{form.zy.name==''?"请选择":form.zy.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="actionsheetFn('hyzk')">婚姻状况<div class="right">{{form.hyzk.name==''?"请选择":form.hyzk.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="actionsheetFn('whcd')">文化程度<div class="right">{{form.whcd.name==''?"请选择":form.whcd.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
+                  <li @click="actionsheetFn('jtsr')">家庭年收入<div class="right">{{form.jtsr.name==''?"请选择":form.jtsr.name+"W"}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                 </ul>
                 <div class="submit_btn" v-if="!read" @click="submit">保存并返回</div>
               </div>
@@ -231,10 +234,11 @@ export default {
           "5": "哺乳期"
         },
         ysxh: {
-          "1": "素菜",
-          "2": "海鲜",
-          "3": "牛羊猪肉",
-          "4": "野味"
+          "1": "酸",
+          "2": "甜",
+          "3": "苦",
+          "4": "辣",
+          "5": "咸"
         },
         llsp: {
           "1": "轻度",
@@ -634,7 +638,6 @@ export default {
   .gmsw {
     h3 {
       font-size: 16px;
-      padding-left: 15px;
       color: #333;
     }
     p {
@@ -671,6 +674,27 @@ export default {
       border-top: 10px solid #eee;
       box-sizing: content-box;
       border-bottom: 0;
+    }
+  }
+
+  .tls {
+    padding-left: 25px;
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+    position: relative;
+    margin-top: 20px;
+    margin-bottom: 10px;
+
+    &::after {
+      display: block;
+      content: "";
+      position: absolute;
+      left: 15px;
+      width: 3px;
+      background: #777;
+      top: 0;
+      height: 100%;
     }
   }
 }

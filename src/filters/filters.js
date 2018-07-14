@@ -1,5 +1,8 @@
 var filters = {
     timeGsh(item) {
+        if (item.indexOf("T") == -1) {
+            return item;
+        }
         return item.substr(0, item.indexOf("T"));
     },
     dateTimeGsh(item) {

@@ -34,7 +34,7 @@
                     {{addData.min+`min`}}
                 </div>
                 <div class="kdc">
-                    <range v-model="addData.min"  :min="1" :max="1000"></range>
+                    <range v-model="addData.min"  :min="1" :max="500"></range>
                 </div>
             </div>
 

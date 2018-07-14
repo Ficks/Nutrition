@@ -16,7 +16,7 @@
            <div class="btns">
              <div class="btn_m xxx" v-show="item.IsEnd===0">正在咨询</div>
              <div class="btn_m xxx" v-show="item.IsEnd===1" style="background:red">已经结束</div>
-             <div class="btn_m" @click.stop="userInfo(item)">用户资料</div>
+             <div class="btn_m" v-show="item.IsEnd===0" @click.stop="userInfo(item)">用户资料</div>
              <!-- <div class="btn_m end" :style="{'margin-top':item.msg?'8px':'20px'}">已结束</div> -->
            </div>
          </div>
@@ -157,6 +157,7 @@ export default {
       p {
         font-size: 15px;
         color: #a3a3a3;
+        padding-top: 5px;
       }
     }
     .btns {

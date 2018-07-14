@@ -28,7 +28,7 @@
               <ul>
                 <li><router-link to="/My/WalkIntoUs">走进我们<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
                 <li><router-link to="/My/Partner">合作伙伴<i class="iconfont icon-chanpinxiangqing_qianwang"></i></router-link></li>
-                <li @click="isLogin">营养师用户<i class="iconfont icon-chanpinxiangqing_qianwang"></i></li>
+                <li @click="isLogin">咨询师<i class="iconfont icon-chanpinxiangqing_qianwang"></i></li>
               </ul>
             </div>
             </scroller>

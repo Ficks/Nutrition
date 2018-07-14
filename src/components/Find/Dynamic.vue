@@ -23,8 +23,8 @@
       </div>
       <div class="gnbtn" v-if="listArr.length>0">
           <span><i  @click="noLove"  class="iconfont icon-shanchu"></i></span>
-          <span><i @click="love" v-show="isLove" class="iconfont icon-dianzanshixin"></i></span>
-          <span><i @click="love" v-show="!isLove" class="iconfont icon-dianzankongxin1"></i></span>
+          <span><i @click="love" v-show="isLove===true" class="iconfont icon-dianzanshixin"></i></span>
+          <span><i @click="love" v-show="isLove==''" class="iconfont icon-dianzankongxin1"></i></span>
       </div>
     </div>
 </template>
@@ -38,6 +38,7 @@ export default {
   },
   data() {
     return {
+      r: "",
       isLove: false,
       listArr: [],
       listArrBf: [],
@@ -53,25 +54,20 @@ export default {
   methods: {
     newSwiper() {
       this.swiperBom = new Swiper(".swiper-container", {
+        // loop: true,
         autoHeight: true,
         on: {
           click: () => {
             this.toPathDetails();
           },
           slideChange: () => {
-            this.isLove = this.listArr[this.swiperBom.previousIndex].isLove;
-          },
-          slideNextTransitionStart: () => {
-            console.log(this.swiperBom.activeIndex);
-            if (this.swiperBom.activeIndex === this.listArr.length - 3) {
-              this.getList();
-            }
-            if (this.listArr[this.swiperBom.previousIndex].isLove !== true) {
+            this.isLove = this.listArr[this.swiperBom.activeIndex].isLove;
+            if (this.r !== "") {
               this.$http({
                 url: "/api/User/DoLike",
                 type: "get",
                 data: {
-                  id: this.listArr[this.swiperBom.previousIndex].id,
+                  id: this.listArr[this.r].id,
                   like: false
                 },
                 success: data => {
@@ -85,7 +81,33 @@ export default {
                   //错误处理
                 }
               });
+              this.r = "";
             }
+          },
+          slideNextTransitionStart: () => {
+            if (this.swiperBom.activeIndex === this.listArr.length - 3) {
+              this.getList();
+            }
+            // if (this.listArr[this.swiperBom.previousIndex].isLove !== true) {
+            //   this.$http({
+            //     url: "/api/User/DoLike",
+            //     type: "get",
+            //     data: {
+            //       id: this.listArr[this.swiperBom.previousIndex].id,
+            //       like: false
+            //     },
+            //     success: data => {
+            //       //成功的处理
+            //       setTimeout(() => {
+            //         this.listArr.splice(this.swiperBom.previousIndex, 1);
+            //         this.swiperBom.removeSlide(this.swiperBom.previousIndex);
+            //       }, 300);
+            //     },
+            //     error: function() {
+            //       //错误处理
+            //     }
+            //   });
+            // }
           }
         }
       });
@@ -99,6 +121,7 @@ export default {
         var strHtml = "";
         var strImg = "";
         for (let i = 0; i < data.length; i++) {
+          data[i].isLove = "";
           this.listArr.push(data[i]);
           if (data[i].picurl !== "") {
             strImg = `
@@ -175,30 +198,41 @@ export default {
     },
     noLove() {
       // 不喜欢跳过
-      if (this.swiperBom.activeIndex == this.listArr.length - 1) {
+      if (this.listArr.length === 1) {
         this.$http({
           url: "/api/User/DoLike",
           type: "get",
           data: {
-            id: this.listArr[this.swiperBom.activeIndex].id,
+            id: this.listArr[0].id,
             like: false
           },
           success: data => {
             //成功的处理
-            this.listArr.splice(this.swiperBom.activeIndex, 1);
-            this.swiperBom.removeSlide(this.swiperBom.activeIndex);
+            this.listArr.splice(0, 1);
+            this.swiperBom.removeSlide(0);
             if (this.listArr.length == 0) {
               $(".swiper-container").hide();
             }
           },
           error: function() {
+            console.log("cuo l");
             //错误处理
           }
         });
+
         return;
       }
-      var to = this.swiperBom.activeIndex + 1;
+      this.r = this.swiperBom.activeIndex;
+      var to = "";
+      if (this.swiperBom.activeIndex == this.listArr.length - 1) {
+        to = 0;
+      } else {
+        to = this.swiperBom.activeIndex + 1;
+      }
       this.swiperBom.slideTo(to);
+      if (this.listArr.length == 0) {
+        $(".swiper-container").hide();
+      }
     }
   },
   mounted() {
