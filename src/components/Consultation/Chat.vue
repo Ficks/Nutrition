@@ -102,7 +102,25 @@ export default {
     }
   },
   methods: {
+    tiSetout() {
+      if (this.$route.query.ism == "false" || this.$route.query.ism == false) {
+        this.$vux.toast.show({
+          type: "warn",
+          text: "咨询已经结束了哦",
+          width: "11em"
+        });
+
+        return true;
+      } else {
+        return false;
+      }
+    },
     addImg(event) {
+      var ism = this.tiSetout();
+      if (ism) {
+        return;
+      }
+
       // 发送图片
       let reader = new FileReader();
       let img1 = event.target.files[0];
@@ -176,6 +194,15 @@ export default {
       var isT = true;
       //接收服务端消息，
       this.proxy.on("receiveSystemMsg", (data, userInfo) => {
+        var ism = this.tiSetout();
+        if (ism) {
+          return;
+        }
+        this.$vux.toast.show({
+          type: "text",
+          text: data,
+          width: "12em"
+        });
         if (userInfo && isT) {
           var userInfo = JSON.parse(userInfo);
           this.my.id = userInfo.UserId;
@@ -185,6 +212,10 @@ export default {
           this.he.name = userInfo.ToName;
           this.he.src = userInfo.ToUserPortrait;
           isT = false;
+
+          // this.$vux.toast.show({
+          //   text:"链接"
+          // })
         }
         this.$vux.loading.hide();
         this.zoomShow = false;
@@ -244,6 +275,10 @@ export default {
       });
     },
     sendMessage(imgType, imgUrl) {
+      var ism = this.tiSetout();
+      if (ism) {
+        return;
+      }
       imgType = imgType == "img" ? imgType : null;
       // 发送消息
       var d = {

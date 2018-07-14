@@ -143,7 +143,7 @@ function loginFn(data, next) {
   if (data.Code !== 20000) {
     Vue.$vux.toast.show({
       type: 'warn',
-      text: data.error
+      text: data.Error || data.Message
     })
     return;
   }

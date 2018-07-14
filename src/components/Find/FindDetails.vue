@@ -355,6 +355,7 @@ export default {
       padding-top: 2px;
       width: 75%;
       textarea {
+        font-size: 14px;
         height: 25px;
         width: 100%;
         background: #ffffff;

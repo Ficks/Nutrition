@@ -1,7 +1,7 @@
 <template>
     <div class="container">
       <div class="header">
-        <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
+        <div class="left" @click="$router.push({path:'/My'})"><i class="iconfont icon-fanhui"></i>返回</div>
         <div class="title">{{$route.name}}</div>
         <div class="right" @click="searchOn">搜索</div>
       </div>
@@ -32,7 +32,7 @@
                         </div>
                         <div class="list_ts">
                             <p>擅长：{{item.GoodAt}}
-                              <span @click.stop="toPinLun(item)" v-if="item.IsEnd==0">评论</span>
+                              <span @click.stop="toPinLun(item)" v-if="item.IsEnd==1">评论</span>
                             </p>
                         </div>
                     </div>
@@ -141,10 +141,19 @@ export default {
     toPathDetails(item) {
       if (item.IsEnd == 1) {
         //   营养师详情
+        // this.$router.push({
+        //   path: "/Consultation/ConsultationDetails",
+        //   query: {
+        //     id: item.DietitianId
+        //   }
+        // });
+
         this.$router.push({
-          path: "/Consultation/ConsultationDetails",
+          path: "/Consultation/Chat",
           query: {
-            id: item.DietitianId
+            name: item.Name,
+            id: item.UserId,
+            ism: false
           }
         });
       } else if (item.IsEnd == 0) {
@@ -155,7 +164,8 @@ export default {
           path: "/Consultation/Chat",
           query: {
             name: item.Name,
-            id: item.UserId
+            id: item.UserId,
+            ism: true
           }
         });
       }

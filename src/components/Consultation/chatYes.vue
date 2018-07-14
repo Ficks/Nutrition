@@ -1,7 +1,7 @@
 <template>
     <div class="container">
       <div class="header">
-        <div class="left" @click="$router.push({path:'/Consultation/ConsultationDetails',query:{back:'/Consultation'}})"><i class="iconfont icon-fanhui"></i>返回</div>
+        <div class="left" @click="$router.push({path:'/My/MyAdvice'})"><i class="iconfont icon-fanhui"></i>返回</div>
         <div class="title">{{$route.name}}</div>
       </div>
         <scroller lock-x height="-45px" ref="scrollerBottom">
@@ -11,7 +11,7 @@
                     <i class="iconfont icon-chenggong"></i>
                 </div>
                 <h1>评价成功</h1>
-                <div class="submit_btn"><router-link to="/Consultation">完成</router-link></div>
+                <div class="submit_btn"><router-link to="/My/MyAdvice">完成</router-link></div>
             </div>
         </scroller>
     </div>
