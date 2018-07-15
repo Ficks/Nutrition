@@ -49,50 +49,10 @@ export default {
       this.$router.push({
         path: "/Tool/SearchList/Details",
         query: {
-          id: item.id
+          id: item.id,
+          typevalue: ""
         }
       });
-    },
-    getList() {
-      console.log(this.$route.path);
-      if (this.searchVal.onFetching) {
-        // do nothing
-      } else {
-        this.searchVal.onFetching = true;
-        setTimeout(() => {
-          this.listArr.push(
-            {
-              src: "/static/images/searchm.jpg",
-              title: "生菜牙白",
-              kcal: "75kcal(100g)"
-            },
-            {
-              src: "/static/images/searchm.jpg",
-              title: "生菜牙白",
-              kcal: "75kcal(100g)"
-            },
-            {
-              src: "/static/images/searchm.jpg",
-              title: "生菜牙白",
-              kcal: "75kcal(100g)"
-            },
-            {
-              src: "/static/images/searchm.jpg",
-              title: "生菜牙白",
-              kcal: "75kcal(100g)"
-            },
-            {
-              src: "/static/images/searchm.jpg",
-              title: "生菜牙白",
-              kcal: "75kcal(100g)"
-            }
-          );
-          this.$nextTick(() => {
-            this.$refs.scrollerBottom.reset();
-          });
-          this.searchVal.onFetching = false;
-        }, 2000);
-      }
     }
   },
   mounted() {

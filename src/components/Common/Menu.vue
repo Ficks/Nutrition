@@ -37,31 +37,37 @@
           <li>
             <router-link :to="{path:'/Tool/Recipes',query:{typevalue:1}}">
             <i class="iconfont icon-zaocan1"></i>
-            <span>早餐</span>
+            <span>早餐<em class="fx12">(及加餐)</em></span>
             </router-link>
           </li>
           <li>
             <router-link :to="{path:'/Tool/Recipes',query:{typevalue:2}}">
             <i class="iconfont icon-wucan"></i>
-            <span>中餐</span>
+            <span>中餐<em class="fx12">(及加餐)</em></span>
             </router-link>
           </li>
           <li>
             <router-link :to="{path:'/Tool/Recipes',query:{typevalue:3}}">
             <i class="iconfont icon-wancan"></i>
-            <span>晚餐</span>
+            <span>晚餐<em class="fx12">(及加餐)</em></span>
             </router-link>
           </li>
-          <li>
+          <!-- <li>
             <router-link :to="{path:'/Tool/Recipes',query:{typevalue:4}}">
             <i class="iconfont icon-lingshi"></i>
             <span>加餐</span>
             </router-link>
-          </li>
+          </li> -->
           <li>
             <router-link to="/AddMotion">
             <i class="iconfont icon-buhang"></i>
             <span>运动</span>
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/DietaryRrecords">
+            <i class="iconfont icon-jilu" style="font-size:25px;padding-bottom:6px"></i>
+            <span>饮食记录</span>
             </router-link>
           </li>
         </ul>
@@ -104,5 +110,9 @@ export default {
   position: fixed;
   z-index: 999;
   bottom: 0;
+}
+.fx12 {
+  font-size: 12px;
+  font-style: normal;
 }
 </style>

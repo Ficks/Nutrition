@@ -6,7 +6,6 @@
               <div class="title">{{$route.name}}</div>
               <div class="right" @click="submit">完成</div>
           </div>
-          <scroller lock-x height="-45px"   ref="scrollerBottom">
           <div class="text_fb">
               <textarea placeholder="写下你想分享的内容..." v-model="data.text">
 
@@ -25,7 +24,6 @@
                   <span @click="setLocation" class="lo">{{this.data.location}}</span>
               </div>
           </div>
-          </scroller>
         </div>
         <div class="childbox" v-show="child">
             <div class="header">
@@ -160,6 +158,12 @@ export default {
               this.$router.push({
                 path: "/Dynamic"
               });
+            } else {
+              this.$vux.toast.show({
+                type: "warn",
+                text: data.Error || data.Message,
+                width: "12em"
+              });
             }
           },
           error: error => {
@@ -201,6 +205,7 @@ export default {
 .container {
   height: 100%;
   overflow: hidden;
+  background: #fff;
   .ht_list {
     padding: 0 15px;
     box-sizing: border-box;

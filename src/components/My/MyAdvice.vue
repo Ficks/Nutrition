@@ -7,7 +7,7 @@
       </div>
         <div class="search">
             <div class="input">
-              <input type="text" v-model="searchVal.name" placeholder="搜索营养师姓名">
+              <input type="text" v-model="searchVal.name" placeholder="搜索咨询师姓名">
               <i class="iconfont icon-sousuo" @click="getList"></i>
             </div>
         </div>
@@ -140,7 +140,7 @@ export default {
     },
     toPathDetails(item) {
       if (item.IsEnd == 1) {
-        //   营养师详情
+        //   咨询师详情
         // this.$router.push({
         //   path: "/Consultation/ConsultationDetails",
         //   query: {

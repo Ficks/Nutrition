@@ -7,6 +7,13 @@
             <span class="active"><router-link to="/Find">资讯</router-link></span>
             <span><router-link to="/Dynamic">动态</router-link></span>
         </div>
+        <div class="search">
+            <div class="input">
+              <input type="text" v-model="searchVal.name" placeholder="根据关键字进行搜索">
+              <i class="iconfont icon-sousuo" @click="getList"></i>
+              <span @click="searchOn">搜索</span>
+            </div>
+        </div>
 
         <div class="box_wr">
             <scroller lock-x height="-100px"  @on-scroll-bottom="getList"  ref="scrollerBottom">
@@ -31,6 +38,7 @@ export default {
   data() {
     return {
       searchVal: {
+        name: "",
         pageNum: 0,
         pageSize: 10,
         onFetching: false,
@@ -41,6 +49,11 @@ export default {
     };
   },
   methods: {
+    searchOn() {
+      this.searchVal.pageNum = 0;
+      this.listArr = [];
+      this.getList(1);
+    },
     getList(time) {
       if (this.searchVal.onFetching) {
         // do nothing
@@ -136,6 +149,47 @@ export default {
       padding-top: 10px;
       font-size: 14px;
       color: #666;
+    }
+  }
+
+  .search {
+    width: 100%;
+    height: 50px;
+    background: #fff;
+    padding: 0 15px;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    .input {
+      position: relative;
+      margin-top: 10px;
+      border-radius: 5px;
+      padding-right: 60px;
+      input {
+        color: #a1a1a1;
+        padding-left: 25px;
+      }
+      span {
+        position: absolute;
+        top: 0;
+        display: block;
+        right: 0;
+        background: #8dc13b;
+        color: #fff;
+        font-size: 12px;
+        width: 50px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        border-radius: 5px;
+        z-index: 999;
+      }
+      i {
+        position: absolute;
+        left: 5px;
+        top: 6px;
+        color: #a1a1a1;
+      }
     }
   }
 }

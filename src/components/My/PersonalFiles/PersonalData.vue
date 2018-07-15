@@ -32,12 +32,6 @@
                         <li v-for="(item,index) in gmsw">{{item.name}} <i v-if="!read" @click="removeIndex=index;remove.value=true;" class="iconfont icon-shanchu"></i></li>
                     </ul>
                 </div>
-                <h2 class="tls">合伙人及退款</h2>
-                <ul v-if="!read">
-                  <li>开户行<input :readonly="read" type="text" class="yhzh" v-model="form.bank" placeholder="请输入开户行"></li>
-                  <li>开户人<input :readonly="read" type="text" class="yhzh" v-model="form.account" placeholder="请输入开户人"></li>
-                  <li>银行账号<input :readonly="read" type="text" class="yhzh" v-model="form.banaccount" placeholder="请输入银行账号"></li>
-                </ul>
                 <h2 class="tls">选填项</h2>
                 <ul>
                   <li @click="actionsheetFn('zy')">职业<div class="right">{{form.zy.name==''?"请选择":form.zy.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
@@ -45,6 +39,13 @@
                   <li @click="actionsheetFn('whcd')">文化程度<div class="right">{{form.whcd.name==''?"请选择":form.whcd.name}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                   <li @click="actionsheetFn('jtsr')">家庭年收入<div class="right">{{form.jtsr.name==''?"请选择":form.jtsr.name+"W"}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></div></li>
                 </ul>
+                <h2 class="tls">合伙人及退款</h2>
+                <ul v-if="!read">
+                  <li>开户行<input :readonly="read" type="text" class="yhzh" v-model="form.bank" placeholder="请输入开户行"></li>
+                  <li>开户人<input :readonly="read" type="text" class="yhzh" v-model="form.account" placeholder="请输入开户人"></li>
+                  <li>银行账号<input :readonly="read" type="text" class="yhzh" v-model="form.banaccount" placeholder="请输入银行账号"></li>
+                </ul>
+                
                 <div class="submit_btn" v-if="!read" @click="submit">保存并返回</div>
               </div>
               </scroller>

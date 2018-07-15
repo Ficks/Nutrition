@@ -78,8 +78,14 @@ img {
   z-index: 999;
   background: #fff;
   width: 100%;
-  height: 235px;
+  height: 255px;
   transition: all .5s;
+}
+
+.fx12 {
+  font-size: 12px;
+  font-style: normal;
+  display: block;
 }
 
 .nav_bom_zoom {

@@ -148,7 +148,7 @@
       </div>
     <!-- 营养咨询 -->
       <div class="yinyanzx">
-        <h2>营养咨询<span><router-link to="/Consultation">更多></router-link></span></h2>
+        <h2>咨询师<span><router-link to="/Consultation">更多></router-link></span></h2>
         <ul>
           <li v-for="(item,index) in nutCon" @click="toDetails(item)">
               <div class="img">
@@ -201,7 +201,10 @@ export default {
   methods: {
     mastri() {
       this.$router.push({
-        path: "/Index/RecommendZzw"
+        path: "/Index/RecommendZzw",
+        query: {
+          id: this.KeyId
+        }
       });
     },
     // 膳食推荐table
@@ -292,7 +295,7 @@ export default {
       });
     },
     toDetails(item) {
-      // 跳转到营养师详情
+      // 跳转到咨询师详情
       this.$router.push({
         path: "/Consultation/ConsultationDetails",
         query: {

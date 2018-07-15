@@ -16,12 +16,12 @@
                 </div>
               </div>
               <ul class="list_re">
-                  <li v-for="(item,index) in listArr[0]" @click="toPathDetails(item)">
+                  <li v-for="(item,index) in listArr[0].dishes" @click="toPathDetails(item)">
                       <div class="img">
-                          <img :src="item.src" alt="">
+                          <img :src="$HTTPURL+item.thumbnail" alt="">
                       </div>
-                      <h3>{{item.title}}</h3>
-                      <p>{{item.kcal}}</p>
+                      <h3>{{item.name}}</h3>
+                      <p>{{item.kcal}}kcal</p>
                   </li>
               </ul>
             </div>
@@ -33,12 +33,12 @@
                     <i class="iconfont icon-wucan"></i> 午餐
 </div></div>              </div>
               <ul class="list_re">
-                  <li v-for="(item,index) in listArr[1]" @click="toPathDetails(item)">
+                  <li v-for="(item,index) in listArr[1].dishes" @click="toPathDetails(item)">
                       <div class="img">
-                          <img :src="item.src" alt="">
+                          <img :src="$HTTPURL+item.thumbnail" alt="">
                       </div>
-                      <h3>{{item.title}}</h3>
-                      <p>{{item.kcal}}</p>
+                      <h3>{{item.name}}</h3>
+                      <p>{{item.kcal}}kcal</p>
                   </li>
               </ul>
             </div>
@@ -54,10 +54,10 @@
               <ul class="list_re">
                   <li v-for="(item,index) in listArr[2]" @click="toPathDetails(item)">
                       <div class="img">
-                          <img :src="item.src" alt="">
+                          <img :src="$HTTPURL+item.thumbnail" alt="">
                       </div>
-                      <h3>{{item.title}}</h3>
-                      <p>{{item.kcal}}</p>
+                      <h3>{{item.name}}</h3>
+                      <p>{{item.kcal}}kcal</p>
                   </li>
               </ul>
             </div>
@@ -77,87 +77,15 @@ export default {
         uptext: "滑动查看更多"
       },
       listArr: [
-        [
-          {
-            src: "/static/images/searchm.jpg",
-            title: "生菜牙白",
-            kcal: "75kcal(100g)"
-          },
-          {
-            src: "/static/images/searchm.jpg",
-            title: "生菜牙白",
-            kcal: "75kcal(100g)"
-          },
-          {
-            src: "/static/images/searchm.jpg",
-            title: "生菜牙白",
-            kcal: "75kcal(100g)"
-          },
-          {
-            src: "/static/images/searchm.jpg",
-            title: "生菜牙白",
-            kcal: "75kcal(100g)"
-          },
-          {
-            src: "/static/images/searchm.jpg",
-            title: "生菜牙白",
-            kcal: "75kcal(100g)"
-          }
-        ],
-        [
-          {
-            src: "/static/images/searchm.jpg",
-            title: "生菜牙白",
-            kcal: "75kcal(100g)"
-          },
-          {
-            src: "/static/images/searchm.jpg",
-            title: "生菜牙白",
-            kcal: "75kcal(100g)"
-          },
-          {
-            src: "/static/images/searchm.jpg",
-            title: "生菜牙白",
-            kcal: "75kcal(100g)"
-          },
-          {
-            src: "/static/images/searchm.jpg",
-            title: "生菜牙白",
-            kcal: "75kcal(100g)"
-          },
-          {
-            src: "/static/images/searchm.jpg",
-            title: "生菜牙白",
-            kcal: "75kcal(100g)"
-          }
-        ],
-        [
-          {
-            src: "/static/images/searchm.jpg",
-            title: "生菜牙白",
-            kcal: "75kcal(100g)"
-          },
-          {
-            src: "/static/images/searchm.jpg",
-            title: "生菜牙白",
-            kcal: "75kcal(100g)"
-          },
-          {
-            src: "/static/images/searchm.jpg",
-            title: "生菜牙白",
-            kcal: "75kcal(100g)"
-          },
-          {
-            src: "/static/images/searchm.jpg",
-            title: "生菜牙白",
-            kcal: "75kcal(100g)"
-          },
-          {
-            src: "/static/images/searchm.jpg",
-            title: "生菜牙白",
-            kcal: "75kcal(100g)"
-          }
-        ]
+        {
+          dishes: {}
+        },
+        {
+          dishes: {}
+        },
+        {
+          dishes: {}
+        }
       ]
     };
   },
@@ -169,11 +97,29 @@ export default {
     toPathDetails(item) {
       console.log(item);
       this.$router.push({
-        path: "/Tool/SearchList/Details"
+        path: "/Tool/SearchList/Details",
+        query: {
+          id: item.id,
+          typevalue: item.type
+        }
+      });
+    },
+    getList() {
+      this.$http({
+        url: "/api/HealthyDiet/GetMenuDietDetail",
+        type: "get",
+        data: {
+          id: this.$route.query.id
+        },
+        success: data => {
+          this.listArr = data.Data;
+        },
+        error: error => {}
       });
     }
   },
   mounted() {
+    this.getList();
     setTimeout(() => {
       this.$nextTick(() => {
         this.$refs.scrollerBottom.reset();

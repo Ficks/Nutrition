@@ -62,7 +62,8 @@ export default {
       //   });
       //   return false;
       // }
-
+      localStorage.setItem("tel", this.tel);
+      localStorage.setItem("password", this.password);
       this.$http({
         url: "/api/Consultation/DietitianLogin",
         type: "get",
@@ -88,7 +89,10 @@ export default {
       });
     }
   },
-  mounted() {}
+  mounted() {
+    this.tel = localStorage.getItem("tel");
+    this.password = localStorage.getItem("password");
+  }
 };
 </script>
 <style lang="less" scoped>

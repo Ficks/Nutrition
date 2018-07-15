@@ -5,13 +5,13 @@
         
         <div class="header">
             <div class="title">
-                营养师列表
+                咨询师列表
             </div>
             <div class="right" @click="searchOn">搜索</div>
         </div>
         <div class="search">
             <div class="input">
-              <input type="text" v-model="searchVal.DietitianName" placeholder="输入姓名来搜索营养师">
+              <input type="text" v-model="searchVal.DietitianName" placeholder="输入姓名来搜索咨询师">
               <i class="iconfont icon-sousuo" @click="getList"></i>
             </div>
         </div>

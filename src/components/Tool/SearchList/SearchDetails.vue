@@ -119,21 +119,21 @@ export default {
             type: "info"
           },
           {
-            label: "早餐",
+            label: "早餐(及加餐)",
             value: 1
           },
           {
-            label: "中餐",
+            label: "中餐(及加餐)",
             value: 2
           },
           {
-            label: "晚餐",
+            label: "晚餐(及加餐)",
             value: 3
-          },
-          {
-            label: "加餐",
-            value: 4
           }
+          // {
+          //   label: "加餐(及加餐)",
+          //   value: 4
+          // }
         ]
       }
     };

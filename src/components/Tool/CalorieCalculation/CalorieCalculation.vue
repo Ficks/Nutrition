@@ -75,7 +75,7 @@
           <h3>选择月份</h3>
           <ul class="textcenter">
             <li @click="yuefsGm(item)" v-for="item in 11">{{item}}月份</li>
-            <li @click="yuefs.show=false" class="cancel">取消</li>
+            <li @click="yuefs.value=false" class="cancel">取消</li>
           </ul>
       </div>
     </div>
