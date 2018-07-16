@@ -218,7 +218,12 @@ export default {
               text: data.Message,
               width: "10em"
             });
-            this.$router.back(-1);
+            this.$router.push({
+              path: "/DietaryRrecords",
+              query: {
+                back: 1
+              }
+            });
           } else {
             // 失败的处理
             this.$vux.toast.show({

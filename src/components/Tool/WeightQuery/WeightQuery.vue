@@ -12,7 +12,7 @@
                   <li v-for="(item,index) in arr" @click="setList(index)"><div>{{item.title}}<span>{{item.value || "请选择"}}{{item.value>0?item.dw:""}}<i class="iconfont icon-chanpinxiangqing_qianwang"></i></span></div></li>
               </ul>
           </div>
-          <div class="box" v-if="bmi!==''">
+          <div class="box" v-show="bmi!==''">
             <p>BMI为</p>
             <h1>{{bmi}}</h1>
             <div class="tps">
@@ -42,6 +42,11 @@
                     </li>
                 </ul>
             </div>
+            <h2 class="itss">18岁以下人群的BMI请参照如下标准：</h2>
+            <div class="imgs"><img src="/static/images/1.jpg" alt=""></div>
+            <div class="imgs"><img src="/static/images/2.jpg" alt=""></div>
+            <div class="imgs"><img src="/static/images/3.jpg" alt=""></div>
+            <div class="imgs"><img src="/static/images/4.jpg" alt=""></div>
           </div>
         </div>
       </scroller>
@@ -128,6 +133,9 @@ export default {
         success: data => {
           //成功的处理
           this.bmi = data.Data;
+          this.$nextTick(() => {
+            this.$refs.scrollerBottom.reset();
+          });
           if (data.Data < 1) {
           }
         },
@@ -280,6 +288,11 @@ export default {
   right: 0;
   bottom: 20px;
   margin: 0 auto;
+}
+
+.itss {
+  padding: 20px 0;
+  font-size: 16px;
 }
 </style>
 

@@ -1,5 +1,6 @@
 <template>
-    <div class="container">
+    <div class="warp">
+      <div class="container" v-show="!detailsShow">
       <!-- 底部导航 -->
       <Menu :index="1"></Menu>
       <div class="header">
@@ -27,18 +28,26 @@
           <span><i @click="love" v-show="isLove==''" class="iconfont icon-dianzankongxin1"></i></span>
       </div>
     </div>
+
+    <div class="view_child" v-show="detailsShow">
+      <Details ref="detailsBox" @hideDetails="detailsShow=false"></Details>
+    </div>
+    </div>
 </template>
 <script>
 import Menu from "../Common/Menu.vue";
+import Details from "./DynamicDetails.vue";
 import { setTimeout } from "timers";
 
 export default {
   components: {
-    Menu
+    Menu,
+    Details
   },
   data() {
     return {
       r: "",
+      detailsShow: false,
       isLove: false,
       listArr: [],
       listArrBf: [],
@@ -158,12 +167,14 @@ export default {
       });
     },
     toPathDetails() {
-      this.$router.push({
-        path: "/Dynamic/DynamicDetails",
-        query: {
-          id: this.listArr[this.swiperBom.activeIndex].id
-        }
-      });
+      this.$refs.detailsBox.init(this.listArr[this.swiperBom.activeIndex].id);
+      this.detailsShow = true;
+      // this.$router.push({
+      //   path: "/Dynamic/DynamicDetails",
+      //   query: {
+      //     id: this.listArr[this.swiperBom.activeIndex].id
+      //   }
+      // });
     },
     love() {
       // 喜欢收藏
@@ -243,6 +254,10 @@ export default {
 };
 </script>
 <style scoped lang="less">
+.warp,
+.view_child {
+  height: 100%;
+}
 .container {
   box-sizing: border-box;
   height: 100%;

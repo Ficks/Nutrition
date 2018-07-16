@@ -1,12 +1,19 @@
 <template>
     <div class="container">
         <div class="header">
-          <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
+          <div class="left" @click="back"><i class="iconfont icon-fanhui"></i>返回</div>
           <div class="title" @click="setDate">{{date}} <i class="iconfont icon-xiala1"></i></div>
         </div>
       <scroller lock-x height="-45px"  ref="scrollerBottom">
           <div class="scroller_b">
-              <div class="list">
+              <div class="list" v-for="(item,index) in listArr">
+                  <div class="tl"><i :class="item.icon"></i>{{item.name}}</div>
+                  <ul>
+                      <li>辣椒炒肉<span>651kcal</span></li>
+                      <li v-for="(jtem,jindex) in item.details">{{jtem.name}} <span>{{item.kcal}}kcal</span></li>
+                  </ul>
+              </div>
+              <!-- <div class="list">
                   <div class="tl"><i class="iconfont icon-zaocan1"></i>早餐</div>
                   <ul>
                       <li>辣椒炒肉<span>651kcal <i class="iconfont icon-shanchu1" @click="removeFn()"></i></span></li>
@@ -33,7 +40,7 @@
                       <li>辣椒炒肉<span>651kcal <i class="iconfont icon-shanchu1" @click="removeFn()"></i></span></li>
                       <li>辣椒炒肉<span>651kcal <i class="iconfont icon-shanchu1" @click="removeFn()"></i></span></li>
                   </ul>
-              </div>
+              </div> -->
           </div>
       </scroller>
       <actionsheet v-model="remove.value" :menus="remove.menu" @on-click-menu-delete="onDelete" show-cancel></actionsheet>
@@ -50,6 +57,7 @@ export default {
   data() {
     return {
       date: this.$getDate(0),
+      listArr: [],
       remove: {
         value: false,
         menu: {
@@ -60,6 +68,13 @@ export default {
     };
   },
   methods: {
+    back() {
+      if (this.$route.query.back) {
+        this.$router.go(-2);
+      } else {
+        this.$router.back(-1);
+      }
+    },
     setDate() {
       // 设置日期
       this.$vux.datetime.show({
@@ -74,7 +89,22 @@ export default {
         onShow() {}
       });
     },
-    getList() {},
+    getList() {
+      this.$http({
+        url: "/api/HealthyArchive/GetMealAndSportsLog",
+        type: "get",
+        data: {
+          date: this.date
+        },
+        success: data => {
+          console.log(data);
+          this.listArr = data.Data;
+        },
+        error: data => {
+          console.log(data);
+        }
+      });
+    },
     removeFn() {
       this.remove.value = true;
     },
@@ -82,7 +112,9 @@ export default {
       // 删除
     }
   },
-  mounted() {}
+  mounted() {
+    this.getList();
+  }
 };
 </script>
 

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="header">
-            <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
+            <div class="left" @click="back()"><i class="iconfont icon-fanhui"></i>返回</div>
             <div class="title">{{$route.name}}</div>
             <div class="right"></div>
         </div>
@@ -73,6 +73,7 @@ export default {
   },
   data() {
     return {
+      id: "",
       searchVal: {
         loading: false,
         pageNum: 0,
@@ -87,11 +88,14 @@ export default {
     };
   },
   methods: {
+    back() {
+      this.$emit("hideDetails");
+    },
     submitPl() {
       this.$http({
         url: "/api/User/SubmitMomentComments",
         type: "post",
-        data: JSON.stringify({ Id: this.$route.query.id, Comments: this.pl }),
+        data: JSON.stringify({ Id: this.id, Comments: this.pl }),
         success: data => {
           //成功的处理
           this.$vux.toast.show({
@@ -110,7 +114,7 @@ export default {
         this.$http({
           url: "/api/User/DoLike",
           type: "get",
-          data: { id: this.$route.query.id, like: true },
+          data: { id: this.id, like: true },
           success: data => {
             if (data.Code === 20000) {
               this.$vux.toast.show({
@@ -145,7 +149,7 @@ export default {
             url: "/api/User/GetMomentComments",
             type: "get",
             data: {
-              id: this.$route.query.id,
+              id: this.id,
               pageNum: this.searchVal.pageNum,
               pageSize: this.searchVal.pageSize
             },
@@ -174,31 +178,37 @@ export default {
         this.$refs.scrollerBottom.reset();
       });
       this.searchVal.loading = false;
+    },
+    init(id) {
+      this.id = id;
+      this.searchVal.pageNum = 0;
+      this.details = {};
+      this.listArr = [];
+      this.$http({
+        url: "/api/User/GetMomentDetails",
+        type: "get",
+        data: { id: this.id },
+        success: data => {
+          //成功的处理
+          console.log(data);
+          this.details = data.Data;
+          // this.$ref.scrollerBottom.reset();
+        },
+        error: function() {
+          //错误处理
+        }
+      });
+      this.getList(1);
     }
   },
-  mounted() {
-    console.log("当前页面API：" + this.$route.path);
-    this.$http({
-      url: "/api/User/GetMomentDetails",
-      type: "get",
-      data: { id: this.$route.query.id },
-      success: data => {
-        //成功的处理
-        console.log(data);
-        this.details = data.Data;
-        // this.$ref.scrollerBottom.reset();
-      },
-      error: function() {
-        //错误处理
-      }
-    });
-    this.getList(1);
-  }
+  mounted() {}
 };
 </script>
 <style scoped lang="less">
 .container {
   height: 100%;
+  background: #fff;
+  padding-top: 0;
 
   .details_dt {
     padding: 15px 35px 50px 35px;

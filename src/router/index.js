@@ -15,7 +15,6 @@ import Find from '@/components/Find/Find.vue'
 import FindDetails from '@/components/Find/FindDetails.vue'
 // 动态
 import Dynamic from '@/components/Find/Dynamic.vue'
-import Dynamic2 from '@/components/Find/Dynamic2.vue'
 import DynamicDetails from '@/components/Find/DynamicDetails.vue'
 import Release from '@/components/Find/Release.vue'
 // 咨询
@@ -116,10 +115,6 @@ export default new Router({
       component: FindDetails
     },
     {
-      path: '/Dynamic2',
-      name: '动态',
-      component: Dynamic2
-    }, {
       path: '/Dynamic',
       name: '动态',
       component: Dynamic
