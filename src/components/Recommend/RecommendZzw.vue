@@ -52,7 +52,7 @@
                 </div>
               </div>
               <ul class="list_re">
-                  <li v-for="(item,index) in listArr[2]" @click="toPathDetails(item)">
+                  <li v-for="(item,index) in listArr[2].dishes" @click="toPathDetails(item)">
                       <div class="img">
                           <img :src="$HTTPURL+item.thumbnail" alt="">
                       </div>
@@ -112,6 +112,7 @@ export default {
           id: this.$route.query.id
         },
         success: data => {
+          console.log(data);
           this.listArr = data.Data;
         },
         error: error => {}
