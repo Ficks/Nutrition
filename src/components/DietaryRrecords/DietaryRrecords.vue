@@ -9,8 +9,8 @@
               <div class="list" v-for="(item,index) in listArr">
                   <div class="tl"><i :class="item.icon"></i>{{item.name}}</div>
                   <ul>
-                      <li>辣椒炒肉<span>651kcal</span></li>
-                      <li v-for="(jtem,jindex) in item.details">{{jtem.name}} <span>{{item.kcal}}kcal</span></li>
+                      <!-- <li>辣椒炒肉<span>651kcal</span></li> -->
+                      <li v-for="(jtem,jindex) in item.detail">{{jtem.name}} <span>{{jtem.kcal}}kcal</span></li>
                   </ul>
               </div>
               <!-- <div class="list">
