@@ -20,7 +20,7 @@
                         <span>提现时间</span>
                     </li>
                     <li>
-                        <p>请在 <span style="color:#f00">两小时</span> 之后查收退款</p>
+                        <p>每周二为系统结算日 请合理规划提现时间</p>
                         <span>预计到账时间</span>
                     </li>
                 </ul>
