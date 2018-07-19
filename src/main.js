@@ -227,7 +227,7 @@ function shareFx() {
         wx.onMenuShareTimeline({
           title: '小易饮食',
           link: shareLink,
-          imgUrl: 'http://www.xyys.ltd/images/logo.jpg',
+          imgUrl: Settings.server + '/images/logo.jpg',
           trigger: function (res) {
             //alert('点击了分享'); 
           },
@@ -245,7 +245,7 @@ function shareFx() {
           title: '小易饮食',
           desc: '带给你健康每一天-小易饮食！',
           link: shareLink,
-          imgUrl: 'http://www.xyys.ltd/images/logo.jpg',
+          imgUrl: Settings.server + '/images/logo.jpg',
           type: 'link',
           dataUrl: '',
           success: function () {
