@@ -78,7 +78,7 @@
         
         <div class="s">
           <div class="z">
-            <span>{{details.kcal}}</span>
+            <span>{{details.kcal}}kcal</span>
             {{grams+`g(${grams / 50}两)`}}
           </div>
           <div class="kdc">

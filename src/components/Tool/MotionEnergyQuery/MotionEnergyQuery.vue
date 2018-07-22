@@ -15,7 +15,8 @@
                 <div class="right">
                     <p>消耗{{item.kcal}}kcal</p>
                     <div class="sped_wr">
-                        <div class="sped" :style="{width:(item.kcal/item.proposalkcal)*100+'%'}"></div>
+                        <div class="sped" v-if="item.proposalkcal==0"></div>
+						<div class="sped" v-else :style="{width:(item.kcal/item.proposalkcal)*100+'%'}"></div>
                     </div>
                     <p class="f14">建议消耗{{item.proposalkcal}}kcal</p>
                 </div>

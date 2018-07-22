@@ -87,6 +87,8 @@ export default {
     setData(data) {
       if (data.length > 0) {
         for (let i = 0; i < data.length; i++) {
+          console.log("----------------------------");
+          console.log(data);
           data[i].src = this.$HTTPURL + data[i].src;
           data[i].desc =
             data[i].desc.length > 50
