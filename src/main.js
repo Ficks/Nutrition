@@ -116,7 +116,7 @@ function loginUp(n, next) {
     url = "/api/WeChat/MoniWeChatLogin"
     upData = {
       referid: "2",
-      openid: "okXzt0jXqVFnR4cY7YjBxvzB0W00",
+      unionid: "okXzt0jXqVFnR4cY7YjBxvzB0W00",
       nickname: "4",
       headurl: "5"
     }

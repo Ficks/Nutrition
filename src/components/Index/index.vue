@@ -4,7 +4,7 @@
     <!-- 顶部 -->
       <div class="top top_on">
           <div class="search">
-            <span>长沙市</span>
+            <span>{{city || '定位中'}}</span>
             <div class="input">
               <div class="inpus"><router-link to="/Tool/Recipes">搜索食材或菜谱</router-link></div>
               <i class="iconfont icon-sousuo"></i>
@@ -185,6 +185,7 @@ export default {
   },
   data() {
     return {
+      city: "",
       score: 0,
       qiandao: "签到",
       isFx: false,
@@ -305,9 +306,52 @@ export default {
     }
   },
   mounted() {
+    var _this = this;
     this.getSignInFn(); //获取用户是否签到和健康得分
     this.getDietRecommend();
     this.getNutritionConsultation();
+
+    getLocation();
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+      } else {
+        // _this.$vux.toast.text("Geolocation is not supported by this browser.");
+      }
+    }
+
+    function showPosition(position) {
+      var latlon = position.coords.latitude + "," + position.coords.longitude;
+      _this.$http({
+        url: "/api/User/GeoDecoding",
+        type: "get",
+        data: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        },
+        success: data => {
+          _this.city = data.Data.result.address_component.city;
+        },
+        error: error => {}
+      });
+    }
+
+    function showError(error) {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          // _this.$vux.toast.text("User denied the request for Geolocation.");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          // _this.$vux.toast.text("Location information is unavailable.");
+          break;
+        case error.TIMEOUT:
+          // _this.$vux.toast.text("The request to get user location timed out.");
+          break;
+        case error.UNKNOWN_ERROR:
+          // _this.$vux.toast.text("An unknown error occurred.");
+          break;
+      }
+    }
   }
 };
 </script>
