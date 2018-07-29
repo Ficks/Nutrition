@@ -195,6 +195,7 @@ export default {
       }
 
       this.postData.type = this.$route.query.typevalue;
+      this.postData.date = this.date;
       if (this.$route.query.typevalue == "") {
         this.mealtimes.show = true;
       } else {
@@ -206,6 +207,7 @@ export default {
       if (val > 0) {
         this.postData.type = val;
       }
+      console.log(this.postData);
       this.$http({
         url: this.api,
         type: "post",
