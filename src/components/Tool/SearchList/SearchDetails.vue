@@ -326,6 +326,10 @@ export default {
       font-size: 16px;
       line-height: 26px;
       padding-left: 30px;
+
+      * {
+        width: 71% !important;
+      }
     }
   }
 
