@@ -2,20 +2,23 @@
   <div class="container">
     <Menu :index="0"></Menu>
     <!-- 顶部 -->
-      <div class="top top_on">
-          <div class="search">
-            <span>{{city || '定位中'}}</span>
-            <div class="input">
-              <div class="inpus"><router-link to="/Tool/Recipes">搜索食材或菜谱</router-link></div>
-              <i class="iconfont icon-sousuo"></i>
-            </div>
-            <router-link to="/My/PersonalFiles"><i class="iconfont icon-dangan2"></i></router-link>
+    <div class="top top_on">
+      <div class="search">
+        <span>{{city || '定位中'}}</span>
+        <div class="input">
+          <div class="inpus">
+            <router-link to="/Tool/Recipes">搜索食材或菜谱</router-link>
           </div>
+          <i class="iconfont icon-sousuo"></i>
+        </div>
+        <router-link to="/My/PersonalFiles">
+          <i class="iconfont icon-dangan2"></i>
+        </router-link>
       </div>
-
-      <scroller lock-x height="-105px"  ref="scrollerBottom">
-        <div class="scroller_box">
-          <div class="top top_er">
+    </div>
+    <scroller lock-x height="-105px" ref="scrollerBottom">
+      <div class="scroller_box">
+        <div class="top top_er">
           <div class="cont">
             <div class="left">
               <div class="qd" @click="signInFn">
@@ -25,78 +28,78 @@
             </div>
             <div class="center">
               <div class="box">
-                <span>健康得分</span>
+                <span>今日膳食得分</span>
                 <h2>{{score}}</h2>
                 <router-link to="/My/PersonalData">完善个人档案></router-link>
               </div>
             </div>
             <div class="right">
-              <div class="share"  @click="share">
+              <div class="share" @click="share">
                 <i class="iconfont icon-fenxiang"></i>
                 <span>分享</span>
               </div>
             </div>
           </div>
-      </div>
-      <!-- 九宫格 -->
-      <div class="grid_m">
+        </div>
+        <!-- 九宫格 -->
+        <div class="grid_m">
           <grid :cols="3" :show-lr-borders="false">
             <grid-item link="/Tool">
-                <i class="iconfont icon-gongjuxiang"></i>
-                <span>基本工具</span>
+              <i class="iconfont icon-gongjuxiang"></i>
+              <span>基本工具</span>
             </grid-item>
             <grid-item link="/Allocation">
-                <i class="iconfont icon-shanshitiaopei"></i>
-                <span>膳食调配</span>
+              <i class="iconfont icon-shanshitiaopei"></i>
+              <span>膳食调配</span>
             </grid-item>
             <grid-item link="/Assessment">
-                <i class="iconfont icon-pinggubaogaodayin"></i>
-                <span>膳食评估</span>
+              <i class="iconfont icon-pinggubaogaodayin"></i>
+              <span>膳食评估</span>
             </grid-item>
             <grid-item link="/self">
-                <i class="iconfont icon-shuxie"></i>
-                <span>自我评估</span>
+              <i class="iconfont icon-shuxie"></i>
+              <span>自我评估</span>
             </grid-item>
             <grid-item link="/Find">
-                <i class="iconfont icon-shequdongtai"></i>
-                <span>社区交流</span>
+              <i class="iconfont icon-shequdongtai"></i>
+              <span>社区交流</span>
             </grid-item>
             <grid-item link="/Consultation">
-                <i class="iconfont icon-kefuzixunhui"></i>
-                <span>人工咨询</span>
+              <i class="iconfont icon-kefuzixunhui"></i>
+              <span>人工咨询</span>
             </grid-item>
             <grid-item link="/My/PersonalFiles" class="bor_none">
-                <i class="iconfont icon-dangan"></i>
-                <span>个人档案</span>
+              <i class="iconfont icon-dangan"></i>
+              <span>个人档案</span>
             </grid-item>
             <grid-item link="/My/WalkIntoUs" class="bor_none">
-                <i class="iconfont icon-guanyuwomen"></i>
-                <span>走进我们</span>
+              <i class="iconfont icon-guanyuwomen"></i>
+              <span>使用说明</span>
             </grid-item>
             <grid-item link="/My/Partner" class="bor_none">
-                <i class="iconfont icon-hezuo"></i>
-                <span>合伙合作</span>
+              <i class="iconfont icon-hezuo"></i>
+              <span>合伙合作</span>
             </grid-item>
           </grid>
-      </div>
-
-      <!-- 膳食推荐 -->
-      <div class="recommend" v-if="!isTNB">
-        <div class="box">
-          <h2>膳食推荐<span @click="getDietRecommend">换一批</span></h2>
-
-          <tab custom-bar-width="27px" v-model="reIndex"  prevent-default @on-before-index-change="recommend">
-            <tab-item selected>
-              早餐
-            </tab-item>
-            <tab-item>
-              中餐
-            </tab-item>
-            <tab-item>
-              晚餐
-            </tab-item>
-          </tab>
-          <!-- <div class="recommend_box" @click="mastri">
+        </div>
+        <!-- 膳食推荐 -->
+        <div class="recommend" v-if="!isTNB">
+          <div class="box">
+            <h2>
+              膳食推荐
+              <span @click="getDietRecommend">换一批</span>
+            </h2>
+            <tab
+              custom-bar-width="27px"
+              v-model="reIndex"
+              prevent-default
+              @on-before-index-change="recommend"
+            >
+              <tab-item selected>早餐</tab-item>
+              <tab-item>中餐</tab-item>
+              <tab-item>晚餐</tab-item>
+            </tab>
+            <!-- <div class="recommend_box" @click="mastri">
             <div class="li_t" v-for="(item,index) in recommendData" :key="index">
               <div class="tab-swiper vux-center" v-show="index===reIndex">
                   <ul>
@@ -114,10 +117,11 @@
                   </ul>
                 </div>
             </div>
-          </div> -->
-          <div class="recommend_box" @click="mastri">
-            <div class="li_t" v-for="(item,index) in recommendData" :key="index">
-              <div class="tab-swiper vux-center" v-show="index===reIndex">
+            </div>-->
+
+            <div class="recommend_box" @click="mastri">
+              <div class="li_t" v-for="(item,index) in recommendData" :key="index">
+                <div class="tab-swiper vux-center" v-show="index===reIndex">
                   <ul>
                     <li v-for="jtem in item.dishes">
                       <h3>{{jtem.name}}</h3>
@@ -125,49 +129,57 @@
                     </li>
                   </ul>
                 </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- 糖尿病膳食推荐 -->
-      <div class="recommend" v-else>
-        <div class="box">
-          <h2>膳食推荐</h2>
-          <div class="recommend_box">
-            <ul>
-              <li v-for="item in recommendData[0].dishes">
-                <h3>{{item.name}}</h3>
-                <span>{{item.kcal}}kcal/{{item.unit}}g*{{item.number}}</span>
-              </li>
-            </ul>
-            <div class="more">
-              <router-link :to="{path:'/Index/Recommend',query:{id:KeyId}}">查看更多></router-link>
+        <!-- 糖尿病膳食推荐 -->
+        <div class="recommend" v-else>
+          <div class="box">
+            <h2>膳食推荐</h2>
+            <div class="recommend_box">
+              <ul>
+                <li v-for="item in recommendData[0].dishes">
+                  <h3>{{item.name}}</h3>
+                  <span>{{item.kcal}}kcal/{{item.unit}}g*{{item.number}}</span>
+                </li>
+              </ul>
+              <div class="more">
+                <router-link :to="{path:'/Index/Recommend',query:{id:KeyId}}">查看更多></router-link>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    <!-- 营养咨询 -->
-      <div class="yinyanzx">
-        <h2>咨询师<span><router-link to="/Consultation">更多></router-link></span></h2>
-        <ul>
-          <li v-for="(item,index) in nutCon" @click="toDetails(item)">
+        <!-- 营养咨询 -->
+        <div class="yinyanzx">
+          <h2>
+            咨询师
+            <span>
+              <router-link to="/Consultation">更多></router-link>
+            </span>
+          </h2>
+          <ul>
+            <li v-for="(item,index) in nutCon" @click="toDetails(item)">
               <div class="img">
                 <img :src="item.HeadUrl" alt="">
               </div>
               <h3>{{item.Name}}</h3>
               <h4>{{item.Company}}</h4>
-          </li>
-        </ul>
-      </div>
+            </li>
+          </ul>
         </div>
-      </scroller>
-
-      <div class="fenx" @click="isFx=false"  v-show="isFx">
-        <div class="img"><img src="/static/images/fx.png" alt=""></div>
-        <p>请点击右上角 <br>将它发送给指定朋友<br>或分享到朋友圈</p>
       </div>
-      <div class="nav_bom_zoom" @click="isFx=false"  v-show="isFx"></div>
-      
+    </scroller>
+    <div class="fenx" @click="isFx=false" v-show="isFx">
+      <div class="img">
+        <img src="/static/images/fx.png" alt="">
+      </div>
+      <p>请点击右上角
+        <br>将它发送给指定朋友
+        <br>或分享到朋友圈
+      </p>
+    </div>
+    <div class="nav_bom_zoom" @click="isFx=false" v-show="isFx"></div>
   </div>
 </template>
 <script>
@@ -693,6 +705,7 @@ export default {
         display: block;
       }
       .img {
+        font-size: 0;
         box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.2);
       }
       h3 {

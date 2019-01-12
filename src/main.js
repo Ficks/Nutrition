@@ -123,6 +123,7 @@ function loginUp(n, next) {
   }
   console.log("请求微信登陆")
   console.log(Settings.server + url);
+  console.log(upData)
   $.ajax({
     url: Settings.server + url,
     type: "get",
@@ -133,6 +134,7 @@ function loginUp(n, next) {
       loginFn(data, next)
     },
     error: function () {
+      console.log(88888)
       //错误处理
     }
   });
@@ -140,6 +142,7 @@ function loginUp(n, next) {
 
 // 登录之后的设置
 function loginFn(data, next) {
+  console.log(9999)
   if (data.Code !== 20000) {
     Vue.$vux.toast.show({
       type: 'warn',
@@ -154,6 +157,8 @@ function loginFn(data, next) {
     headurl: data.Data.headurl,
     username: data.Data.nickname
   };
+  console.log("后台返回的信息");
+  console.log(data);
   ajaxConfig(d);
   sessionStorage.setItem('userData', JSON.stringify(d))
   next();

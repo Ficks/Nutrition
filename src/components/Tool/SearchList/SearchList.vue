@@ -1,24 +1,26 @@
 <template>
-    <div class="container">
-      <div class="header">
-        <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
-        <div class="title">{{$route.name}}</div>
-        <div class="right" @click="searchOn">搜索</div>
+  <div class="container">
+    <div class="header">
+      <div class="left" @click="$router.back(-1)">
+        <i class="iconfont icon-fanhui"></i>返回
       </div>
-        <div class="search">
-            <div class="input">
-              <input type="text" v-model="searchVal.dishName" placeholder="输入文字搜索食谱">
-              <i class="iconfont icon-sousuo" @click="getList"></i>
-            </div>
-        </div>
-        <scroller lock-x height="-85px" @on-scroll-bottom="getList"  ref="scrollerBottom">
-          <div class="box scroller_box">
-              <panel :list="listArr" type="1" @on-click-item="toPathDetails"></panel>
-              <p class="more_s"  v-show="!searchVal.onFetching">{{searchVal.uptext}}</p>
-              <load-more tip="loading" v-show="searchVal.onFetching"></load-more>
-          </div>
-        </scroller>
+      <div class="title">{{$route.name}}</div>
+      <div class="right" @click="searchOn">搜索</div>
     </div>
+    <div class="search">
+      <div class="input">
+        <input type="text" v-model="searchVal.dishName" placeholder="输入文字搜索食谱">
+        <i class="iconfont icon-sousuo" @click="getList"></i>
+      </div>
+    </div>
+    <scroller lock-x height="-85px" @on-scroll-bottom="getList" ref="scrollerBottom">
+      <div class="box scroller_box">
+        <panel :list="listArr" type="1" @on-click-item="toPathDetails"></panel>
+        <p class="more_s" v-show="!searchVal.onFetching">{{searchVal.uptext}}</p>
+        <load-more tip="loading" v-show="searchVal.onFetching"></load-more>
+      </div>
+    </scroller>
+  </div>
 </template>
 <script>
 import { LoadMore, Panel } from "vux";
@@ -49,17 +51,20 @@ export default {
       if (this.$route.path === "/Tool/Recipes") {
         // 菜谱检索
         this.searchVal.dishesType = 1;
+        if (this.$route.query.type) {
+          this.searchVal.dishesType = "";
+        }
       } else if (this.$route.path === "/Tool/MaterialRetrieval") {
         // 食材检索
         this.searchVal.dishesType = 3;
       } else if (this.$route.path === "/Tool/OtherRetrieval") {
         // 其他食品检索
         this.searchVal.dishesType = 2;
-      } else if (
-        this.$route.path === "/My/PersonalFiles/AllergicFood/Details"
-      ) {
+      } else if (this.$route.path === "/My/PersonalFiles/AllergicFood") {
         this.searchVal.dishesType = "";
         // 过敏食物筛选
+        console.log("过敏食物");
+        console.log(this.searchVal.dishesType);
       }
 
       console.log("当前页面API：" + this.$route.path);

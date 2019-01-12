@@ -1,82 +1,91 @@
 <template>
-    <div class="header_box">
-        <!-- 底部导航 -->
-      <tabbar class="nav_bom" v-model="index">
-          <tabbar-item link="/">
-          <div class="list" slot="label">
-            <i class="iconfont icon-shouye"></i>
-            <span>首页</span>
-            </div>
-          </tabbar-item>
-          <tabbar-item link="/Find">
-          <div class="list" slot="label">
-            <i class="iconfont icon-faxian"></i>
-            <span>发现</span>
-            </div>
-          </tabbar-item>
-          <tabbar-item>
-          <div class="list add" slot="label" @click="openAlt(true)">
-            <i class="iconfont icon-tianjia"></i>
-            </div>
-          </tabbar-item>
-          <tabbar-item link="/Consultation">
-          <div class="list" slot="label">
-            <i class="iconfont icon-tuwenzixun"></i>
-            <span>咨询</span>
-            </div>
-          </tabbar-item>
-          <tabbar-item link="/My">
-          <div class="list" slot="label">
-            <i class="iconfont icon-wode-F"></i>
-            <span>我的</span>
-            </div>
-          </tabbar-item>
-      </tabbar>
-      <div class="nav_bom_alt" :style="{bottom:navBottom+'px'}">
-        <ul>
-          <li>
-            <router-link :to="{path:'/Tool/Recipes',query:{typevalue:1}}">
+  <div class="header_box">
+    <!-- 底部导航 -->
+    <tabbar class="nav_bom" v-model="index">
+      <tabbar-item link="/">
+        <div class="list" slot="label">
+          <i class="iconfont icon-shouye"></i>
+          <span>首页</span>
+        </div>
+      </tabbar-item>
+      <tabbar-item link="/Find">
+        <div class="list" slot="label">
+          <i class="iconfont icon-faxian"></i>
+          <span>发现</span>
+        </div>
+      </tabbar-item>
+      <tabbar-item>
+        <div class="list add" slot="label" @click="openAlt(true)">
+          <i class="iconfont icon-tianjia"></i>
+        </div>
+      </tabbar-item>
+      <tabbar-item link="/Consultation">
+        <div class="list" slot="label">
+          <i class="iconfont icon-tuwenzixun"></i>
+          <span>咨询</span>
+        </div>
+      </tabbar-item>
+      <tabbar-item link="/My">
+        <div class="list" slot="label">
+          <i class="iconfont icon-wode-F"></i>
+          <span>我的</span>
+        </div>
+      </tabbar-item>
+    </tabbar>
+    <div class="nav_bom_alt" :style="{bottom:navBottom+'px'}">
+      <ul>
+        <li>
+          <router-link :to="{path:'/Tool/Recipes',query:{typevalue:1,type:true}}">
             <i class="iconfont icon-zaocan1"></i>
-            <span>早餐<em class="fx12">(及加餐)</em></span>
-            </router-link>
-          </li>
-          <li>
-            <router-link :to="{path:'/Tool/Recipes',query:{typevalue:2}}">
+            <span>
+              早餐
+              <em class="fx12">(及加餐)</em>
+            </span>
+          </router-link>
+        </li>
+        <li>
+          <router-link :to="{path:'/Tool/Recipes',query:{typevalue:2,type:true}}">
             <i class="iconfont icon-wucan"></i>
-            <span>中餐<em class="fx12">(及加餐)</em></span>
-            </router-link>
-          </li>
-          <li>
-            <router-link :to="{path:'/Tool/Recipes',query:{typevalue:3}}">
+            <span>
+              中餐
+              <em class="fx12">(及加餐)</em>
+            </span>
+          </router-link>
+        </li>
+        <li>
+          <router-link :to="{path:'/Tool/Recipes',query:{typevalue:3,type:true}}">
             <i class="iconfont icon-wancan"></i>
-            <span>晚餐<em class="fx12">(及加餐)</em></span>
-            </router-link>
-          </li>
-          <!-- <li>
+            <span>
+              晚餐
+              <em class="fx12">(及加餐)</em>
+            </span>
+          </router-link>
+        </li>
+        <!-- <li>
             <router-link :to="{path:'/Tool/Recipes',query:{typevalue:4}}">
             <i class="iconfont icon-lingshi"></i>
             <span>加餐</span>
             </router-link>
-          </li> -->
-          <li>
-            <router-link to="/AddMotion">
+        </li>-->
+        <li>
+          <router-link to="/AddMotion">
             <i class="iconfont icon-buhang"></i>
             <span>运动</span>
-            </router-link>
-          </li>
-          <li>
-            <router-link to="/DietaryRrecords">
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/DietaryRrecords">
             <i class="iconfont icon-jilu" style="font-size:25px;padding-bottom:6px"></i>
             <span>饮食记录</span>
-            </router-link>
-          </li>
-        </ul>
-        <div class="close" @click="openAlt(false)">
-            <i class="iconfont icon-tianjia"></i>
-        </div>
+          </router-link>
+        </li>
+      </ul>
+      <div class="close" @click="openAlt(false)">
+        <i class="iconfont icon-tianjia"></i>
       </div>
-      <div class="nav_bom_zoom" @click="navBottom=-300" v-show="navBottom===0"></div>
     </div>
+    <div class="nav_bom_zoom" @click="navBottom=-300" v-show="navBottom===0"></div>
+  </div>
 </template>
 <script>
 import { Tabbar, TabbarItem } from "vux";
