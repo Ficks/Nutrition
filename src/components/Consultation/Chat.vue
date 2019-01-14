@@ -7,6 +7,8 @@
       </div>
         <div class="scroller_box chat" id="chat_box">
           <p class="mz"><span>仅代表营养师意见，与平台无关</span></p>
+          <div class="tipsas" v-if="isEnds">咨询已经结束了</div>
+          <div class="tipsasdhi" v-if="isEnds"></div>
             <load-more tip="loading" v-show="loading"></load-more>
             <ul>
                 <li v-for="(item,index) in listArr" :class="{he:item.id==he.id,my:item.id==my.id}">
@@ -59,6 +61,7 @@ export default {
   },
   data() {
     return {
+      isEnds:false,
       zoomShow: true,
       history: 1,
       end: false,
@@ -104,12 +107,14 @@ export default {
   methods: {
     tiSetout() {
       if (this.$route.query.ism == "false" || this.$route.query.ism == false) {
+      this.isEnds=true;
         this.$vux.toast.show({
           type: "warn",
           text: "咨询已经结束了哦",
           width: "11em"
         });
 
+        this.$vux.loading.hide();
         return true;
       } else {
         return false;
@@ -606,5 +611,28 @@ export default {
 <style>
 .xs-plugin-pulldown-container {
   display: none !important;
+}
+.tipsas{
+  width:200px;
+  text-align:center;
+  border-radius:4px;
+  margin:0 auto;
+  position:fixed;
+  top:45%;
+  z-index:9999;
+  color:#fff;
+  left:50%;
+  margin-left:-100px;
+}
+.tipsasdhi{
+  display:block;
+  width:100%;
+  height:100%;
+  z-index:999;
+  content:"";
+  position:fixed;
+  top:0;
+  left:0;
+  background:rgba(0,0,0,.7);
 }
 </style>
