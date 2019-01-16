@@ -1,5 +1,5 @@
 var settings = {
   server: "https://www.xyys.ltd",
-  isWechat: false,
+  isWechat: true,
 }
 module.exports = settings;

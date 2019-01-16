@@ -7,7 +7,7 @@
         <span>{{city || '定位中'}}</span>
         <div class="input">
           <div class="inpus">
-            <router-link to="/Tool/Recipes">搜索食材或菜谱</router-link>
+            <router-link :to="{path:'/Tool/Recipes',query:{type:true}}">搜索食材或菜谱</router-link>
           </div>
           <i class="iconfont icon-sousuo"></i>
         </div>
