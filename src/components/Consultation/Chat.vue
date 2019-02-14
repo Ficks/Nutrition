@@ -1,49 +1,69 @@
 <template>
-    <div class="container">
-      <div class="fixbo" :class="{fixboactive:zoomShow}"></div>
-      <div class="header">
-        <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
-        <div class="title">{{title}}</div>
+  <div class="container">
+    <!-- <div class="fixbo" :class="{fixboactive:zoomShow}"></div> -->
+    <div class="header">
+      <div class="left" @click="$router.back(-1)">
+        <i class="iconfont icon-fanhui"></i>返回
       </div>
-        <div class="scroller_box chat" id="chat_box">
-          <p class="mz"><span>仅代表营养师意见，与平台无关</span></p>
-          <div class="tipsas" v-if="isEnds">咨询已经结束了</div>
-          <div class="tipsasdhi" v-if="isEnds"></div>
-            <load-more tip="loading" v-show="loading"></load-more>
-            <ul>
-                <li v-for="(item,index) in listArr" :class="{he:item.id==he.id,my:item.id==my.id}">
-                    <div class="tx"><img :src="item.src" alt=""></div>
-                    <div class="box">
-                        <div class="text" v-if="item.type=='text'">{{item.text}}</div>
-                        <!-- <textarea v-if="item.type=='text'" v-model="item.text"></textarea> -->
-                        <div class="img" v-else><img :src="item.text" alt=""></div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="text_jl" id="outh">{{chatText}}</div>
-        <div class="ltk" :style="{height:chatText===''?'45px':outHeight+16+'px'}">
-          <div class="rel">
-            <div class="input" :style="{height:chatText==='' || outHeight<30?'30px':outHeight+'px','padding-right':chatText===''?'30px':'60px'}"><textarea v-model="chatText"></textarea></div>
-            <div class="btn_fm">
-              <span @click="sendMessage" v-show="chatText!==''">发送</span>
-              <i  v-show="chatText==''" class="iconfont icon-tupian"></i>
-              <input class="upload_img"  v-show="chatText==''" type="file" @change="addImg"> 
+      <div class="title">{{title}}</div>
+    </div>
+    <div class="scroller_box chat" id="chat_box">
+      <p class="mz">
+        <span>仅代表营养师意见，与平台无关</span>
+      </p>
+      <!-- <div class="tipsas" v-if="isEnds">咨询已经结束了</div> -->
+      <!-- <div class="tipsasdhi" v-if="isEnds"></div> -->
+
+      <load-more tip="loading" v-show="loading"></load-more>
+      <ul>
+        <li v-for="(item,index) in listArr" :class="{he:item.id==he.id,my:item.id==my.id}">
+          <div class="tx">
+            <img :src="item.src" alt="">
+          </div>
+          <div class="box">
+            <div class="text" v-if="item.type=='text'">{{item.text}}</div>
+            <!-- <textarea v-if="item.type=='text'" v-model="item.text"></textarea> -->
+
+            <div class="img" v-else>
+              <img :src="item.text" alt="">
             </div>
           </div>
-        </div>
-
-        <div class="nav_bom_zoom" v-if="end"></div>
-        <div class="alert_box" v-if="end">
-          <p>本次咨询已结束，去给个评价吧~</p>
-          <div class="boxs">
-            <div class="btn"><router-link to="/Consultation/ChatRefund">前往评价</router-link></div>
-            <div class="backs"><router-link :to="{path:'/Consultation/ConsultationDetails',query:{
-              back:'/Consultation'
-            }}">返回</router-link></div>
-          </div>
-        </div>
+        </li>
+      </ul>
     </div>
+    <div class="text_jl" id="outh">{{chatText}}</div>
+    <div class="ltk" :style="{height:chatText===''?'45px':outHeight+16+'px'}">
+      <div class="rel">
+        <div
+          class="input"
+          :style="{height:chatText==='' || outHeight<30?'30px':outHeight+'px','padding-right':chatText===''?'30px':'60px'}"
+        >
+          <textarea :disabled="isEnds" :style="{background:isEnds?'#ccc':''}" v-model="chatText"></textarea>
+        </div>
+        <div class="btn_fm">
+          <span @click="sendMessage" v-show="chatText!==''">发送</span>
+          <i v-show="chatText==''" v-if="!isEnds" class="iconfont icon-tupian"></i>
+          <input class="upload_img" v-show="chatText==''" type="file" @change="addImg">
+        </div>
+      </div>
+    </div>
+    <div class="nav_bom_zoom" v-if="end"></div>
+    <div class="alert_box" v-if="end">
+      <p>本次咨询已结束，去给个评价吧~</p>
+      <div class="boxs">
+        <div class="btn">
+          <router-link to="/Consultation/ChatRefund">前往评价</router-link>
+        </div>
+        <div class="backs">
+          <router-link
+            :to="{path:'/Consultation/ConsultationDetails',query:{
+              back:'/Consultation'
+            }}"
+          >返回</router-link>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import { LoadMore, Toast } from "vux";
@@ -61,7 +81,7 @@ export default {
   },
   data() {
     return {
-      isEnds:false,
+      isEnds: false,
       zoomShow: true,
       history: 1,
       end: false,
@@ -107,12 +127,13 @@ export default {
   methods: {
     tiSetout() {
       if (this.$route.query.ism == "false" || this.$route.query.ism == false) {
-      this.isEnds=true;
-        this.$vux.toast.show({
-          type: "warn",
-          text: "咨询已经结束了哦",
-          width: "11em"
-        });
+        this.isEnds = true;
+        this.chatText = "咨询已结束";
+        // this.$vux.toast.show({
+        //   type: "warn",
+        //   text: "咨询已经结束了哦",
+        //   width: "11em"
+        // });
 
         this.$vux.loading.hide();
         return true;
@@ -122,9 +143,9 @@ export default {
     },
     addImg(event) {
       var ism = this.tiSetout();
-      if (ism) {
-        return;
-      }
+      // if (ism) {
+      //   return;
+      // }
 
       // 发送图片
       let reader = new FileReader();
@@ -200,9 +221,9 @@ export default {
       //接收服务端消息，
       this.proxy.on("receiveSystemMsg", (data, userInfo) => {
         var ism = this.tiSetout();
-        if (ism) {
-          return;
-        }
+        // if (ism) {
+        //   return;
+        // }
         this.$vux.toast.show({
           type: "text",
           text: data,
@@ -281,9 +302,9 @@ export default {
     },
     sendMessage(imgType, imgUrl) {
       var ism = this.tiSetout();
-      if (ism) {
-        return;
-      }
+      // if (ism) {
+      //   return;
+      // }
       imgType = imgType == "img" ? imgType : null;
       // 发送消息
       var d = {
@@ -612,27 +633,27 @@ export default {
 .xs-plugin-pulldown-container {
   display: none !important;
 }
-.tipsas{
-  width:200px;
-  text-align:center;
-  border-radius:4px;
-  margin:0 auto;
-  position:fixed;
-  top:45%;
-  z-index:9999;
-  color:#fff;
-  left:50%;
-  margin-left:-100px;
+.tipsas {
+  width: 200px;
+  text-align: center;
+  border-radius: 4px;
+  margin: 0 auto;
+  position: fixed;
+  top: 45%;
+  z-index: 9999;
+  color: #fff;
+  left: 50%;
+  margin-left: -100px;
 }
-.tipsasdhi{
-  display:block;
-  width:100%;
-  height:100%;
-  z-index:999;
-  content:"";
-  position:fixed;
-  top:0;
-  left:0;
-  background:rgba(0,0,0,.7);
+.tipsasdhi {
+  display: block;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
 }
 </style>

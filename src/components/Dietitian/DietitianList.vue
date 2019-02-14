@@ -1,31 +1,34 @@
 <template>
-    <div class="container">
-        <div class="header">
-        <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
-        <div class="title">{{$route.name}}</div>
+  <div class="container">
+    <div class="header">
+      <div class="left" @click="$router.back(-1)">
+        <i class="iconfont icon-fanhui"></i>返回
       </div>
+      <div class="title">{{$route.name}}</div>
+    </div>
     <scroller lock-x height="-45px" @on-scroll-bottom="getList" ref="scrollerBottom">
       <div class="scroller_box bsxz">
-         <div class="list_w" v-for="(item,index) in listArr" @click="chat(item)">
-           <div class="tx"><img :src="item.HeadUrl" alt=""></div>
-           <div class="wz">
-             <h2>{{item.NickName}}</h2>
-             <p>{{item.CreateDate | mouthTimeGsh}}</p>
-             <p>{{item.EndDate | mouthTimeGsh}}</p>
-           </div>
-           <div class="btns">
-             <div class="btn_m xxx" v-show="item.IsEnd===0">正在咨询</div>
-             <div class="btn_m xxx" v-show="item.IsEnd===1" style="background:red">已经结束</div>
-             <div class="btn_m" v-show="item.IsEnd===0" @click.stop="userInfo(item)">用户资料</div>
-             <!-- <div class="btn_m end" :style="{'margin-top':item.msg?'8px':'20px'}">已结束</div> -->
-           </div>
-         </div>
-         <p class="logss">{{searchVal.uptext}}</p>
-          <load-more tip="loading" v-show="loading"></load-more>
+        <div class="list_w" v-for="(item,index) in listArr" @click="chat(item)">
+          <div class="tx">
+            <img :src="item.HeadUrl" alt="">
+          </div>
+          <div class="wz">
+            <h2>{{item.NickName}}</h2>
+            <p>{{item.CreateDate | mouthTimeGsh}}</p>
+            <p>{{item.EndDate | mouthTimeGsh}}</p>
+          </div>
+          <div class="btns">
+            <div class="btn_m xxx" v-show="item.IsEnd===0">正在咨询</div>
+            <div class="btn_m xxx" v-show="item.IsEnd===1" style="background:red">查看聊天记录</div>
+            <div class="btn_m" v-show="item.IsEnd===0" @click.stop="userInfo(item)">用户资料</div>
+            <!-- <div class="btn_m end" :style="{'margin-top':item.msg?'8px':'20px'}">已结束</div> -->
+          </div>
+        </div>
+        <p class="logss">{{searchVal.uptext}}</p>
+        <load-more tip="loading" v-show="loading"></load-more>
       </div>
     </scroller>
-      
-    </div>
+  </div>
 </template>
 <script>
 import { LoadMore } from "vux";
@@ -54,13 +57,13 @@ export default {
       });
     },
     chat(item) {
-      if (item.IsEnd === 1) {
-        this.$vux.toast.show({
-          type: "warn",
-          text: "咨询已结束"
-        });
-        return;
-      }
+      // if (item.IsEnd === 1) {
+      //   this.$vux.toast.show({
+      //     type: "warn",
+      //     text: "咨询已结束"
+      //   });
+      //   return;
+      // }
       this.$router.push({
         path: "/Dietitian/Chat",
         query: {
