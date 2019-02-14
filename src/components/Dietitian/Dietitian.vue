@@ -1,34 +1,34 @@
 <template>
-    <div class="container">
-        <div class="header">
-        <div class="left" @click="$router.back(-1)"><i class="iconfont icon-fanhui"></i>返回</div>
-        <div class="title">{{$route.name}}</div>
+  <div class="container">
+    <div class="header">
+      <div class="left" @click="$router.back(-1)">
+        <i class="iconfont icon-fanhui"></i>返回
       </div>
+      <div class="title">{{$route.name}}</div>
+    </div>
     <scroller lock-x height="-45px" ref="scrollerBottom">
       <div class="scroller_box">
-          <div class="logo">
-            <img src="/static/images/logo.jpg" alt="">
+        <div class="logo">
+          <img src="/static/images/logo.jpg" alt="">
         </div>
         <div class="login">
-            <div class="list">
-                <i class="iconfont icon-shouji"></i>
-                <div class="abs">
-                <input type="text" placeholder="请输入手机号码" v-model="tel">
-                </div>
+          <div class="list">
+            <i class="iconfont icon-shouji"></i>
+            <div class="abs">
+              <input type="text" placeholder="请输入手机号码" v-model="tel">
             </div>
-            <div class="list">
-                <i class="iconfont icon-suo"></i>
-                <div class="abs">
-                <input type="password" placeholder="请输入密码" v-model="password">
-                </div>
+          </div>
+          <div class="list">
+            <i class="iconfont icon-suo"></i>
+            <div class="abs">
+              <input type="password" placeholder="请输入密码" v-model="password">
             </div>
-
-            <div class="submit_btn" @click="submit">登录</div>
+          </div>
+          <div class="submit_btn" @click="submit">登录</div>
         </div>
       </div>
     </scroller>
-      
-    </div>
+  </div>
 </template>
 <script>
 import { Toast } from "vux";
@@ -77,7 +77,7 @@ export default {
             });
           } else {
             this.$vux.toast.show({
-              type: "error",
+              type: "warn",
               text: data.Error,
               width: "11em"
             });

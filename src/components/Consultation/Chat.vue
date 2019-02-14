@@ -40,9 +40,9 @@
         >
           <textarea :disabled="isEnds" :style="{background:isEnds?'#ccc':''}" v-model="chatText"></textarea>
         </div>
-        <div class="btn_fm">
+        <div class="btn_fm" v-if="!isEnds">
           <span @click="sendMessage" v-show="chatText!==''">发送</span>
-          <i v-show="chatText==''" v-if="!isEnds" class="iconfont icon-tupian"></i>
+          <i v-show="chatText==''" class="iconfont icon-tupian"></i>
           <input class="upload_img" v-show="chatText==''" type="file" @change="addImg">
         </div>
       </div>
