@@ -36,7 +36,7 @@
       <div class="rel">
         <div
           class="input"
-          :style="{height:chatText==='' || outHeight<30?'30px':outHeight+'px','padding-right':chatText===''?'30px':'60px'}"
+          :style="{height:chatText==='' || outHeight<30?'30px':outHeight+'px','padding-right':isEnds?'0':chatText===''?'30px':'60px'}"
         >
           <textarea :disabled="isEnds" :style="{background:isEnds?'#ccc':''}" v-model="chatText"></textarea>
         </div>
@@ -196,7 +196,7 @@ export default {
         this.scrollTop = els.scrollHeight;
         this.loading = true;
         setTimeout(() => {
-          this.getHistoryMessage();
+          this.getHistoryMessage(this.history);
         }, 800);
       }
     },
@@ -207,6 +207,7 @@ export default {
       this.proxy = conn.createHubProxy("chatHub");
       this.receiveSystemMsg(); //注册接收系统消息
       this.receiveMessageHistory(); //注册接收历史消息
+
       this.receiveRecentMsg(); //注册近期消息
       this.receiveUserMsg(); //接收消息
       conn
@@ -289,9 +290,9 @@ export default {
         });
       });
     },
-    getHistoryMessage() {
+    getHistoryMessage(index) {
       // 事件获取历史消息，逻辑在上面
-      this.proxy.invoke("requestMessageHistory", 1).done(msg => {});
+      this.proxy.invoke("requestMessageHistory", index).done(msg => {});
     },
     receiveUserMsg() {
       //接收消息，
@@ -335,6 +336,7 @@ export default {
         token = this.getLogin.Token,
         toId = this.$route.query.id;
       this.proxy.invoke("connect", userId, token, toId).done(msg => {});
+      this.getHistoryMessage(this.history); //触发获取历史记录
     }
   },
   mounted() {
@@ -350,6 +352,7 @@ export default {
     var el = document.getElementById("chat_box");
     el.onscroll = () => {
       var t = el.scrollTop; //获取距离页面顶部的距离
+
       if (t === 0) {
         this.getList();
       }
